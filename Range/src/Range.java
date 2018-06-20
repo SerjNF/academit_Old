@@ -1,5 +1,6 @@
 package ru.inbox.foreman;
 
+
 /**
  * Класс Range. Диапазон определён от меньшего числа к большему
  *
@@ -14,12 +15,28 @@ public class Range {
     Range() {
     }
 
+    public double getFrom(){
+        return from;
+    }
+
+    public double getTo(){
+        return to;
+    }
+
+    public void setFrom(double from){
+        this.from = from;
+    }
+
+    public void setTo(double to){
+        this.to = to;
+    }
+
     Range(double from, double to) {
         this.from = from >= to ? from : to;
         this.to = from >= to ? to : from;
     }
 
-    public Double calcLength() {
+    public double calcLength() {
         return from - to;
     }
 
@@ -27,12 +44,15 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    /**
-     * Test method
-     *
-     * @param arg arg
-     */
-    public static void main(String[] arg) {
-        System.out.printf("%f", new Range(5.0, 6.5).calcLength());
+    public Range interceptRange(Range range){
+        double rangeFrom = range.getFrom();
+        double rangeTo = range.getTo();
+
+        if (range.isInside(from) || range.isInside(to)){
+            return new Range(from >= rangeFrom ? from : rangeFrom, to >= rangeTo ? to : rangeTo);
+        }
+        return null;
     }
+
+
 }
