@@ -27,6 +27,7 @@ public class Range {
     Range(double from, double to) {
         this.from = from <= to ? from : to;
         this.to = from <= to ? to : from;
+
     }
 
     double getFrom() {
@@ -119,6 +120,9 @@ public class Range {
         double rangeOneTo = rangeOne.getTo();
         double rangeTwoFrom = rangeTwo.getFrom();
         double rangeTwoTo = rangeTwo.getTo();
+        if(rangeOneFrom == rangeTwoFrom && rangeOneTo == rangeTwoTo){
+            return null;
+        }
         ArrayList<Range> resultRange = new ArrayList<>();
         // Проверка, что В входит в А
         if (rangeOne.isInside(rangeTwoFrom) && rangeOne.isInside(rangeTwoTo)) {

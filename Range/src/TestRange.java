@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 /**
  * Test Method
- *              \------------------F---------------------\
+ * \------------------F---------------------\
  * ____________3.2====А======7_____________12====С=====18.5________________________________>
- *                  5------В-------10
+ * 5------В-------10
  *
  * @author SergeyNF
  * @since 20.06.2018
@@ -69,23 +69,37 @@ public class TestRange {
         // Разность диапазонов
 
         System.out.println();
+
         System.out.println("Результат вычитания из А, В");
+
         ArrayList<Range> subtractAB = Range.subtractOfRange(A, B);
 
-        for (int i = 0; i < subtractAB.size(); ++i) {
-            Range range = subtractAB.get(i);
-            System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
+        if (subtractAB != null) {
+            for (int i = 0; i < subtractAB.size(); ++i) {
+                Range range = subtractAB.get(i);
+                System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
+            }
+        } else {
+            System.out.println("Результат, диапазон нулевой длины");
         }
         System.out.println();
 
 
         System.out.printf("Результат вычитания из F(%.2f, %.2f), B%n", F.getFrom(), F.getTo());
+
         ArrayList<Range> subtractFB = Range.subtractOfRange(F, B);
 
-        for (int i = 0; i < subtractFB.size(); ++i) {
-            Range range = subtractFB.get(i);
-            System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
+        if (subtractFB != null) {
+
+            for (int i = 0; i < subtractFB.size(); ++i) {
+                Range range = subtractFB.get(i);
+                System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
+            }
+        } else {
+            System.out.println("Результат, диапазон нулевой длины");
+
         }
+
         System.out.println();
 
     }
