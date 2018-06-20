@@ -1,6 +1,8 @@
 package ru.inbox.foreman;
 
 
+import java.util.ArrayList;
+
 /**
  * Класс Range. Диапазон определён от меньшего числа к большему
  *
@@ -15,19 +17,19 @@ public class Range {
     Range() {
     }
 
-    public double getFrom(){
+    public double getFrom() {
         return from;
     }
 
-    public double getTo(){
+    public double getTo() {
         return to;
     }
 
-    public void setFrom(double from){
+    public void setFrom(double from) {
         this.from = from;
     }
 
-    public void setTo(double to){
+    public void setTo(double to) {
         this.to = to;
     }
 
@@ -44,14 +46,26 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    public Range interceptRange(Range range){
+    public Range interceptRange(Range range) {
         double rangeFrom = range.getFrom();
         double rangeTo = range.getTo();
 
-        if (range.isInside(from) || range.isInside(to)){
+        if (range.isInside(from) || range.isInside(to)) {
             return new Range(from >= rangeFrom ? from : rangeFrom, to >= rangeTo ? to : rangeTo);
         }
         return null;
+    }
+
+    public ArrayList<Range> mergeRange(Range range) {
+        ArrayList<Range> resultRange = new ArrayList<>();
+
+        if (range.isInside(from) || range.isInside(to)) {
+            resultRange.add(new Range(from <= range.getFrom() ? from : range.getFrom(), to >= range.getTo() ? to : range.getTo()));
+        } else {
+            resultRange.add(range);
+            resultRange.add(this);
+        }
+        return resultRange;
     }
 
 
