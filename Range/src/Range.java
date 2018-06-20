@@ -10,18 +10,30 @@ import java.util.ArrayList;
  * @since 20.06.2018
  */
 public class Range {
-
     private double from;
     private double to;
 
+    /**
+     * конструктор по умолчанию
+     */
     Range() {
     }
 
-    public double getFrom() {
+    /**
+     * Конструктор с параметрами
+     * @param from начало диапазона
+     * @param to конец диапазона
+     */
+    Range(double from, double to) {
+        this.from = from <= to ? from : to;
+        this.to = from <= to ? to : from;
+    }
+
+    double getFrom() {
         return from;
     }
 
-    public double getTo() {
+    double getTo() {
         return to;
     }
 
@@ -29,41 +41,99 @@ public class Range {
         this.from = from;
     }
 
-    public void setTo(double to) {
+    void setTo(double to) {
         this.to = to;
     }
 
-    Range(double from, double to) {
-        this.from = from >= to ? from : to;
-        this.to = from >= to ? to : from;
+
+    /**
+     * Длина диапазона
+     *
+     * @return вещественное число.
+     */
+    double calcLength() {
+        return Math.abs(from - to);
     }
 
-    public double calcLength() {
-        return from - to;
-    }
-
-    public boolean isInside(double number) {
+    /**
+     * Проверка вхождения числа в диапазон
+     *
+     * @param number проверяемое число
+     * @return boolean  результат проверки. true - входит
+     */
+    boolean isInside(double number) {
         return number >= from && number <= to;
     }
 
-    public Range interceptRange(Range range) {
+    /**
+     * Пересечение диапазонов.
+     *
+     * @param range Диапазон, проверяемый на пересечение с данным
+     * @return При отсутствии возвращает null, создавая пустую ссылку. В противном случае, диапазон - ообщий для исходных
+     */
+    Range interceptRange(Range range) {
         double rangeFrom = range.getFrom();
         double rangeTo = range.getTo();
 
         if (range.isInside(from) || range.isInside(to)) {
-            return new Range(from >= rangeFrom ? from : rangeFrom, to >= rangeTo ? to : rangeTo);
+            return new Range(from >= rangeFrom ? from : rangeFrom, to <= rangeTo ? to : rangeTo);
         }
         return null;
     }
 
-    public ArrayList<Range> mergeRange(Range range) {
+    /**
+     * Static method
+     * Объединение диапазонов. rangeOne + rangeTwo
+     *
+     * @param rangeOne первый диапазон
+     * @param rangeTwo второй диапазон
+     * @return ArrayList  диапазонов. Результат может состоять из однго или дву диапазонов
+     */
+    static ArrayList<Range> sumOfRanges(Range rangeOne, Range rangeTwo) {
+        double rangeOneFrom = rangeOne.getFrom();
+        double rangeOneTo = rangeOne.getTo();
+        double rangeTwoFrom = rangeTwo.getFrom();
+        double rangeTwoTo = rangeTwo.getTo();
         ArrayList<Range> resultRange = new ArrayList<>();
 
-        if (range.isInside(from) || range.isInside(to)) {
-            resultRange.add(new Range(from <= range.getFrom() ? from : range.getFrom(), to >= range.getTo() ? to : range.getTo()));
+        if (rangeOne.isInside(rangeTwoFrom) || rangeOne.isInside(rangeTwoTo)) {
+            resultRange.add(new Range(rangeOneFrom <= rangeTwoFrom ? rangeOneFrom : rangeTwoFrom, rangeOneTo >= rangeTwoTo ? rangeOneTo : rangeTwoTo));
+        // нет общего диапазона
         } else {
-            resultRange.add(range);
-            resultRange.add(this);
+            resultRange.add(rangeOne);
+            resultRange.add(rangeTwo);
+        }
+        return resultRange;
+    }
+
+    /**
+     * Static method
+     * Вычитание диапазонов. rangeOne - rangeTwo
+     *
+     * @param rangeOne первый диапазон (A)
+     * @param rangeTwo второй диапазон (B)
+     * @return ArrayList  диапазонов. Результат может состоять из однго или дву диапазонов
+     */
+    static ArrayList<Range> subtractOfRange(Range rangeOne, Range rangeTwo) {
+        double rangeOneFrom = rangeOne.getFrom();
+        double rangeOneTo = rangeOne.getTo();
+        double rangeTwoFrom = rangeTwo.getFrom();
+        double rangeTwoTo = rangeTwo.getTo();
+        ArrayList<Range> resultRange = new ArrayList<>();
+        // Проверка, что В входит в А
+        if (rangeOne.isInside(rangeTwoFrom) && rangeOne.isInside(rangeTwoTo)) {
+            resultRange.add(new Range(rangeOneFrom, rangeTwoFrom));
+            resultRange.add((new Range(rangeTwoTo, rangeOneTo)));
+        // Проверка, что А пересечение В
+        } else if (rangeOneFrom <= rangeTwoFrom && rangeOneTo >= rangeTwoFrom) {
+            resultRange.add(new Range(rangeOneFrom, rangeTwoFrom));
+        // Проверка, что В пересечение А
+        } else if (rangeOneTo >= rangeTwoTo && rangeOneFrom <= rangeTwoTo) {
+            resultRange.add(new Range(rangeTwoTo, rangeOneTo));
+        // нет общего диапазона
+        } else {
+            resultRange.add(rangeOne);
+            resultRange.add(rangeTwo);
         }
         return resultRange;
     }
