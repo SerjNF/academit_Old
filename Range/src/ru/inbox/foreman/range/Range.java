@@ -12,7 +12,6 @@ public class Range {
     private double from;
     private double to;
 
-
     /**
      * Конструктор с параметрами
      *
