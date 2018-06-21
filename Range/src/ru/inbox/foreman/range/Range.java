@@ -1,8 +1,6 @@
 package ru.inbox.foreman.ru.inbox.foreman.range;
 
 
-import java.util.ArrayList;
-
 /**
  * Класс Range. Диапазон определён от меньшего числа к большему
  *
