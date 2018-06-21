@@ -1,4 +1,4 @@
-package ru.inbox.foreman;
+package ru.inbox.foreman.ru.inbox.foreman;
 
 import java.util.ArrayList;
 
@@ -46,8 +46,7 @@ public class TestRange {
 
         }
 
-        // объединение диапазонов
-
+        // Объединение диапазонов
         sumRanges(A, B);
         sumRanges(B, F);
         sumRanges(C, B);
@@ -58,7 +57,6 @@ public class TestRange {
         diffRange(A, B);
         diffRange(F, C);
         diffRange(C, F);
-
     }
 
     private static void sumRanges(Range one, Range two) {
@@ -74,7 +72,7 @@ public class TestRange {
     }
 
     private static void diffRange(Range one, Range two) {
-        System.out.printf("Результат вычитания из диапазонов %s диапазона %s%n", one.rangeToString(), two.rangeToString());
+        System.out.printf("Результат вычитания из диапазона %s диапазона %s%n", one.rangeToString(), two.rangeToString());
 
         ArrayList<Range> subtract = Range.subtractOfRange(one, two);
 
@@ -88,5 +86,4 @@ public class TestRange {
         }
         System.out.println();
     }
-
 }

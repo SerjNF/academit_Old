@@ -1,4 +1,4 @@
-package ru.inbox.foreman;
+package ru.inbox.foreman.ru.inbox.foreman;
 
 
 import java.util.ArrayList;
