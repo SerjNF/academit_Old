@@ -31,7 +31,7 @@ public class Range {
      * @param range второй диапазон
      * @return ArrayList  диапазонов. Результат может состоять из однго или дву диапазонов
      */
-    public Range[] sumOfRanges( Range range) {
+    public Range[] sumOfRanges(Range range) {
 
         double rangeFrom = range.getFrom();
         double rangeTo = range.getTo();
@@ -51,8 +51,7 @@ public class Range {
      * Static method
      * Вычитание диапазонов. this(A) - range(B)
      *
-     *
-     * @param range    второй диапазон
+     * @param range второй диапазон
      * @return Массив диапазонов. Результат может состоять из однго или дву диапазонов. Если вычитаем равные диапазоны или из меньшего больший, возвращает null
      */
     public Range[] subtractOfRange(Range range) {
@@ -142,6 +141,4 @@ public class Range {
         }
         return null;
     }
-
-
 }
