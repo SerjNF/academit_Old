@@ -34,9 +34,10 @@ public class TestRange {
         // Проверка пересечения
         Range D = A.intersectRanges(B);
         if (D != null) {
-            System.out.printf("Результат пересечения A и В диапазон D (%.2f, %.2f)%n", D.getFrom(), D.getTo());
+            System.out.printf("Результат пересечения A и В диапазон D (%.2f, %.2f)%n%n", D.getFrom(), D.getTo());
         } else {
-            System.out.println("Результат пересечения, А и В не пересекаются%n");
+            System.out.println("Результат пересечения, А и В не пересекаются");
+            System.out.println();
         }
 
         Range E = A.intersectRanges(C);
@@ -44,6 +45,7 @@ public class TestRange {
             System.out.printf("Результат пересечения A и C диапазон E (%.2f, %.2f)%n%n", E.getFrom(), E.getTo());
         } else {
             System.out.println("Результат пересечения, А и C не пересекаются");
+            System.out.println();
         }
 
         // Объединение диапазонов
@@ -65,9 +67,9 @@ public class TestRange {
 
         for (int i = 0; i < sun.length; ++i) {
             Range range = sun[i];
-            if (range != null) {
+          //  if (range != null) {
                 System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
-            }
+          //  }
         }
         System.out.println();
     }
@@ -80,9 +82,9 @@ public class TestRange {
         if (subtract != null) {
             for (int i = 0; i < subtract.length; ++i) {
                 Range range = subtract[i];
-                if (range != null) {
+               // if (range != null) {
                     System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
-                }
+              //  }
             }
         } else {
             System.out.println("Результат, диапазон нулевой длины либо бесконечность");

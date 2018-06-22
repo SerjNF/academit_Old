@@ -1,4 +1,3 @@
-
 package ru.inbox.foreman.range;
 
 /**
@@ -20,7 +19,6 @@ public class Range {
      */
     public Range(double from, double to) {
         this.from = Math.min(from, to);
-        Math.min(from, to);
         this.to = Math.max(from, to);
     }
 
@@ -35,14 +33,13 @@ public class Range {
 
         double rangeFrom = range.getFrom();
         double rangeTo = range.getTo();
-        Range[] resultRange = new Range[2];
+        Range[] resultRange;
 
         if ((this.from <= rangeFrom && this.to >= rangeFrom) || (this.from <= rangeTo && this.to >= rangeTo)) {
-            resultRange[0] = new Range(Math.min(this.from, rangeFrom), Math.max(this.to, rangeTo));
+            resultRange = new Range[]{new Range(Math.min(this.from, rangeFrom), Math.max(this.to, rangeTo))};
             // нет общего диапазона
         } else {
-            resultRange[0] = this;
-            resultRange[1] = range;
+            resultRange = new Range[]{this, range};
         }
         return resultRange;
     }
@@ -63,26 +60,33 @@ public class Range {
         if (this.from >= rangeFrom && this.to <= rangeTo) {
             return null;
         }
-        Range[] resultRange = new Range[2];
+        Range[] resultRange;
         // Проверка, что В входит в А
         if (this.from <= rangeFrom && this.to >= rangeTo) {
-
+            Range rOne = null;
+            Range rTwo = null;
             if (this.from != rangeFrom) {
-                resultRange[0] = new Range(this.from, rangeFrom);
+                rOne = new Range(this.from, rangeFrom);
             }
             if (rangeTo != this.to) {
-                resultRange[1] = new Range(rangeTo, this.to);
+                rTwo = new Range(rangeTo, this.to);
             }
+
+            if(rOne !=null && rTwo != null){
+                resultRange = new Range[] {rOne, rTwo};
+            } else{
+                resultRange = new Range[] { rOne != null ? rOne : rTwo};
+            }
+
             // Проверка, что А пересечение В
         } else if (this.from <= rangeFrom && this.to >= rangeFrom) {
-            resultRange[0] = new Range(this.from, rangeFrom);
+            resultRange = new Range[]{new Range(this.from, rangeFrom)};
             // Проверка, что В пересечение А
         } else if (this.to >= rangeTo && this.from <= rangeTo) {
-            resultRange[0] = new Range(rangeTo, this.to);
+            resultRange = new Range[]{new Range(rangeTo, this.to)};
             // нет общего диапазона
         } else {
-            resultRange[0] = this;
-            resultRange[1] = range;
+            resultRange = new Range[]{this, range};
         }
         return resultRange;
     }
@@ -130,7 +134,7 @@ public class Range {
      * Пересечение диапазонов.
      *
      * @param range Диапазон, проверяемый на пересечение с данным
-     * @return При отсутствии возвращает null, создавая пустую ссылку. В противном случае, диапазон - ообщий для исходных
+     * @return При отсутствии возвращает null, создавая пустую ссылку. В противном случае, диапазон - общий для исходных
      */
     public Range intersectRanges(Range range) {
         double rangeFrom = range.getFrom();
