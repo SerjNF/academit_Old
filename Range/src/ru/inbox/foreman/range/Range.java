@@ -56,10 +56,11 @@ public class Range {
         double rangeFrom = range.getFrom();
         double rangeTo = range.getTo();
 
-        // Если вычитаем равные диапазоны или из меньшего больший, возвращает ноль
+        // Если вычитаем равные диапазоны или из меньшего больший, возвращает null
         if (this.from >= rangeFrom && this.to <= rangeTo) {
             return null;
         }
+
         Range[] resultRange;
         // Проверка, что В входит в А
         if (this.from <= rangeFrom && this.to >= rangeTo) {
@@ -71,13 +72,11 @@ public class Range {
             if (rangeTo != this.to) {
                 rTwo = new Range(rangeTo, this.to);
             }
-
-            if(rOne !=null && rTwo != null){
-                resultRange = new Range[] {rOne, rTwo};
-            } else{
-                resultRange = new Range[] { rOne != null ? rOne : rTwo};
+            if (rOne != null && rTwo != null) {
+                resultRange = new Range[]{rOne, rTwo};
+            } else {
+                resultRange = new Range[]{rOne != null ? rOne : rTwo};
             }
-
             // Проверка, что А пересечение В
         } else if (this.from <= rangeFrom && this.to >= rangeFrom) {
             resultRange = new Range[]{new Range(this.from, rangeFrom)};
@@ -140,7 +139,7 @@ public class Range {
         double rangeFrom = range.getFrom();
         double rangeTo = range.getTo();
 
-        if (this.from <=rangeFrom && this.to >= rangeFrom || rangeTo <= this.to && rangeTo >=this.from) {
+        if (this.from <= rangeFrom && this.to >= rangeFrom || rangeTo <= this.to && rangeTo >= this.from) {
             return new Range(Math.max(this.from, rangeFrom), Math.min(this.to, rangeTo));
         }
         return null;
