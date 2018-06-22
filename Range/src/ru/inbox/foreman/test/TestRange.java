@@ -67,9 +67,7 @@ public class TestRange {
 
         for (int i = 0; i < sun.length; ++i) {
             Range range = sun[i];
-          //  if (range != null) {
                 System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
-          //  }
         }
         System.out.println();
     }
@@ -82,9 +80,7 @@ public class TestRange {
         if (subtract != null) {
             for (int i = 0; i < subtract.length; ++i) {
                 Range range = subtract[i];
-               // if (range != null) {
                     System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
-              //  }
             }
         } else {
             System.out.println("Результат, диапазон нулевой длины либо бесконечность");
