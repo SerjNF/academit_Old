@@ -92,7 +92,7 @@ public class Range {
     }
 
     public double getFrom() {
-        return from;
+        return this.from;
     }
 
     public void setFrom(double from) {
@@ -100,7 +100,7 @@ public class Range {
     }
 
     public double getTo() {
-        return to;
+        return this.to;
     }
 
     public void setTo(double to) {
@@ -108,7 +108,7 @@ public class Range {
     }
 
     public String rangeToString() {
-        return "(" + from + ", " + to + ")";
+        return "(" + this.from + ", " + this.to + ")";
     }
 
     /**
@@ -117,7 +117,7 @@ public class Range {
      * @return вещественное число.
      */
     public double calcLength() {
-        return to - from;
+        return this.to - this.from;
     }
 
     /**
@@ -127,7 +127,7 @@ public class Range {
      * @return boolean  результат проверки. true - входит
      */
     public boolean isInside(double number) {
-        return number >= from && number <= to;
+        return number >= this.from && number <= this.to;
     }
 
     /**
@@ -140,8 +140,8 @@ public class Range {
         double rangeFrom = range.getFrom();
         double rangeTo = range.getTo();
 
-        if (range.isInside(from) || range.isInside(to)) {
-            return new Range(Math.max(from, rangeFrom), Math.min(to, rangeTo));
+        if (this.from <=rangeFrom && this.to >= rangeFrom || rangeTo <= this.to && rangeTo >=this.from) {
+            return new Range(Math.max(this.from, rangeFrom), Math.min(this.to, rangeTo));
         }
         return null;
     }
