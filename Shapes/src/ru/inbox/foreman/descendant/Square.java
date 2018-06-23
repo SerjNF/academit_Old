@@ -37,4 +37,17 @@ public class Square extends Shape {
     public double getPerimeter() {
         return this.width * 4;
     }
+
+    public boolean equals(Shape obj) {
+        return (this == obj);
+    }
+
+    @Override
+    public  boolean equals(Object o){
+        if (!(o instanceof Square)){
+            return false;
+        }
+        Square s = (Square)o;
+        return (o == this) || (s.getHeight() == this.height);
+    }
 }

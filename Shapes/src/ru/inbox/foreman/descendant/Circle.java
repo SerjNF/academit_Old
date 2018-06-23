@@ -36,4 +36,13 @@ public class Circle extends Shape {
         return 2 * Math.PI * radius;
     }
 
+    @Override
+    public  boolean equals(Object o){
+        if (!(o instanceof Circle)){
+            return false;
+        }
+        Circle c = (Circle)o;
+        return (o == this) || (c.getHeight() == 2 * radius);
+    }
+
 }

@@ -12,10 +12,10 @@ public class Rectangle extends Shape {
     private double width;
     private double height;
 
-    public Rectangle(String shapesName, double width, double heigth) {
+    public Rectangle(String shapesName, double width, double height) {
         super(shapesName);
         this.width = width;
-        this.height = heigth;
+        this.height = height;
     }
 
     @Override
@@ -36,5 +36,14 @@ public class Rectangle extends Shape {
     @Override
     public double getPerimeter() {
         return (this.width + this.height) * 2;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Rectangle)) {
+            return false;
+        }
+        Rectangle r = (Rectangle) o;
+        return (o == this) || (r.getHeight() == this.getHeight() && r.getWidth() == this.getWidth()) || (r.getWidth() == this.getHeight() && r.getHeight() == this.getWidth());
     }
 }

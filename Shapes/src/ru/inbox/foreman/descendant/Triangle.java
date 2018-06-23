@@ -55,4 +55,29 @@ public class Triangle extends Shape {
     public double getPerimeter() {
         return a.lengthLine() + b.lengthLine() + c.lengthLine();
     }
+
+    private Line getA() {
+        return a;
+    }
+
+    private Line getB() {
+        return b;
+    }
+
+    private Line getC() {
+        return c;
+    }
+
+    @Override
+    public  boolean equals(Object o){
+        if (!(o instanceof Triangle)){
+            return false;
+        }
+        Triangle t = (Triangle)o;
+        return (o == this) || equalsLine(t);
+    }
+
+    private boolean equalsLine(Triangle t){
+        return (a == t.getA() && b == t.getB() && c == t.getC()) || (b == t.getA() && c == t.getB() && a == t.getC()) || (c == t.getA() && a == t.getB() && b == t.getC());
+    }
 }

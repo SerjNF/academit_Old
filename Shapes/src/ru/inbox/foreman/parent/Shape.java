@@ -1,5 +1,6 @@
 package ru.inbox.foreman.parent;
 
+
 /**
  * Класс объектов фигура
  *
@@ -31,6 +32,16 @@ public class Shape {
 
     public String getName() {
         return shapesName;
+    }
+
+    @Override
+    public String toString() {
+        return "Класс: " + getClass().getName() + ", Фигура - " + getName() + ", S = " + getArea() + ", P = " + getPerimeter();
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) Math.round(getArea());
     }
 
 

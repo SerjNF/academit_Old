@@ -20,8 +20,8 @@ public class TestShape {
         Shape[] shapes = new Shape[]{
                 new Square("Квадрат 1", 1.6),
                 new Square("Квадрат 2", 3.9),
-                new Rectangle("Прямоугольник 1", 6.9, 0.2),
-                new Rectangle("Прямоугольник 2", 0.2, 6.9),
+                new Rectangle("Прямоугольник 1", 6.9, 1.2),
+                new Rectangle("Прямоугольник 2", 1.2, 6.9),
                 new Triangle("Треугольник 1", 0, 5, 0, 0, 4, 3),
                 new Triangle("Треугольник 2", 1, 4, -1, -2, -2, 7),
                 new Circle("Круг 1", 2.9),
@@ -42,6 +42,21 @@ public class TestShape {
         number = 2;
         showInfoShape(searchShapeWithNumberOfPerimeter(shapes, number));
 
+
+        System.out.println();
+        System.out.println("Проверка метода toString");
+        for (Shape shape : shapes) {
+            System.out.println(shape);
+        }
+
+        System.out.println();
+        System.out.printf("Результат сравнения Прямоугольника 1 и 2: %s%n", shapes[2].equals(shapes[3]));
+        System.out.printf("Результат сравнения Круга 1 и 2: %s%n", shapes[6].equals(shapes[7]));
+
+        System.out.println();
+        System.out.printf("Хэш-код Квадрата 1: %s%n", shapes[0].hashCode());
+        System.out.printf("Хэш-код Прямоугольника 1: %s%n", shapes[2].hashCode());
+        System.out.printf("Хэш-код Прямоугольника 2: %s%n", shapes[3].hashCode());
     }
 
     /**
@@ -51,9 +66,11 @@ public class TestShape {
      * @param number номер возвращаемой фигуры
      * @return фигура
      */
-    private static Shape searchShapeWithNumberOfArea(Shape[] shapes, int number) {
-        Arrays.sort(shapes, new SortShapeByArea());
-        return shapes[shapes.length - 1 - (number - 1)];
+    private static Shape searchShapeWithNumberOfArea(final Shape[] shapes, int number) {
+        Shape[] tempShapes = new Shape[shapes.length];
+        System.arraycopy(shapes, 0, tempShapes, 0, shapes.length);
+        Arrays.sort(tempShapes, new SortShapeByArea());
+        return tempShapes[tempShapes.length - 1 - (number - 1)];
     }
 
     /**
@@ -63,9 +80,11 @@ public class TestShape {
      * @param shapes массив фигур
      * @return фигура
      */
-    private static Shape searchShapeWithNumberOfPerimeter(Shape[] shapes, int number) {
-        Arrays.sort(shapes, new SortShapeByPerimeter());
-        return shapes[number - 1];
+    private static Shape searchShapeWithNumberOfPerimeter(final Shape[] shapes, int number) {
+        Shape[] tempShapes = new Shape[shapes.length];
+        System.arraycopy(shapes, 0, tempShapes, 0, shapes.length);
+        Arrays.sort(tempShapes, new SortShapeByPerimeter());
+        return tempShapes[number - 1];
     }
 
     /**
