@@ -44,6 +44,15 @@ public class Rectangle extends Shape {
             return false;
         }
         Rectangle r = (Rectangle) o;
-        return (o == this) || (r.getHeight() == this.getHeight() && r.getWidth() == this.getWidth()) || (r.getWidth() == this.getHeight() && r.getHeight() == this.getWidth());
+        return (o == this) || (r.getHeight() == this.getHeight() && r.getWidth() == this.getWidth());// || (r.getWidth() == this.getHeight() && r.getHeight() == this.getWidth());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 2;
+        int prime = 44;
+        hash = prime * hash + Double.hashCode(width);
+        hash = prime * hash + Double.hashCode(height);
+        return hash;
     }
 }

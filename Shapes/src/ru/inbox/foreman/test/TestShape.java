@@ -21,8 +21,8 @@ public class TestShape {
                 new Square("Квадрат 1", 1.6),
                 new Square("Квадрат 2", 3.9),
                 new Rectangle("Прямоугольник 1", 6.9, 1.2),
-                new Rectangle("Прямоугольник 2", 1.2, 6.9),
-                new Triangle("Треугольник 1", 0, 5, 0, 0, 4, 3),
+                new Rectangle("Прямоугольник 2", 6.9, 1.2),
+                new Triangle("Треугольник 1", 1, 4, -1, -2, -2, 7),
                 new Triangle("Треугольник 2", 1, 4, -1, -2, -2, 7),
                 new Circle("Круг 1", 2.9),
                 new Circle("Круг 2", 1.1),};
@@ -51,12 +51,20 @@ public class TestShape {
 
         System.out.println();
         System.out.printf("Результат сравнения Прямоугольника 1 и 2: %s%n", shapes[2].equals(shapes[3]));
+        System.out.printf("Результат сравнения Треугольника 1 и 2: %s%n", shapes[4].equals(shapes[5]));
         System.out.printf("Результат сравнения Круга 1 и 2: %s%n", shapes[6].equals(shapes[7]));
 
         System.out.println();
         System.out.printf("Хэш-код Квадрата 1: %s%n", shapes[0].hashCode());
+        System.out.printf("Хэш-код Квадрата 2: %s%n", shapes[1].hashCode());
         System.out.printf("Хэш-код Прямоугольника 1: %s%n", shapes[2].hashCode());
         System.out.printf("Хэш-код Прямоугольника 2: %s%n", shapes[3].hashCode());
+        System.out.printf("Хэш-код Треугольник 1: %s%n", shapes[4].hashCode());
+        System.out.printf("Хэш-код Треугольник 2: %s%n", shapes[5].hashCode());
+        System.out.printf("Хэш-код Круг 1: %s%n", shapes[6].hashCode());
+        System.out.printf("Хэш-код Круг 2: %s%n", shapes[7].hashCode());
+
+
     }
 
     /**

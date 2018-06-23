@@ -38,16 +38,20 @@ public class Square extends Shape {
         return this.width * 4;
     }
 
-    public boolean equals(Shape obj) {
-        return (this == obj);
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Square)) {
+            return false;
+        }
+        Square s = (Square) o;
+        return (o == this) || (s.getHeight() == this.height);
     }
 
     @Override
-    public  boolean equals(Object o){
-        if (!(o instanceof Square)){
-            return false;
-        }
-        Square s = (Square)o;
-        return (o == this) || (s.getHeight() == this.height);
+    public int hashCode() {
+        int hash = 100;
+        int prime = 22;
+        hash = prime * hash + Double.hashCode(width);
+        return hash;
     }
 }

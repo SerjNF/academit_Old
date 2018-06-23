@@ -69,15 +69,21 @@ public class Triangle extends Shape {
     }
 
     @Override
-    public  boolean equals(Object o){
-        if (!(o instanceof Triangle)){
+    public boolean equals(Object o) {
+        if (!(o instanceof Triangle)) {
             return false;
         }
-        Triangle t = (Triangle)o;
-        return (o == this) || equalsLine(t);
+        Triangle t = (Triangle) o;
+        return (o == this) || (a.equals(t.getA()) && b.equals(t.getB()) && c.equals(t.getC()));
     }
 
-    private boolean equalsLine(Triangle t){
-        return (a == t.getA() && b == t.getB() && c == t.getC()) || (b == t.getA() && c == t.getB() && a == t.getC()) || (c == t.getA() && a == t.getB() && b == t.getC());
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        int prime = 33;
+        hash = prime * hash + (a != null ? a.hashCode() : 0);
+        hash = prime * hash + (b != null ? b.hashCode() : 0);
+        hash = prime * hash + (c != null ? c.hashCode() : 0);
+        return hash;
     }
 }
