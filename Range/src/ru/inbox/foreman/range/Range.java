@@ -30,61 +30,48 @@ public class Range {
      */
     public Range[] sumOfRanges(Range range) {
 
-        double rangeFrom = range.from;
-        double rangeTo = range.to;
-        Range[] resultRange;
-
-        if (!(this.from > rangeTo || this.to < rangeFrom)) {
-            resultRange = new Range[]{new Range(Math.min(this.from, rangeFrom), Math.max(this.to, rangeTo))};
-            // нет общего диапазона
+        // нет общего диапазона
+        if (this.from > range.to || this.to < range.from) {
+            return new Range[]{new Range(this.from, this.to), new Range(range.from, range.to)};
         } else {
-            resultRange = new Range[]{new Range(this.from, this.to), new Range(rangeFrom, rangeTo)};
+            return new Range[]{new Range(Math.min(this.from, range.from), Math.max(this.to, range.to))};
         }
-        return resultRange;
     }
 
     /**
      * Вычитание диапазонов. this(A) - range(B)
      *
      * @param range второй диапазон
-     * @return Массив диапазонов. Результат может состоять из однго или дву диапазонов. Если вычитаем равные диапазоны или из меньшего больший, возвращает null
+     * @return Массив диапазонов. Результат может состоять из однго или дву диапазонов. Если вычитаем равные диапазоны или стыкующиеся  - Массив с пустым диапазоном.
+     * Если вычитаем из меньшего больший или нет пересечения -  массив длиной 0
      */
     public Range[] subtractOfRange(Range range) {
-        double rangeFrom = range.from;
-        double rangeTo = range.to;
-        Range[] resultRange;
-
-        // Если вычитаем равные диапазоны или из меньшего больший, возвращает null
-        if (this.from >= rangeFrom && this.to <= rangeTo) {
+        //равные диапазоны
+        if (this.from == range.from && this.to == range.to) {
+            return new Range[1];
+        }
+        //из меньшего больший
+        if (this.from >= range.from && this.to <= range.to) {
             return new Range[0];
         }
-
-        // Проверка, что В входит в А
-        if (this.from <= rangeFrom && this.to >= rangeTo) {
-            Range rOne = null;
-            Range rTwo = null;
-            if (this.from != rangeFrom) {
-                rOne = new Range(this.from, rangeFrom);
-            }
-            if (rangeTo != this.to) {
-                rTwo = new Range(rangeTo, this.to);
-            }
-            if (rOne != null && rTwo != null) {
-                resultRange = new Range[]{rOne, rTwo};
-            } else {
-                resultRange = new Range[]{rOne != null ? rOne : rTwo};
-            }
-            // Проверка, что А пересечение В
-        } else if (this.from <= rangeFrom && this.to >= rangeFrom) {
-            resultRange = new Range[]{new Range(this.from, rangeFrom)};
-            // Проверка, что В пересечение А
-        } else if (this.to >= rangeTo && this.from <= rangeTo) {
-            resultRange = new Range[]{new Range(rangeTo, this.to)};
-            // нет общего диапазона
-        } else {
-            resultRange = new Range[]{new Range(this.from, this.to), new Range(rangeFrom, rangeTo)};
+        //нет пересечения
+        if (this.from > range.to || this.to < range.from) {
+            return new Range[0];
         }
-        return resultRange;
+        //диапазон внутри
+        if (this.from < range.from && this.to > range.to) {
+            return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
+        }
+        //пересечение слева
+        if (this.from < range.to && this.to > range.from) {
+            return new Range[]{new Range(this.from, range.from)};
+        }
+        //пересечение справа
+        if (this.to > range.from && this.from < range.to) {
+            return new Range[]{new Range(range.to, this.to)};
+        }
+        //пустое пересечение
+        return new Range[1];
     }
 
     public double getFrom() {
@@ -133,11 +120,8 @@ public class Range {
      * @return При отсутствии возвращает null, создавая пустую ссылку. В противном случае, диапазон - общий для исходных
      */
     public Range intersectRanges(Range range) {
-        double rangeFrom = range.from;
-        double rangeTo = range.to;
-
-        if (!(this.from > rangeTo || this.to < rangeFrom)) {
-            return new Range(Math.max(this.from, rangeFrom), Math.min(this.to, rangeTo));
+        if (this.from <= range.to && this.to >= range.from) {
+            return new Range(Math.max(this.from, range.from), Math.min(this.to, range.to));
         }
         return null;
     }

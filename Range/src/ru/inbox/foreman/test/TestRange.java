@@ -20,6 +20,7 @@ public class TestRange {
         Range B = new Range(5, 10);
         Range C = new Range(12, 18.5);
         Range F = new Range(3.2, 18.5);
+        Range G = new Range(5, 12);
 
         System.out.printf("Диапазон А (%.2f, %.2f)%n", A.getFrom(), A.getTo());
         System.out.printf("Диапазон B (%.2f, %.2f)%n", B.getFrom(), B.getTo());
@@ -58,6 +59,9 @@ public class TestRange {
         diffRange(A, B);
         diffRange(F, C);
         diffRange(C, F);
+        diffRange(C, G);
+        diffRange(F, B);
+        diffRange(A, A);
     }
 
     private static void sumRanges(Range one, Range two) {
@@ -67,7 +71,7 @@ public class TestRange {
 
         for (int i = 0; i < sun.length; ++i) {
             Range range = sun[i];
-                System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
+            System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
         }
         System.out.println();
     }
@@ -78,12 +82,17 @@ public class TestRange {
         Range[] subtract = one.subtractOfRange(two);
 
         if (subtract.length != 0) {
+            if (subtract[0] == null) {
+                System.out.println("Путое пересечение");
+                System.out.println();
+                return;
+            }
             for (int i = 0; i < subtract.length; ++i) {
                 Range range = subtract[i];
-                    System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
+                System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
             }
         } else {
-            System.out.println("Результат, диапазон нулевой длины либо бесконечность");
+            System.out.println("Нет пересечения, либо результат вычитания - бесконечность");
         }
         System.out.println();
     }
