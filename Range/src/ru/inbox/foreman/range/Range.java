@@ -23,7 +23,6 @@ public class Range {
     }
 
     /**
-     * Static method
      * Объединение диапазонов. rangeOne + rangeTwo
      *
      * @param range второй диапазон
@@ -31,37 +30,35 @@ public class Range {
      */
     public Range[] sumOfRanges(Range range) {
 
-        double rangeFrom = range.getFrom();
-        double rangeTo = range.getTo();
+        double rangeFrom = range.from;
+        double rangeTo = range.to;
         Range[] resultRange;
 
-        if ((this.from <= rangeFrom && this.to >= rangeFrom) || (this.from <= rangeTo && this.to >= rangeTo)) {
+        if (!(this.from > rangeTo || this.to < rangeFrom)) {
             resultRange = new Range[]{new Range(Math.min(this.from, rangeFrom), Math.max(this.to, rangeTo))};
             // нет общего диапазона
         } else {
-            resultRange = new Range[]{this, range};
+            resultRange = new Range[]{new Range(this.from, this.to), new Range(rangeFrom, rangeTo)};
         }
         return resultRange;
     }
 
     /**
-     * Static method
      * Вычитание диапазонов. this(A) - range(B)
      *
      * @param range второй диапазон
      * @return Массив диапазонов. Результат может состоять из однго или дву диапазонов. Если вычитаем равные диапазоны или из меньшего больший, возвращает null
      */
     public Range[] subtractOfRange(Range range) {
-
-        double rangeFrom = range.getFrom();
-        double rangeTo = range.getTo();
+        double rangeFrom = range.from;
+        double rangeTo = range.to;
+        Range[] resultRange;
 
         // Если вычитаем равные диапазоны или из меньшего больший, возвращает null
         if (this.from >= rangeFrom && this.to <= rangeTo) {
-            return null;
+            return new Range[0];
         }
 
-        Range[] resultRange;
         // Проверка, что В входит в А
         if (this.from <= rangeFrom && this.to >= rangeTo) {
             Range rOne = null;
@@ -85,7 +82,7 @@ public class Range {
             resultRange = new Range[]{new Range(rangeTo, this.to)};
             // нет общего диапазона
         } else {
-            resultRange = new Range[]{this, range};
+            resultRange = new Range[]{new Range(this.from, this.to), new Range(rangeFrom, rangeTo)};
         }
         return resultRange;
     }
@@ -136,10 +133,10 @@ public class Range {
      * @return При отсутствии возвращает null, создавая пустую ссылку. В противном случае, диапазон - общий для исходных
      */
     public Range intersectRanges(Range range) {
-        double rangeFrom = range.getFrom();
-        double rangeTo = range.getTo();
+        double rangeFrom = range.from;
+        double rangeTo = range.to;
 
-        if (this.from <= rangeFrom && this.to >= rangeFrom || rangeTo <= this.to && rangeTo >= this.from) {
+        if (!(this.from > rangeTo || this.to < rangeFrom)) {
             return new Range(Math.max(this.from, rangeFrom), Math.min(this.to, rangeTo));
         }
         return null;

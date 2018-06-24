@@ -77,7 +77,7 @@ public class TestRange {
 
         Range[] subtract = one.subtractOfRange(two);
 
-        if (subtract != null) {
+        if (subtract.length != 0) {
             for (int i = 0; i < subtract.length; ++i) {
                 Range range = subtract[i];
                     System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
