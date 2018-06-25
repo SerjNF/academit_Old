@@ -46,7 +46,6 @@ public class TestShape {
         number = 2;
         showInfoShape(searchShapeWithNumberOfPerimeter(shapes, number));
 
-
         System.out.println();
         System.out.println("Проверка метода toString");
         for (Shape shape : shapes) {
