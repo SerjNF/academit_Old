@@ -22,9 +22,12 @@ public class TestRange {
         Range F = new Range(3.2, 18.5);
         Range G = new Range(5, 12);
 
-        System.out.printf("Диапазон А (%.2f, %.2f)%n", A.getFrom(), A.getTo());
-        System.out.printf("Диапазон B (%.2f, %.2f)%n", B.getFrom(), B.getTo());
-        System.out.printf("Диапазон C (%.2f, %.2f)%n%n", C.getFrom(), C.getTo());
+        System.out.printf("Диапазон А %s%n", A.rangeToString());
+        System.out.printf("Диапазон B %s%n", B.rangeToString());
+        System.out.printf("Диапазон C %s%n", C.rangeToString());
+        System.out.printf("Диапазон F %s%n", F.rangeToString());
+        System.out.printf("Диапазон G %s%n%n", G.rangeToString());
+
 
         // Проверка вхождения числа
         double number = 4.0;
@@ -33,7 +36,7 @@ public class TestRange {
         System.out.printf("Число %.2f %s в диапазон В длинной %.2f%n%n", number, (B.isInside(number)) ? "входит" : "не входит", B.calcLength());
 
         // Проверка пересечения
-        Range D = A.intersectRanges(B);
+        Range D = A.getIntersectRanges(B);
         if (D != null) {
             System.out.printf("Результат пересечения A и В диапазон D (%.2f, %.2f)%n%n", D.getFrom(), D.getTo());
         } else {
@@ -41,7 +44,7 @@ public class TestRange {
             System.out.println();
         }
 
-        Range E = A.intersectRanges(C);
+        Range E = A.getIntersectRanges(C);
         if (E != null) {
             System.out.printf("Результат пересечения A и C диапазон E (%.2f, %.2f)%n%n", E.getFrom(), E.getTo());
         } else {
@@ -82,17 +85,13 @@ public class TestRange {
         Range[] subtract = one.subtractOfRange(two);
 
         if (subtract.length != 0) {
-            if (subtract[0] == null) {
-                System.out.println("Путое пересечение");
-                System.out.println();
-                return;
-            }
+
             for (int i = 0; i < subtract.length; ++i) {
                 Range range = subtract[i];
                 System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
             }
         } else {
-            System.out.println("Нет пересечения, либо результат вычитания - бесконечность");
+            System.out.println("Нет пересечения, либо пустое пересечение, либо результат вычитания - бесконечность");
         }
         System.out.println();
     }

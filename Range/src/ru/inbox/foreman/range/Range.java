@@ -23,7 +23,7 @@ public class Range {
     }
 
     /**
-     * Объединение диапазонов. rangeOne + rangeTwo
+     * Объединение диапазонов. this(A) + range(B)
      *
      * @param range второй диапазон
      * @return ArrayList  диапазонов. Результат может состоять из однго или дву диапазонов
@@ -31,7 +31,7 @@ public class Range {
     public Range[] sumOfRanges(Range range) {
 
         // нет общего диапазона
-        if (this.from > range.to || this.to < range.from) {
+        if (getIntersectRanges(range) == null) {
             return new Range[]{new Range(this.from, this.to), new Range(range.from, range.to)};
         } else {
             return new Range[]{new Range(Math.min(this.from, range.from), Math.max(this.to, range.to))};
@@ -46,32 +46,25 @@ public class Range {
      * Если вычитаем из меньшего больший или нет пересечения -  массив длиной 0
      */
     public Range[] subtractOfRange(Range range) {
-        //равные диапазоны
-        if (this.from == range.from && this.to == range.to) {
-            return new Range[1];
+        if (getIntersectRanges(range) != null) {
+            //из меньшего больший либо равные
+            if (this.from >= range.from && this.to <= range.to) {
+                return new Range[0];
+            }
+            //диапазон внутри
+            if (this.from < range.from && this.to > range.to) {
+                return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
+            }
+            //пересечение слева
+            if (this.from < range.to && this.to > range.from) {
+                return new Range[]{new Range(this.from, range.from)};
+            }
+            //пересечение справа
+            if (this.to > range.from && this.from < range.to) {
+                return new Range[]{new Range(range.to, this.to)};
+            }
         }
-        //из меньшего больший
-        if (this.from >= range.from && this.to <= range.to) {
-            return new Range[0];
-        }
-        //нет пересечения
-        if (this.from > range.to || this.to < range.from) {
-            return new Range[0];
-        }
-        //диапазон внутри
-        if (this.from < range.from && this.to > range.to) {
-            return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
-        }
-        //пересечение слева
-        if (this.from < range.to && this.to > range.from) {
-            return new Range[]{new Range(this.from, range.from)};
-        }
-        //пересечение справа
-        if (this.to > range.from && this.from < range.to) {
-            return new Range[]{new Range(range.to, this.to)};
-        }
-        //пустое пересечение
-        return new Range[1];
+        return new Range[0];
     }
 
     public double getFrom() {
@@ -114,13 +107,13 @@ public class Range {
     }
 
     /**
-     * Пересечение диапазонов.
+     * Возврат результата пересечения диапазонов.
      *
      * @param range Диапазон, проверяемый на пересечение с данным
      * @return При отсутствии возвращает null, создавая пустую ссылку. В противном случае, диапазон - общий для исходных
      */
-    public Range intersectRanges(Range range) {
-        if (this.from <= range.to && this.to >= range.from) {
+    public Range getIntersectRanges(Range range) {
+        if (this.from < range.to && this.to > range.from) {
             return new Range(Math.max(this.from, range.from), Math.min(this.to, range.to));
         }
         return null;
