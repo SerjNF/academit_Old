@@ -6,16 +6,14 @@ import ru.inbox.foreman.parent.Shape;
  * Класс объектов квадрат
  *
  * @author SergeyNF
+ * @version 1.1
  * @since 23.06.2018
  */
-public class Square extends Shape {
+public class Square implements Shape {
     private double width;
-    private double height;
 
-    public Square(String shapesName, double width) {
-        super(shapesName);
+    public Square(double width) {
         this.width = width;
-        this.height = width;
     }
 
     @Override
@@ -25,7 +23,7 @@ public class Square extends Shape {
 
     @Override
     public double getHeight() {
-        return this.height;
+        return this.width;
     }
 
     @Override
@@ -40,11 +38,14 @@ public class Square extends Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Square)) {
+        if (o == this) {
+            return true;
+        }
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
         Square s = (Square) o;
-        return (o == this) || (s.getHeight() == this.height);
+        return o == this || s.width == this.width;
     }
 
     @Override
@@ -53,5 +54,10 @@ public class Square extends Shape {
         int prime = 22;
         hash = prime * hash + Double.hashCode(width);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "Класс: " + getClass().getName() + ", S = " + getArea() + ", P = " + getPerimeter();
     }
 }

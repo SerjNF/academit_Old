@@ -1,7 +1,10 @@
 package ru.inbox.foreman.test;
 
-import ru.inbox.foreman.descendant.*;
-import ru.inbox.foreman.parent.*;
+import ru.inbox.foreman.descendant.Circle;
+import ru.inbox.foreman.descendant.Rectangle;
+import ru.inbox.foreman.descendant.Square;
+import ru.inbox.foreman.descendant.Triangle;
+import ru.inbox.foreman.parent.Shape;
 import ru.inbox.foreman.supportElement.SortShapeByArea;
 import ru.inbox.foreman.supportElement.SortShapeByPerimeter;
 
@@ -11,6 +14,7 @@ import java.util.Arrays;
  * Класс с методами для тестирования объектов, птомков класса Shape
  *
  * @author SergeyNF
+ * @version 1.1
  * @since 23.06.2018
  */
 public class TestShape {
@@ -18,14 +22,14 @@ public class TestShape {
     public static void main(String[] arg) {
 
         Shape[] shapes = new Shape[]{
-                new Square("Квадрат 1", 1.6),
-                new Square("Квадрат 2", 3.9),
-                new Rectangle("Прямоугольник 1", 6.9, 1.2),
-                new Rectangle("Прямоугольник 2", 6.9, 1.2),
-                new Triangle("Треугольник 1", 1, 4, -1, -2, -2, 7),
-                new Triangle("Треугольник 2", 1, 4, -1, -2, -2, 7),
-                new Circle("Круг 1", 2.9),
-                new Circle("Круг 2", 1.1),};
+                new Square(1.6),
+                new Square(3.9),
+                new Rectangle(6.9, 1.2),
+                new Rectangle(6.9, 1.2),
+                new Triangle(1, 4, -1, -2, -2, 7),
+                new Triangle(1, 4, -1, -2, -2, 7),
+                new Circle(2.9),
+                new Circle(1.1),};
 
         System.out.println("Данные всех фигур");
         for (Shape shape : shapes) {
@@ -63,8 +67,6 @@ public class TestShape {
         System.out.printf("Хэш-код Треугольник 2: %s%n", shapes[5].hashCode());
         System.out.printf("Хэш-код Круг 1: %s%n", shapes[6].hashCode());
         System.out.printf("Хэш-код Круг 2: %s%n", shapes[7].hashCode());
-
-
     }
 
     /**
@@ -101,7 +103,7 @@ public class TestShape {
      * @param shape фигура
      */
     private static void showInfoShape(Shape shape) {
-        System.out.printf("Фигура %-15s высотой %5.2f, шириной %5.2f, S = %5.2f, P = %5.2f%n", shape.getName(), shape.getHeight(), shape.getWidth(), shape.getArea(), shape.getPerimeter());
+        System.out.printf("Фигура класса %-40s высотой %5.2f, шириной %5.2f, S = %5.2f, P = %5.2f%n", shape.getClass().getName(), shape.getHeight(), shape.getWidth(), shape.getArea(), shape.getPerimeter());
     }
 
 }

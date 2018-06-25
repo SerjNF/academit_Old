@@ -1,40 +1,19 @@
 package ru.inbox.foreman.parent;
 
 /**
- * Класс объектов фигура
+ * Interface с набором методов для геометрических фигур
  *
  * @author SergeyNF
  * @since 23.06.2018
+ * @version 1.1
  */
-public class Shape {
-    private final String shapesName;
+public interface Shape {
 
-    protected Shape(String shapesName) {
-        this.shapesName = shapesName;
-    }
+    double getWidth();
 
-    public double getWidth() {
-        return 0;
-    }
+    double getHeight();
 
-    public double getHeight() {
-        return 0;
-    }
+    double getArea();
 
-    public double getArea() {
-        return 0;
-    }
-
-    public double getPerimeter() {
-        return 0;
-    }
-
-    public String getName() {
-        return shapesName;
-    }
-
-    @Override
-    public String toString() {
-        return "Класс: " + getClass().getName() + ", Фигура - " + shapesName + ", S = " + getArea() + ", P = " + getPerimeter();
-    }
+    double getPerimeter();
 }

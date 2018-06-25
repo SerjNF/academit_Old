@@ -7,9 +7,10 @@ import ru.inbox.foreman.supportElement.Line;
  * Класс объектов треугольник
  *
  * @author SergeyNF
+ * @version 1.1
  * @since 23.06.2018
  */
-public class Triangle extends Shape {
+public class Triangle implements Shape {
     private double x1;
     private double y1;
     private double x2;
@@ -21,8 +22,8 @@ public class Triangle extends Shape {
     private Line b;
     private Line c;
 
-    public Triangle(String nameShape, double x1, double y1, double x2, double y2, double x3, double y3) {
-        super(nameShape);
+    public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
+
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -70,11 +71,14 @@ public class Triangle extends Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Triangle)) {
+        if (o == this) {
+            return true;
+        }
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
         Triangle t = (Triangle) o;
-        return (o == this) || (a.equals(t.getA()) && b.equals(t.getB()) && c.equals(t.getC()));
+        return a.equals(t.a) && b.equals(t.b) && c.equals(t.c);
     }
 
     @Override
@@ -85,5 +89,10 @@ public class Triangle extends Shape {
         hash = prime * hash + (b != null ? b.hashCode() : 0);
         hash = prime * hash + (c != null ? c.hashCode() : 0);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "Класс: " + getClass().getName() + ", S = " + getArea() + ", P = " + getPerimeter();
     }
 }

@@ -11,12 +11,6 @@ import java.util.Comparator;
 public class SortShapeByPerimeter implements Comparator<Shape> {
     @Override
     public int compare(Shape shapeOne, Shape shapeTwo) {
-        if (shapeOne.getPerimeter() > shapeTwo.getPerimeter()) {
-            return 1;
-        } else if (shapeOne.getPerimeter() < shapeTwo.getPerimeter()) {
-            return -1;
-        } else {
-            return 0;
-        }
+        return Double.compare(shapeOne.getPerimeter(), shapeTwo.getPerimeter());
     }
 }

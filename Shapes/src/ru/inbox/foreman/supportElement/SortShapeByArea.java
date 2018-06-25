@@ -10,12 +10,6 @@ import java.util.Comparator;
 public class SortShapeByArea implements Comparator<Shape> {
     @Override
     public int compare(Shape shapeOne, Shape shapeTwo) {
-        if (shapeOne.getArea() > shapeTwo.getArea()){
-            return 1;
-        } else if (shapeOne.getArea() < shapeTwo.getArea()){
-            return -1;
-        } else {
-            return 0;
-        }
+        return Double.compare(shapeOne.getArea(), shapeTwo.getArea());
     }
 }

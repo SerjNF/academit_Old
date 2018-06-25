@@ -6,13 +6,14 @@ import ru.inbox.foreman.parent.Shape;
  * Класс объектов круг
  *
  * @author SergeyNF
+ * @version 1.1
  * @since 23.06.2018
  */
-public class Circle extends Shape {
+public class Circle implements Shape {
     private double radius;
 
-    public Circle(String nameShape, double radius) {
-        super(nameShape);
+    public Circle(double radius) {
+        //super(nameShape);
         this.radius = radius;
     }
 
@@ -38,11 +39,14 @@ public class Circle extends Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Circle)) {
+        if (o == this) {
+            return true;
+        }
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
         Circle c = (Circle) o;
-        return (o == this) || (c.getHeight() == 2 * radius);
+        return c.radius == this.radius;
     }
 
     @Override
@@ -51,6 +55,11 @@ public class Circle extends Shape {
         int prime = 20;
         hash = prime * hash + Double.hashCode(radius);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "Класс: " + getClass().getName() + ", S = " + getArea() + ", P = " + getPerimeter();
     }
 
 }

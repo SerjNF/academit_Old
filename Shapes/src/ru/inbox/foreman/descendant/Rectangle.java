@@ -6,14 +6,15 @@ import ru.inbox.foreman.parent.Shape;
  * Класс объектов прямоугольник
  *
  * @author SergeyNF
+ * @version 1.1
  * @since 23.06.2018
  */
-public class Rectangle extends Shape {
+public class Rectangle implements Shape {
     private double width;
     private double height;
 
-    public Rectangle(String shapesName, double width, double height) {
-        super(shapesName);
+    public Rectangle(double width, double height) {
+
         this.width = width;
         this.height = height;
     }
@@ -40,11 +41,14 @@ public class Rectangle extends Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Rectangle)) {
+        if (o == this) {
+            return true;
+        }
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
         Rectangle r = (Rectangle) o;
-        return (o == this) || (r.getHeight() == this.getHeight() && r.getWidth() == this.getWidth());// || (r.getWidth() == this.getHeight() && r.getHeight() == this.getWidth());
+        return r.height == this.height && r.width == this.width;
     }
 
     @Override
@@ -54,5 +58,10 @@ public class Rectangle extends Shape {
         hash = prime * hash + Double.hashCode(width);
         hash = prime * hash + Double.hashCode(height);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "Класс: " + getClass().getName() + ", S = " + getArea() + ", P = " + getPerimeter();
     }
 }

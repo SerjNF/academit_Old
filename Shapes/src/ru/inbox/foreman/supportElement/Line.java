@@ -1,7 +1,7 @@
 package ru.inbox.foreman.supportElement;
 
 /**
- * Класс линия. Вспомогательны для треугольника
+ * Класс линия. Вспомогательный для треугольника
  */
 public class Line {
     private double x1;
@@ -15,23 +15,6 @@ public class Line {
         this.x2 = x2;
         this.y2 = y2;
     }
-
-    private double getX1() {
-        return x1;
-    }
-
-    private double getX2() {
-        return x2;
-    }
-
-    private double getY1() {
-        return y1;
-    }
-
-    private double getY2() {
-        return y2;
-    }
-
     /**
      * Длина линии
      *
@@ -54,11 +37,14 @@ public class Line {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Line)) {
+        if (o == this) {
+            return true;
+        }
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
         Line l = (Line) o;
-        return (o == this) || (x1 == l.getX1() && x2 == l.getX2() && y1 == l.getY1() && y2 == l.getY2());
+        return x1 == l.x1 && x2 == l.x2 && y1 == l.y1 && y2 == l.y2;
     }
 }
 
