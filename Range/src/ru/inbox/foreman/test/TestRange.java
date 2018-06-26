@@ -28,10 +28,8 @@ public class TestRange {
         System.out.printf("Диапазон F %s%n", F.rangeToString());
         System.out.printf("Диапазон G %s%n%n", G.rangeToString());
 
-
         // Проверка вхождения числа
         double number = 4.0;
-
         System.out.printf("Число %.2f %s в диапазон A длинной %.2f%n", number, (A.isInside(number)) ? "входит" : "не входит", A.calcLength());
         System.out.printf("Число %.2f %s в диапазон В длинной %.2f%n%n", number, (B.isInside(number)) ? "входит" : "не входит", B.calcLength());
 
@@ -64,7 +62,7 @@ public class TestRange {
         diffRange(C, F);
         diffRange(C, G);
         diffRange(F, B);
-        diffRange(A, A);
+
     }
 
     private static void sumRanges(Range one, Range two) {
@@ -85,13 +83,12 @@ public class TestRange {
         Range[] subtract = one.subtractOfRange(two);
 
         if (subtract.length != 0) {
-
             for (int i = 0; i < subtract.length; ++i) {
                 Range range = subtract[i];
                 System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
             }
         } else {
-            System.out.println("Нет пересечения, либо пустое пересечение, либо результат вычитания - бесконечность");
+            System.out.println("Рузультат вычитания - диапазон нулевой длины, либо бесконечность");
         }
         System.out.println();
     }

@@ -22,50 +22,6 @@ public class Range {
         this.to = Math.max(from, to);
     }
 
-    /**
-     * Объединение диапазонов. this(A) + range(B)
-     *
-     * @param range второй диапазон
-     * @return Массив  диапазонов. Результат может состоять из однго или дву диапазонов
-     */
-    public Range[] sumOfRanges(Range range) {
-
-        // нет общего диапазона
-        if (getIntersectRanges(range) == null) {
-            return new Range[]{new Range(this.from, this.to), new Range(range.from, range.to)};
-        } else {
-            return new Range[]{new Range(Math.min(this.from, range.from), Math.max(this.to, range.to))};
-        }
-    }
-
-    /**
-     * Вычитание диапазонов. this(A) - range(B)
-     *
-     * @param range второй диапазон
-     * @return Массив диапазонов. Результат может состоять из одного или двух диапазонов либо массив может быть пустым.
-     */
-    public Range[] subtractOfRange(Range range) {
-        if (getIntersectRanges(range) != null) {
-            //из меньшего больший либо равные
-            if (this.from >= range.from && this.to <= range.to) {
-                return new Range[0];
-            }
-            //диапазон внутри
-            if (this.from < range.from && this.to > range.to) {
-                return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
-            }
-            //пересечение слева
-            if (this.from < range.to && this.to > range.from) {
-                return new Range[]{new Range(this.from, range.from)};
-            }
-            //пересечение справа
-            if (this.to > range.from && this.from < range.to) {
-                return new Range[]{new Range(range.to, this.to)};
-            }
-        }
-        return new Range[0];
-    }
-
     public double getFrom() {
         return this.from;
     }
@@ -116,5 +72,44 @@ public class Range {
             return new Range(Math.max(this.from, range.from), Math.min(this.to, range.to));
         }
         return null;
+    }
+
+    /**
+     * Объединение диапазонов. this + range
+     *
+     * @param range второй диапазон
+     * @return Массив  диапазонов. Результат может состоять из однго или дву диапазонов
+     */
+    public Range[] sumOfRanges(Range range) {
+
+        // нет общего диапазона
+        if (this.from > range.to || this.to < range.from) {
+            return new Range[]{new Range(this.from, this.to), new Range(range.from, range.to)};
+        } else {
+            return new Range[]{new Range(Math.min(this.from, range.from), Math.max(this.to, range.to))};
+        }
+    }
+
+    /**
+     * Вычитание диапазонов. this - range
+     *
+     * @param range второй диапазон
+     * @return Массив диапазонов. Результат может состоять из одного или двух диапазонов либо массив может быть пустым.
+     */
+    public Range[] subtractOfRange(Range range) {
+        //диапазон внутри
+        if (this.from < range.from && this.to > range.to) {
+            return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
+        }
+        //пересечение справа
+        if (this.from < range.from && this.to <= range.to) {
+            return new Range[]{new Range(this.from, Math.min(this.to, range.from))};
+        }
+        //пересечение слева
+        if (this.to > range.to && this.from >= range.from) {
+            return new Range[]{new Range(this.to, Math.max(this.from, range.to))};
+        }
+        return new Range[0];
+        //  return new Range[] {new Range(from, to)};
     }
 }
