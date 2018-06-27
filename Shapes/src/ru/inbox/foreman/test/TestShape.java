@@ -75,8 +75,7 @@ public class TestShape {
      * @return фигура
      */
     private static Shape searchShapeWithNumberOfArea(Shape[] shapes, int number) {
-        Shape[] tempShapes;
-        tempShapes = Arrays.copyOf(shapes, shapes.length);
+        Shape[] tempShapes = Arrays.copyOf(shapes, shapes.length);
         Arrays.sort(tempShapes, new SortShapeByArea());
         return tempShapes[tempShapes.length - 1 - (number - 1)];
     }
@@ -89,8 +88,7 @@ public class TestShape {
      * @return фигура
      */
     private static Shape searchShapeWithNumberOfPerimeter(Shape[] shapes, int number) {
-        Shape[] tempShapes;
-        tempShapes = Arrays.copyOf(shapes, shapes.length);
+        Shape[] tempShapes = Arrays.copyOf(shapes, shapes.length);
         Arrays.sort(tempShapes, new SortShapeByPerimeter());
         return tempShapes[number - 1];
     }
