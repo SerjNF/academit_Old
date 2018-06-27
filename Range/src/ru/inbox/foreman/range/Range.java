@@ -107,9 +107,9 @@ public class Range {
         }
         //пересечение слева
         if (this.to > range.to && this.from >= range.from) {
-            return new Range[]{new Range(this.to, Math.max(this.from, range.to))};
+            return new Range[]{new Range(Math.max(this.from, range.to), this.to)};
         }
         return new Range[0];
-        //  return new Range[] {new Range(from, to)};
+        //  return new Range[] {new Range(this.from, this.to)};
     }
 }
