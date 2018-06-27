@@ -20,7 +20,7 @@ public class Line {
      *
      * @return double - длина линии
      */
-    public double lengthLine() {
+    public double getLineLength() {
         return Math.sqrt((Math.pow(this.x1 - this.x2, 2) + Math.pow(this.y1 - this.y2, 2)));
     }
 
@@ -43,8 +43,8 @@ public class Line {
         if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
-        Line l = (Line) o;
-        return x1 == l.x1 && x2 == l.x2 && y1 == l.y1 && y2 == l.y2;
+        Line line = (Line) o;
+        return x1 == line.x1 && x2 == line.x2 && y1 == line.y1 && y2 == line.y2;
     }
 }
 

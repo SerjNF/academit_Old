@@ -6,7 +6,6 @@ import ru.inbox.foreman.parent.Shape;
  * Класс объектов квадрат
  *
  * @author SergeyNF
- * @version 1.1
  * @since 23.06.2018
  */
 public class Square implements Shape {
@@ -45,7 +44,7 @@ public class Square implements Shape {
             return false;
         }
         Square s = (Square) o;
-        return o == this || s.width == this.width;
+        return s.width == this.width;
     }
 
     @Override

@@ -14,7 +14,6 @@ import java.util.Arrays;
  * Класс с методами для тестирования объектов, птомков класса Shape
  *
  * @author SergeyNF
- * @version 1.1
  * @since 23.06.2018
  */
 public class TestShape {
@@ -75,9 +74,9 @@ public class TestShape {
      * @param number номер возвращаемой фигуры
      * @return фигура
      */
-    private static Shape searchShapeWithNumberOfArea(final Shape[] shapes, int number) {
-        Shape[] tempShapes = new Shape[shapes.length];
-        System.arraycopy(shapes, 0, tempShapes, 0, shapes.length);
+    private static Shape searchShapeWithNumberOfArea(Shape[] shapes, int number) {
+        Shape[] tempShapes;
+        tempShapes = Arrays.copyOf(shapes, shapes.length);
         Arrays.sort(tempShapes, new SortShapeByArea());
         return tempShapes[tempShapes.length - 1 - (number - 1)];
     }
@@ -89,9 +88,9 @@ public class TestShape {
      * @param shapes массив фигур
      * @return фигура
      */
-    private static Shape searchShapeWithNumberOfPerimeter(final Shape[] shapes, int number) {
-        Shape[] tempShapes = new Shape[shapes.length];
-        System.arraycopy(shapes, 0, tempShapes, 0, shapes.length);
+    private static Shape searchShapeWithNumberOfPerimeter(Shape[] shapes, int number) {
+        Shape[] tempShapes;
+        tempShapes = Arrays.copyOf(shapes, shapes.length);
         Arrays.sort(tempShapes, new SortShapeByPerimeter());
         return tempShapes[number - 1];
     }

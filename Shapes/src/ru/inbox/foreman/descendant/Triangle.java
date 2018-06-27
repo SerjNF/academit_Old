@@ -7,7 +7,6 @@ import ru.inbox.foreman.supportElement.Line;
  * Класс объектов треугольник
  *
  * @author SergeyNF
- * @version 1.1
  * @since 23.06.2018
  */
 public class Triangle implements Shape {
@@ -48,13 +47,13 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        double semiPerimeter = (a.lengthLine() + b.lengthLine() + c.lengthLine()) / 2;
-        return Math.sqrt(semiPerimeter * (semiPerimeter - a.lengthLine()) * (semiPerimeter - b.lengthLine()) * (semiPerimeter - c.lengthLine()));
+        double semiPerimeter = (a.getLineLength() + b.getLineLength() + c.getLineLength()) / 2;
+        return Math.sqrt(semiPerimeter * (semiPerimeter - a.getLineLength()) * (semiPerimeter - b.getLineLength()) * (semiPerimeter - c.getLineLength()));
     }
 
     @Override
     public double getPerimeter() {
-        return a.lengthLine() + b.lengthLine() + c.lengthLine();
+        return a.getLineLength() + b.getLineLength() + c.getLineLength();
     }
 
     private Line getA() {
