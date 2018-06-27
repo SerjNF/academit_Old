@@ -98,7 +98,7 @@ public class Range {
      */
     public Range[] subtractOfRange(Range range) {
         //нет пересечения
-        if (this.from > range.to || this.to < range.from) {
+        if (this.from >= range.to || this.to <= range.from) {
             return new Range[]{new Range(this.from, this.to)};
         }
         //диапазон внутри
@@ -106,11 +106,11 @@ public class Range {
             return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
         }
         //пересечение справа
-        if (this.from < range.from && range.from <= this.to) {
+        if (this.from < range.from && range.from < this.to) {
             return new Range[]{new Range(this.from, range.from)};
         }
         //пересечение слева
-        if (this.to > range.to && this.from <= range.to) {
+        if (this.to > range.to && this.from < range.to) {
             return new Range[]{new Range(range.to, this.to)};
         }
         return new Range[0];

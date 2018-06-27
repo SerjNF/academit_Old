@@ -60,7 +60,7 @@ public class TestRange {
         diffRange(A, B);
         diffRange(F, C);
         diffRange(C, F);
-        diffRange(G, C);
+        diffRange(C, G);
         diffRange(A, C);
 
     }
