@@ -5,7 +5,6 @@ package ru.inbox.foreman.parent;
  *
  * @author SergeyNF
  * @since 23.06.2018
- * @version 1.1
  */
 public interface Shape {
 

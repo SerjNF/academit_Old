@@ -6,7 +6,6 @@ import ru.inbox.foreman.parent.Shape;
  * Класс объектов прямоугольник
  *
  * @author SergeyNF
- * @version 1.1
  * @since 23.06.2018
  */
 public class Rectangle implements Shape {
