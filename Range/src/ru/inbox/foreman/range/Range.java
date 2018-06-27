@@ -97,19 +97,22 @@ public class Range {
      * @return Массив диапазонов. Результат может состоять из одного или двух диапазонов либо массив может быть пустым.
      */
     public Range[] subtractOfRange(Range range) {
+        //нет пересечения
+        if (this.from > range.to || this.to < range.from) {
+            return new Range[]{new Range(this.from, this.to)};
+        }
         //диапазон внутри
         if (this.from < range.from && this.to > range.to) {
             return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
         }
         //пересечение справа
-        if (this.from < range.from && this.to <= range.to) {
-            return new Range[]{new Range(this.from, Math.min(this.to, range.from))};
+        if (this.from < range.from && range.from <= this.to) {
+            return new Range[]{new Range(this.from, range.from)};
         }
         //пересечение слева
-        if (this.to > range.to && this.from >= range.from) {
-            return new Range[]{new Range(Math.max(this.from, range.to), this.to)};
+        if (this.to > range.to && this.from <= range.to) {
+            return new Range[]{new Range(range.to, this.to)};
         }
         return new Range[0];
-        //  return new Range[] {new Range(this.from, this.to)};
     }
 }

@@ -60,8 +60,8 @@ public class TestRange {
         diffRange(A, B);
         diffRange(F, C);
         diffRange(C, F);
-        diffRange(C, G);
-        diffRange(F, B);
+        diffRange(G, C);
+        diffRange(A, C);
 
     }
 
@@ -88,7 +88,7 @@ public class TestRange {
                 System.out.printf("Диапазон %d (%.2f, %.2f)%n", i + 1, range.getFrom(), range.getTo());
             }
         } else {
-            System.out.println("Рузультат вычитания - диапазон нулевой длины, либо бесконечность");
+            System.out.println("Рузультат вычитания - пустое пересечение, либо бесконечность");
         }
         System.out.println();
     }
