@@ -174,7 +174,7 @@ public class Vector {
         Vector v = (Vector) o;
         if (this.vector.length != v.vector.length){
             return false;
-        }
+       }
         return Arrays.equals(this.vector, v.vector);
     }
 }
