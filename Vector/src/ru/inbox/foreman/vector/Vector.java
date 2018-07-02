@@ -313,9 +313,15 @@ public class Vector {
             return false;
         }
         Vector v = (Vector) o;
-//        if (this.vector.length != v.vector.length){
-//            return false;
-//       }
-        return Arrays.equals(this.vector, v.vector);
+        //   return Arrays.equals(this.vector, v.vector);  //
+        if (this.vector.length != v.vector.length) {
+            return false;
+        }
+        for (int i = 0; i < this.vector.length; ++i) {
+            if (this.vector[i] != v.vector[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 }
