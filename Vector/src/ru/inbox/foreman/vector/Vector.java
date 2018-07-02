@@ -29,13 +29,13 @@ public class Vector {
     /**
      * Конструктор. копирование вектора
      *
-     * @param vector вектор
+     * @param v вектор
      */
-    public Vector(Vector vector) {
-        if (vector == null) {
+    public Vector(Vector v) {
+        if (v == null) {
             this.vector = null;
         } else {
-            this.vector = Arrays.copyOf(vector.vector, vector.vector.length);
+            this.vector = Arrays.copyOf(v.vector, v.vector.length);
         }
     }
 
@@ -76,45 +76,45 @@ public class Vector {
     /**
      * Прибавление к вектору другого вектора
      *
-     * @param vector прибавляемый вектор
+     * @param v прибавляемый вектор
      * @return новый объект, результирующий вектор
      */
-    public Vector addition(Vector vector) {
-        if (vector == null) {
+    public Vector addition(Vector v) {
+        if (v == null) {
             return new Vector(this.vector);
         }
         Vector tempVector;
-        if (this.vector.length < vector.vector.length) {
-            tempVector = new Vector(vector.vector.length, this.vector);
-            return new Vector(sumArray(tempVector.vector, vector.vector));
+        if (this.vector.length < v.vector.length) {
+            tempVector = new Vector(v.vector.length, this.vector);
+            return new Vector(sumArray(tempVector.vector, v.vector));
         }
-        if (this.vector.length > vector.vector.length) {
-            tempVector = new Vector(this.vector.length, vector.vector);
+        if (this.vector.length > v.vector.length) {
+            tempVector = new Vector(this.vector.length, v.vector);
             return new Vector(sumArray(tempVector.vector, this.vector));
         }
-        return new Vector(sumArray(this.vector, vector.vector));
+        return new Vector(sumArray(this.vector, v.vector));
     }
 
     /**
      * Вычитание из вектора другого вуктора
      *
-     * @param vector вычитаемый вектор
+     * @param v вычитаемый вектор
      * @return новый объект, результирующий вектор
      */
-    public Vector subtraction(Vector vector) {
-        if (vector == null) {
+    public Vector subtraction(Vector v) {
+        if (v == null) {
             return new Vector(this.vector);
         }
         Vector tempVector;
-        if (this.vector.length < vector.vector.length) {
-            tempVector = new Vector(vector.vector.length, this.vector);
-            return new Vector(diffArray(tempVector.vector, vector.vector));
+        if (this.vector.length < v.vector.length) {
+            tempVector = new Vector(v.vector.length, this.vector);
+            return new Vector(diffArray(tempVector.vector, v.vector));
         }
-        if (this.vector.length > vector.vector.length) {
-            tempVector = new Vector(this.vector.length, vector.vector);
+        if (this.vector.length > v.vector.length) {
+            tempVector = new Vector(this.vector.length, v.vector);
             return new Vector(diffArray(this.vector, tempVector.vector));
         }
-        return new Vector(diffArray(this.vector, vector.vector));
+        return new Vector(diffArray(this.vector, v.vector));
     }
 
     /**
@@ -143,7 +143,6 @@ public class Vector {
         }
         return new Vector(resVector);
     }
-
 
     /**
      * Возврат значения из массива вектора по индексу
@@ -235,7 +234,6 @@ public class Vector {
         return multiplicationVectors(v1.vector, v2.vector);
     }
 
-
     /**
      * Функция сложения 2х массивов почленно
      *
@@ -250,7 +248,6 @@ public class Vector {
         }
         return resArray;
     }
-
 
     /**
      * функция вычитания из массива 1 массива 2 почленно
