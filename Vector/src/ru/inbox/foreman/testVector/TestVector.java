@@ -25,20 +25,28 @@ public class TestVector {
             System.out.printf("вектор v3 = %s%n", v3.toString());
             System.out.printf("вектор v4 = %s%n", v4.toString());
 
+            v1.addition(v2);
+            System.out.printf("v1 увеличенный на v2 = %s%n", v1.toString());
 
-            System.out.printf("v1 + v2 = %s%n", v1.addition(v2).toString());
-            System.out.printf("v1 - v2 = %s%n", v1.subtraction(v2).toString());
+            v1.subtraction(v4);
+            System.out.printf("v1 уменишенный на v4 = %s%n", v1.toString());
 
             System.out.printf("длина вектора v1 = %s%n", v1.getVectorLength());
             System.out.printf("длина вектора v2 = %s%n", v2.getVectorLength());
 
-            System.out.printf("вектор v1 * 5 = %s%n", v1.multiplicationOnScalar(5.0));
+            v1.multiplicationOnScalar(5.0);
+            System.out.printf("вектор v1 * 5 = %s%n", v1.toString());
 
-            System.out.println("значение вектора v1[2] заменено на -5");
-            v1.setComponentVector(2, -5);
+            try {
+                v1.setVectorComponent(2, -5);
+                System.out.println("значение вектора v1[2] заменено на -5");
+                System.out.printf("значение вектора v1[2] = %.1f%n", v1.getVectorComponent(2));
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.println("выход за пределы компанентов вектора");
+            }
 
-            System.out.printf("значение вектора v1[2] = %.1f%n", v1.getComponentVector(2));
-            System.out.printf("развернутый вектор v2 = %s%n", v2.reverse().toString());
+            v2.reverse();
+            System.out.printf("развернутый вектор v2 = %s%n", v2.toString());
 
             System.out.printf("сложение векторов v1 + v2 = %s%n", Vector.sumVectors(v1, v2));
             System.out.printf("разность векторов v1 - v2 = %s%n", Vector.diffVectors(v1, v2));

@@ -18,12 +18,11 @@ public class Vector {
      * @param n размерность
      * @throws IllegalArgumentException - исключение при размерности ветора меньше либо равной 0
      */
-    public Vector(int n) throws IllegalArgumentException {
+    public Vector(int n) {
         if (n <= 0) {
             throw new IllegalArgumentException("");
-        } else {
-            this.vector = new double[n];
         }
+        this.vector = new double[n];
     }
 
     /**
@@ -55,13 +54,11 @@ public class Vector {
      * @param vector массив со значениями
      * @throws IllegalArgumentException исключение при длине массива боьшей размерности
      */
-    public Vector(int n, double[] vector) throws IllegalArgumentException {
-        if (n >= vector.length) {
-            this.vector = new double[n];
-        } else {
+    public Vector(int n, double[] vector) {
+        if (n < vector.length) {
             throw new IllegalArgumentException();
         }
-        System.arraycopy(vector, 0, this.vector, 0, vector.length);
+        this.vector = Arrays.copyOf(vector, n);
     }
 
     /**
@@ -77,71 +74,49 @@ public class Vector {
      * Прибавление к вектору другого вектора
      *
      * @param v прибавляемый вектор
-     * @return новый объект, результирующий вектор
      */
-    public Vector addition(Vector v) {
-        if (v == null) {
-            return new Vector(this.vector);
-        }
-        Vector tempVector;
+    public void addition(Vector v) {
         if (this.vector.length < v.vector.length) {
-            tempVector = new Vector(v.vector.length, this.vector);
-            return new Vector(sumArray(tempVector.vector, v.vector));
+            this.vector = sumArray(Arrays.copyOf(this.vector, v.vector.length), v.vector);
+        } else if (this.vector.length > v.vector.length) {
+            this.vector = sumArray(Arrays.copyOf(v.vector, this.vector.length), this.vector);
+        } else {
+            vector = sumArray(this.vector, v.vector);
         }
-        if (this.vector.length > v.vector.length) {
-            tempVector = new Vector(this.vector.length, v.vector);
-            return new Vector(sumArray(tempVector.vector, this.vector));
-        }
-        return new Vector(sumArray(this.vector, v.vector));
     }
 
     /**
-     * Вычитание из вектора другого вуктора
+     * Вычитание из вектора другого вектора
      *
      * @param v вычитаемый вектор
-     * @return новый объект, результирующий вектор
      */
-    public Vector subtraction(Vector v) {
-        if (v == null) {
-            return new Vector(this.vector);
-        }
-        Vector tempVector;
+    public void subtraction(Vector v) {
         if (this.vector.length < v.vector.length) {
-            tempVector = new Vector(v.vector.length, this.vector);
-            return new Vector(diffArray(tempVector.vector, v.vector));
+            this.vector = diffArray(Arrays.copyOf(this.vector, v.vector.length), v.vector);
+        } else if (this.vector.length > v.vector.length) {
+            this.vector = diffArray(this.vector, Arrays.copyOf(v.vector, this.vector.length));
+        } else {
+            this.vector = diffArray(this.vector, v.vector);
         }
-        if (this.vector.length > v.vector.length) {
-            tempVector = new Vector(this.vector.length, v.vector);
-            return new Vector(diffArray(this.vector, tempVector.vector));
-        }
-        return new Vector(diffArray(this.vector, v.vector));
     }
 
     /**
      * Разварот вектора (умножение на -1)
-     *
-     * @return новый объект, результирующий вектор
      */
-    public Vector reverse() {
-        double[] resVector = new double[this.vector.length];
-        for (int i = 0; i < this.vector.length; ++i) {
-            resVector[i] = this.vector[i] * (-1);
-        }
-        return new Vector(resVector);
+    public void reverse() {
+        multiplicationOnScalar(-1);
     }
+
 
     /**
      * Умножение вектора на скаляр
      *
      * @param scalar double, величина на которую умножается вектор
-     * @return Vector, умноженный на скаляр
      */
-    public Vector multiplicationOnScalar(double scalar) {
-        double[] resVector = new double[this.vector.length];
+    public void multiplicationOnScalar(double scalar) {
         for (int i = 0; i < this.vector.length; ++i) {
-            resVector[i] = this.vector[i] * scalar;
+            this.vector[i] *= scalar;
         }
-        return new Vector(resVector);
     }
 
     /**
@@ -149,14 +124,14 @@ public class Vector {
      *
      * @param pos индекс в массиве
      * @return значение компанента по индексу
-     * @throws IllegalArgumentException - исключение при значении индекса выходящего за пределами массива
+     * @throws IndexOutOfBoundsException - исключение при значении индекса выходящего за пределами массива
      */
-    public double getComponentVector(int pos) throws IllegalArgumentException {
+    public double getVectorComponent(int pos) {
         if (pos > this.vector.length - 1 || pos < 0) {
-            throw new IllegalArgumentException();
-        } else {
-            return this.vector[pos];
+            throw new IndexOutOfBoundsException();
         }
+        return this.vector[pos];
+
     }
 
     /**
@@ -164,14 +139,14 @@ public class Vector {
      *
      * @param pos    индекс в массиве
      * @param number устанавливаемое значение
-     * @throws IllegalArgumentException - исключение при значении индекса выходящего за пределами массива
+     * @throws IndexOutOfBoundsException - исключение при значении индекса выходящего за пределами массива
      */
-    public void setComponentVector(int pos, double number) throws IllegalArgumentException {
+    public void setVectorComponent(int pos, double number) {
         if (pos > this.vector.length - 1 || pos < 0) {
-            throw new IllegalArgumentException();
-        } else {
-            this.vector[pos] = number;
+            throw new IndexOutOfBoundsException();
         }
+        this.vector[pos] = number;
+
     }
 
     /**
@@ -182,7 +157,7 @@ public class Vector {
     public double getVectorLength() {
         double vectorLength = 0;
         for (double v : this.vector) {
-            vectorLength = vectorLength + v * v;
+            vectorLength += v * v;
         }
         return Math.sqrt(vectorLength);
     }
@@ -196,7 +171,13 @@ public class Vector {
      */
 
     public static Vector sumVectors(Vector v1, Vector v2) {
-        return v1.addition(v2);
+        if (v1.vector.length < v2.vector.length) {
+            return new Vector(sumArray(Arrays.copyOf(v1.vector, v2.vector.length), v2.vector));
+        }
+        if (v1.vector.length > v2.vector.length) {
+            return new Vector(sumArray(Arrays.copyOf(v2.vector, v1.vector.length), v1.vector));
+        }
+        return new Vector(sumArray(v1.vector, v2.vector));
     }
 
     /**
@@ -207,7 +188,13 @@ public class Vector {
      * @return результирующий вектор, с наибольшей разверностью
      */
     public static Vector diffVectors(Vector v1, Vector v2) {
-        return v1.subtraction(v2);
+        if (v1.vector.length < v2.vector.length) {
+            return new Vector(diffArray(Arrays.copyOf(v1.vector, v2.vector.length), v2.vector));
+        }
+        if (v1.vector.length > v2.vector.length) {
+            return new Vector(diffArray(v1.vector, Arrays.copyOf(v2.vector, v1.vector.length)));
+        }
+        return new Vector(diffArray(v1.vector, v2.vector));
     }
 
     /**
@@ -218,18 +205,11 @@ public class Vector {
      * @return везультат скалярного умножения векторов
      */
     public static double multiplicationVectors(Vector v1, Vector v2) {
-        if (v1 == null || v2 == null) {
-            return 0.0;
-        }
-        Vector tempVector;
         if (v1.vector.length < v2.vector.length) {
-            tempVector = new Vector(v2.vector.length, v1.vector);
-
-            return multiplicationVectors(tempVector.vector, v2.vector);
+            return multiplicationVectors(Arrays.copyOf(v1.vector, v2.vector.length), v2.vector);
         }
         if (v1.vector.length > v2.vector.length) {
-            tempVector = new Vector(v1.vector.length, v2.vector);
-            return multiplicationVectors(v1.vector, tempVector.vector);
+            return multiplicationVectors(v1.vector, Arrays.copyOf(v2.vector, v1.vector.length));
         }
         return multiplicationVectors(v1.vector, v2.vector);
     }
@@ -256,7 +236,7 @@ public class Vector {
      * @param array2 массив 2
      * @return массив, резулттат вычитания
      */
-    private double[] diffArray(double[] array1, double[] array2) {
+    private static double[] diffArray(double[] array1, double[] array2) {
         double[] resArray = new double[array1.length];
         for (int i = 0; i < array1.length; ++i) {
             resArray[i] = array1[i] - array2[i];
@@ -265,7 +245,7 @@ public class Vector {
     }
 
     /**
-     * функция вычисления суммы произведения сомпанентов массивов
+     * функция вычисления суммы произведения компанентов массива
      *
      * @param array1 массив 1
      * @param array2 массив 2
@@ -274,7 +254,7 @@ public class Vector {
     private static double multiplicationVectors(double[] array1, double[] array2) {
         double result = 0;
         for (int i = 0; i < array1.length; ++i) {
-            result = result + array1[i] * array2[i];
+            result += array1[i] * array2[i];
         }
         return result;
     }
