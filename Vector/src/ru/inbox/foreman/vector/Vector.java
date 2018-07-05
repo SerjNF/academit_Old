@@ -20,7 +20,7 @@ public class Vector {
      */
     public Vector(int n) {
         if (n <= 0) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("Размерность вектора не можеты быть меньше либо равной 0");
         }
         this.vector = new double[n];
     }
@@ -31,11 +31,7 @@ public class Vector {
      * @param v вектор
      */
     public Vector(Vector v) {
-        if (v == null) {
-            this.vector = null;
-        } else {
-            this.vector = Arrays.copyOf(v.vector, v.vector.length);
-        }
+        this.vector = Arrays.copyOf(v.vector, v.vector.length);
     }
 
     /**
@@ -44,6 +40,9 @@ public class Vector {
      * @param vector массив со значениями
      */
     private Vector(double[] vector) {
+        if (vector.length <= 0) {
+            throw new IllegalArgumentException("Размерность вектора не можеты быть меньше либо равной 0");
+        }
         this.vector = Arrays.copyOf(vector, vector.length);
     }
 
@@ -55,10 +54,79 @@ public class Vector {
      * @throws IllegalArgumentException исключение при длине массива боьшей размерности
      */
     public Vector(int n, double[] vector) {
-        if (n < vector.length) {
-            throw new IllegalArgumentException();
+        if (n <= 0) {
+            throw new IllegalArgumentException("Размерность вектора не можеты быть меньше либо равной 0");
         }
         this.vector = Arrays.copyOf(vector, n);
+    }
+
+    /**
+     * Статический метод сложения 2х векторов
+     *
+     * @param v1 вектор 1
+     * @param v2 вектор 2
+     * @return результирующий вектор, с наибольшей разверностью
+     */
+
+    public static Vector sumVectors(Vector v1, Vector v2) {
+        return new Vector(sumArray(v1.vector, v2.vector));
+    }
+
+    /**
+     * Статический метод вычитания из вектора v1 вектора v2
+     *
+     * @param v1 вектор 1 - из которого вычитают
+     * @param v2 вектор 2 - вычитаемый
+     * @return результирующий вектор, с наибольшей разверностью
+     */
+    public static Vector diffVectors(Vector v1, Vector v2) {
+        return new Vector(diffArray(v1.vector, v2.vector));
+    }
+
+    /**
+     * Статик метод скалярного умножения векторов
+     *
+     * @param v1 вектор 1
+     * @param v2 вектор 2
+     * @return везультат скалярного умножения векторов
+     */
+    public static double multiplicationVectors(Vector v1, Vector v2) {
+        int maxLength = v1.vector.length >= v2.vector.length ? v1.vector.length : v2.vector.length;
+        double result = 0;
+        for (int i = 0; i < maxLength; ++i) {
+            result += (i < v1.vector.length ? v1.vector[i] : 0) * (i < v2.vector.length ? v2.vector[i] : 0);
+        }
+        return result;
+    }
+
+    /**
+     * Функция сложения 2х массивов почленно
+     *
+     * @param array1 массив 1
+     * @param array2 массив 2
+     * @return массив, результат сложения
+     */
+    private static double[] sumArray(double[] array1, double[] array2) {
+        double[] resArray = new double[array1.length >= array2.length ? array1.length : array2.length];
+        for (int i = 0; i < resArray.length; ++i) {
+            resArray[i] = (i < array1.length ? array1[i] : 0) + (i < array2.length ? array2[i] : 0);
+        }
+        return resArray;
+    }
+
+    /**
+     * функция вычитания из массива 1 массива 2 почленно
+     *
+     * @param array1 массив 1
+     * @param array2 массив 2
+     * @return массив, результат вычитания
+     */
+    private static double[] diffArray(double[] array1, double[] array2) {
+        double[] resArray = new double[array1.length >= array2.length ? array1.length : array2.length];
+        for (int i = 0; i < resArray.length; ++i) {
+            resArray[i] = (i < array1.length ? array1[i] : 0) - (i < array2.length ? array2[i] : 0);
+        }
+        return resArray;
     }
 
     /**
@@ -76,13 +144,7 @@ public class Vector {
      * @param v прибавляемый вектор
      */
     public void addition(Vector v) {
-        if (this.vector.length < v.vector.length) {
-            this.vector = sumArray(Arrays.copyOf(this.vector, v.vector.length), v.vector);
-        } else if (this.vector.length > v.vector.length) {
-            this.vector = sumArray(Arrays.copyOf(v.vector, this.vector.length), this.vector);
-        } else {
-            vector = sumArray(this.vector, v.vector);
-        }
+        this.vector = sumArray(this.vector, v.vector);
     }
 
     /**
@@ -91,13 +153,7 @@ public class Vector {
      * @param v вычитаемый вектор
      */
     public void subtraction(Vector v) {
-        if (this.vector.length < v.vector.length) {
-            this.vector = diffArray(Arrays.copyOf(this.vector, v.vector.length), v.vector);
-        } else if (this.vector.length > v.vector.length) {
-            this.vector = diffArray(this.vector, Arrays.copyOf(v.vector, this.vector.length));
-        } else {
-            this.vector = diffArray(this.vector, v.vector);
-        }
+        this.vector = diffArray(this.vector, v.vector);
     }
 
     /**
@@ -106,7 +162,6 @@ public class Vector {
     public void reverse() {
         multiplicationOnScalar(-1);
     }
-
 
     /**
      * Умножение вектора на скаляр
@@ -122,30 +177,29 @@ public class Vector {
     /**
      * Возврат значения из массива вектора по индексу
      *
-     * @param pos индекс в массиве
+     * @param index индекс в массиве
      * @return значение компанента по индексу
      * @throws IndexOutOfBoundsException - исключение при значении индекса выходящего за пределами массива
      */
-    public double getVectorComponent(int pos) {
-        if (pos > this.vector.length - 1 || pos < 0) {
+    public double getVectorComponent(int index) {
+        if (index >= this.vector.length || index < 0) {
             throw new IndexOutOfBoundsException();
         }
-        return this.vector[pos];
-
+        return this.vector[index];
     }
 
     /**
      * Установка значения в массиве вектора по индексу
      *
-     * @param pos    индекс в массиве
+     * @param index  индекс в массиве
      * @param number устанавливаемое значение
      * @throws IndexOutOfBoundsException - исключение при значении индекса выходящего за пределами массива
      */
-    public void setVectorComponent(int pos, double number) {
-        if (pos > this.vector.length - 1 || pos < 0) {
-            throw new IndexOutOfBoundsException();
+    public void setVectorComponent(int index, double number) {
+        if (index >= this.vector.length || index < 0) {
+            throw new IndexOutOfBoundsException("Индекс должен быть в пределах от 0 до " + this.vector.length);
         }
-        this.vector[pos] = number;
+        this.vector[index] = number;
 
     }
 
@@ -160,103 +214,6 @@ public class Vector {
             vectorLength += v * v;
         }
         return Math.sqrt(vectorLength);
-    }
-
-    /**
-     * Статический метод сложения 2х векторов
-     *
-     * @param v1 вектор 1
-     * @param v2 вектор 2
-     * @return резулютирующий вектор, с наибольшей разверностью
-     */
-
-    public static Vector sumVectors(Vector v1, Vector v2) {
-        if (v1.vector.length < v2.vector.length) {
-            return new Vector(sumArray(Arrays.copyOf(v1.vector, v2.vector.length), v2.vector));
-        }
-        if (v1.vector.length > v2.vector.length) {
-            return new Vector(sumArray(Arrays.copyOf(v2.vector, v1.vector.length), v1.vector));
-        }
-        return new Vector(sumArray(v1.vector, v2.vector));
-    }
-
-    /**
-     * Статический метод вычитания из вектора v1 вектора v2
-     *
-     * @param v1 вектор 1 - из которого вычитают
-     * @param v2 вектор 2 - вычитаемый
-     * @return результирующий вектор, с наибольшей разверностью
-     */
-    public static Vector diffVectors(Vector v1, Vector v2) {
-        if (v1.vector.length < v2.vector.length) {
-            return new Vector(diffArray(Arrays.copyOf(v1.vector, v2.vector.length), v2.vector));
-        }
-        if (v1.vector.length > v2.vector.length) {
-            return new Vector(diffArray(v1.vector, Arrays.copyOf(v2.vector, v1.vector.length)));
-        }
-        return new Vector(diffArray(v1.vector, v2.vector));
-    }
-
-    /**
-     * Статик метод скалярного умножения векторов
-     *
-     * @param v1 вектор 1
-     * @param v2 вектор 2
-     * @return везультат скалярного умножения векторов
-     */
-    public static double multiplicationVectors(Vector v1, Vector v2) {
-        if (v1.vector.length < v2.vector.length) {
-            return multiplicationVectors(Arrays.copyOf(v1.vector, v2.vector.length), v2.vector);
-        }
-        if (v1.vector.length > v2.vector.length) {
-            return multiplicationVectors(v1.vector, Arrays.copyOf(v2.vector, v1.vector.length));
-        }
-        return multiplicationVectors(v1.vector, v2.vector);
-    }
-
-    /**
-     * Функция сложения 2х массивов почленно
-     *
-     * @param array1 массив 1
-     * @param array2 массив 2
-     * @return массив, результат сложения
-     */
-    private static double[] sumArray(double[] array1, double[] array2) {
-        double[] resArray = new double[array1.length];
-        for (int i = 0; i < array1.length; ++i) {
-            resArray[i] = array1[i] + array2[i];
-        }
-        return resArray;
-    }
-
-    /**
-     * функция вычитания из массива 1 массива 2 почленно
-     *
-     * @param array1 массив 1
-     * @param array2 массив 2
-     * @return массив, резулттат вычитания
-     */
-    private static double[] diffArray(double[] array1, double[] array2) {
-        double[] resArray = new double[array1.length];
-        for (int i = 0; i < array1.length; ++i) {
-            resArray[i] = array1[i] - array2[i];
-        }
-        return resArray;
-    }
-
-    /**
-     * функция вычисления суммы произведения компанентов массива
-     *
-     * @param array1 массив 1
-     * @param array2 массив 2
-     * @return double, результат выполнения
-     */
-    private static double multiplicationVectors(double[] array1, double[] array2) {
-        double result = 0;
-        for (int i = 0; i < array1.length; ++i) {
-            result += array1[i] * array2[i];
-        }
-        return result;
     }
 
     @Override
@@ -290,7 +247,7 @@ public class Vector {
             return false;
         }
         Vector v = (Vector) o;
-        //   return Arrays.equals(this.vector, v.vector);  //
+
         if (this.vector.length != v.vector.length) {
             return false;
         }

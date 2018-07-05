@@ -37,14 +37,14 @@ public class TestVector {
             v1.multiplicationOnScalar(5.0);
             System.out.printf("вектор v1 * 5 = %s%n", v1.toString());
 
+            int index = 2;
             try {
-                v1.setVectorComponent(2, -5);
-                System.out.println("значение вектора v1[2] заменено на -5");
-                System.out.printf("значение вектора v1[2] = %.1f%n", v1.getVectorComponent(2));
+                v1.setVectorComponent(index, -5);
+                System.out.println("значение вектора v1["+ index +"] заменено на -5");
+                System.out.printf("значение вектора v1["+ index +"] = %.1f%n", v1.getVectorComponent(index));
             } catch (IndexOutOfBoundsException ex) {
-                System.out.println("выход за пределы компанентов вектора");
+                ex.printStackTrace();
             }
-
             v2.reverse();
             System.out.printf("развернутый вектор v2 = %s%n", v2.toString());
 
@@ -54,10 +54,11 @@ public class TestVector {
 
             System.out.printf("скалярное умножение векторов v1 * v2 = %s%n", Vector.multiplicationVectors(v1, v2));
 
-            Vector error = new Vector(0);
+           // Vector error = new Vector(0);
 
         } catch (IllegalArgumentException e) {
             System.out.println("не допустимая длина массива");
+            e.printStackTrace();
         }
     }
 }
