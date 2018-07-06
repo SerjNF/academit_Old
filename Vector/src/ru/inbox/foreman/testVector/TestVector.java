@@ -13,7 +13,7 @@ public class TestVector {
             Vector v1 = new Vector(3, new double[]{1.0, 5, 4});
             Vector v2 = new Vector(2, new double[]{2, 6});
             Vector v3 = new Vector(5);
-            Vector v4 = Vector.sumVectors(v1, v3);
+            Vector v4 = Vector.sumVectors(v1, v2);
 
             System.out.printf("размерность вектора v1 = %d%n", v1.getSize());
             System.out.printf("размерность вектора v2 = %d%n", v2.getSize());
@@ -45,16 +45,26 @@ public class TestVector {
             } catch (IndexOutOfBoundsException ex) {
                 ex.printStackTrace();
             }
+
             v2.reverse();
             System.out.printf("развернутый вектор v2 = %s%n", v2.toString());
 
+            System.out.println("v1 = " + v1.toString());
+            System.out.println("v2 = " + v2.toString());
+
+            Vector v5 = new Vector(v2);
             System.out.printf("сложение векторов v1 + v2 = %s%n", Vector.sumVectors(v1, v2));
             System.out.printf("разность векторов v1 - v2 = %s%n", Vector.diffVectors(v1, v2));
             System.out.printf("разность векторов v2 - v1 = %s%n", Vector.diffVectors(v2, v1));
 
             System.out.printf("скалярное умножение векторов v1 * v2 = %s%n", Vector.multiplicationVectors(v1, v2));
 
-           // Vector error = new Vector(0);
+            v2.addition(v1);
+            System.out.printf("v2 увеличенный на v1 = %s%n", v2.toString());
+
+            System.out.printf("Сравнение v5 и v1: %s%n", v1.equals(v5));
+            System.out.printf("hashcode v1: %d%n", v1.hashCode());
+            System.out.printf("hashcode v1: %d%n", v5.hashCode());
 
         } catch (IllegalArgumentException e) {
             System.out.println("не допустимая длина массива");

@@ -69,7 +69,10 @@ public class Vector {
      */
 
     public static Vector sumVectors(Vector v1, Vector v2) {
-        return new Vector(sumArray(v1.vector, v2.vector));
+        // что бы ворнинги убрать для tmp использовал конструктор со значениями из массива
+        Vector tmp = new Vector(v1.vector);
+        tmp.addition(v2);
+        return tmp;
     }
 
     /**
@@ -80,7 +83,9 @@ public class Vector {
      * @return результирующий вектор, с наибольшей разверностью
      */
     public static Vector diffVectors(Vector v1, Vector v2) {
-        return new Vector(diffArray(v1.vector, v2.vector));
+        Vector tmp = new Vector(v1);
+        tmp.subtraction(v2);
+        return tmp;
     }
 
     /**
@@ -91,42 +96,12 @@ public class Vector {
      * @return везультат скалярного умножения векторов
      */
     public static double multiplicationVectors(Vector v1, Vector v2) {
-        int maxLength = v1.vector.length >= v2.vector.length ? v1.vector.length : v2.vector.length;
+        int minLength = Math.min(v1.vector.length, v2.vector.length);
         double result = 0;
-        for (int i = 0; i < maxLength; ++i) {
-            result += (i < v1.vector.length ? v1.vector[i] : 0) * (i < v2.vector.length ? v2.vector[i] : 0);
+        for (int i = 0; i < minLength; ++i) {
+            result += v1.vector[i] * v2.vector[i];
         }
         return result;
-    }
-
-    /**
-     * Функция сложения 2х массивов почленно
-     *
-     * @param array1 массив 1
-     * @param array2 массив 2
-     * @return массив, результат сложения
-     */
-    private static double[] sumArray(double[] array1, double[] array2) {
-        double[] resArray = new double[array1.length >= array2.length ? array1.length : array2.length];
-        for (int i = 0; i < resArray.length; ++i) {
-            resArray[i] = (i < array1.length ? array1[i] : 0) + (i < array2.length ? array2[i] : 0);
-        }
-        return resArray;
-    }
-
-    /**
-     * функция вычитания из массива 1 массива 2 почленно
-     *
-     * @param array1 массив 1
-     * @param array2 массив 2
-     * @return массив, результат вычитания
-     */
-    private static double[] diffArray(double[] array1, double[] array2) {
-        double[] resArray = new double[array1.length >= array2.length ? array1.length : array2.length];
-        for (int i = 0; i < resArray.length; ++i) {
-            resArray[i] = (i < array1.length ? array1[i] : 0) - (i < array2.length ? array2[i] : 0);
-        }
-        return resArray;
     }
 
     /**
@@ -144,7 +119,17 @@ public class Vector {
      * @param v прибавляемый вектор
      */
     public void addition(Vector v) {
-        this.vector = sumArray(this.vector, v.vector);
+        if (v.vector.length <= this.vector.length) {
+            for (int i = 0; i < v.vector.length; ++i) {
+                vector[i] += v.vector[i];
+            }
+        } else {
+            double[] tmp = Arrays.copyOf(v.vector, v.vector.length);
+            for (int i = 0; i < this.vector.length; ++i) {
+                tmp[i] += this.vector[i];
+            }
+            this.vector = tmp;
+        }
     }
 
     /**
@@ -153,7 +138,17 @@ public class Vector {
      * @param v вычитаемый вектор
      */
     public void subtraction(Vector v) {
-        this.vector = diffArray(this.vector, v.vector);
+        if (v.vector.length <= this.vector.length) {
+            for (int i = 0; i < v.vector.length; ++i) {
+                vector[i] -= v.vector[i];
+            }
+        } else {
+            double[] tmp = Arrays.copyOf(this.vector, v.vector.length);
+            for (int i = 0; i < v.vector.length; ++i) {
+                tmp[i] -= v.vector[i];
+            }
+            this.vector = tmp;
+        }
     }
 
     /**
@@ -183,7 +178,7 @@ public class Vector {
      */
     public double getVectorComponent(int index) {
         if (index >= this.vector.length || index < 0) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Индекс должен быть в пределах от 0 до " + this.vector.length);
         }
         return this.vector[index];
     }
