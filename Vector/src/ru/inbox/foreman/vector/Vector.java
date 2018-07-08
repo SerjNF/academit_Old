@@ -207,6 +207,7 @@ public class Vector {
         double vectorLength = 0;
         for (double v : this.vector) {
             vectorLength += v * v;
+
         }
         return Math.sqrt(vectorLength);
     }
@@ -216,7 +217,7 @@ public class Vector {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         for (int i = 0; i < vector.length; ++i) {
-            sb.append(vector[i]);
+            sb.append(String.format("%02.0f",vector[i]));
             if (i < vector.length - 1) {
                 sb.append(", ");
             }
