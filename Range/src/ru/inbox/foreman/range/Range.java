@@ -38,8 +38,8 @@ public class Range {
         this.to = to;
     }
 
-    public String rangeToString() {
-        return "(" + this.from + ", " + this.to + ")";
+    public String toString() {
+        return String.format("{%.2f, %.2f}", this.from, this.to);
     }
 
     /**

@@ -22,11 +22,11 @@ public class TestRange {
         Range F = new Range(3.2, 18.5);
         Range G = new Range(5, 12);
 
-        System.out.printf("Диапазон А %s%n", A.rangeToString());
-        System.out.printf("Диапазон B %s%n", B.rangeToString());
-        System.out.printf("Диапазон C %s%n", C.rangeToString());
-        System.out.printf("Диапазон F %s%n", F.rangeToString());
-        System.out.printf("Диапазон G %s%n%n", G.rangeToString());
+        System.out.printf("Диапазон А %s%n", A.toString());
+        System.out.printf("Диапазон B %s%n", B.toString());
+        System.out.printf("Диапазон C %s%n", C.toString());
+        System.out.printf("Диапазон F %s%n", F.toString());
+        System.out.printf("Диапазон G %s%n%n", G.toString());
 
         // Проверка вхождения числа
         double number = 4.0;
@@ -67,7 +67,7 @@ public class TestRange {
 
     private static void sumRanges(Range one, Range two) {
 
-        System.out.printf("Результат объединения диапазонов %s и %s%n", one.rangeToString(), two.rangeToString());
+        System.out.printf("Результат объединения диапазонов %s и %s%n", one.toString(), two.toString());
         Range[] sun = one.sumOfRanges(two);
 
         for (int i = 0; i < sun.length; ++i) {
@@ -78,7 +78,7 @@ public class TestRange {
     }
 
     private static void diffRange(Range one, Range two) {
-        System.out.printf("Результат вычитания из диапазона %s диапазона %s%n", one.rangeToString(), two.rangeToString());
+        System.out.printf("Результат вычитания из диапазона %s диапазона %s%n", one.toString(), two.toString());
 
         Range[] subtract = one.subtractOfRange(two);
 
