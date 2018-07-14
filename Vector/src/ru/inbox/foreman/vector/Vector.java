@@ -39,7 +39,7 @@ public class Vector {
      *
      * @param vector массив со значениями
      */
-    private Vector(double[] vector) {
+    public Vector(double[] vector) {
         if (vector.length <= 0) {
             throw new IllegalArgumentException("Размерность вектора не можеты быть меньше либо равной 0");
         }

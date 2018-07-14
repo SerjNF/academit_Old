@@ -66,6 +66,7 @@ public class TestVector {
             System.out.printf("hashcode v1: %d%n", v1.hashCode());
             System.out.printf("hashcode v1: %d%n", v5.hashCode());
 
+
         } catch (IllegalArgumentException e) {
             System.out.println("не допустимая длина массива");
             e.printStackTrace();
