@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class testMatrix {
     public static void main(String[] arg) {
 
-        //TODO try Catch
+
         try {
             Matrix m1 = new Matrix(3, 2);
             System.out.printf("m1: %n%s", m1.toString());
