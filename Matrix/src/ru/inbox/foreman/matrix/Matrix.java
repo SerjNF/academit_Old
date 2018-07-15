@@ -163,7 +163,6 @@ public class Matrix {
                     this.matrix[x].setVectorComponent(y, tmp);
                 }
             }
-
         } else {    // Если не квадрат, вектора заменяются на новые
             Vector[] tmpMatrix = new Vector[this.matrix[0].getSize()];
             for (int i = 0; i < tmpMatrix.length; ++i) {
@@ -214,7 +213,7 @@ public class Matrix {
     public void subtractionMatrix(Matrix matrix) {
         Matrix tmp = new Matrix(matrix);
         tmp.multiplicationMatrixOnScalar(-1.0);
-        additionMatrix(tmp);
+        this.additionMatrix(tmp);
     }
 
     /**
@@ -264,25 +263,25 @@ public class Matrix {
      *
      * @return определитель матрицы. Тип возвращаемого значения double.
      */
-    private double calcDeterminant(Matrix matrix) {
+    private double calcDeterminant(Matrix m) {
         //  число векторов
-        int height = matrix.matrix.length;
+        int height = m.matrix.length;
         // Для матрицы 1 на 1 сразу решение. Проверяем первому уровню
         if (height == 1) {
-            return matrix.matrix[0].getVectorComponent(0);
+            return m.matrix[0].getVectorComponent(0);
         }
         // Для матрицы 2 на 2 сразу решение. Проверяем только по одной стороне
         if (height == 2) {
-            return matrix.matrix[0].getVectorComponent(0) * matrix.matrix[1].getVectorComponent(1) - matrix.matrix[1].getVectorComponent(0) * matrix.matrix[0].getVectorComponent(1);
+            return m.matrix[0].getVectorComponent(0) * m.matrix[1].getVectorComponent(1) - m.matrix[1].getVectorComponent(0) * m.matrix[0].getVectorComponent(1);
         }
         // определяем вектор с наибольшим количеством нолей
-        int stringWithMaxNull = searchVectorWithMaxNull(matrix);
+        int vectorWithMaxNull = searchVectorWithMaxNull(m);
 
         double determinant = 0.0;
         double epsilon = 10e-10;
-        // пробегаем по матрице на выбранной строке и суммируем результат произведения (-1) в степени,  n-го элемена в этой строке и разложенной относительно него матрицы
-        for (int i = 0; i < matrix.matrix.length; i++) {
-            determinant += matrix.matrix[stringWithMaxNull].getVectorComponent(i) <= epsilon ? 0 : matrix.matrix[stringWithMaxNull].getVectorComponent(i) * Math.pow(-1.0, i + 2) * calcDeterminant(decomposeMatrix(matrix, stringWithMaxNull, i));
+        // пробегаем по матрице на выбранной строке и суммируем результат произведения (-1) в степени n+2 элемена в этой строке и разложенной относительно него матрицы
+        for (int i = 0; i < m.matrix.length; i++) {
+            determinant += m.matrix[vectorWithMaxNull].getVectorComponent(i) <= epsilon ? 0 : m.matrix[vectorWithMaxNull].getVectorComponent(i) * Math.pow(-1.0, i + 2) * calcDeterminant(decompositionMatrix(m, vectorWithMaxNull, i));
         }
         return determinant;
     }
@@ -322,7 +321,7 @@ public class Matrix {
      * @param vectorComponent элемент вектора относительно которого нужно разложить
      * @return матрицу размерностью на 1 меньше. Тип возвращаемого значения double.
      */
-    private Matrix decomposeMatrix(Matrix matrix, int vector, int vectorComponent) {
+    private Matrix decompositionMatrix(Matrix matrix, int vector, int vectorComponent) {
         double[][] decompositionMatrix = new double[matrix.matrix.length - 1][matrix.matrix[0].getSize() - 1];
 
         for (int i = 0, m = 0; i < matrix.matrix.length; i++) {

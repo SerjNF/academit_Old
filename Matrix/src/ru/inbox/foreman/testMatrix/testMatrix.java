@@ -20,13 +20,13 @@ public class testMatrix {
             System.out.printf("m1: %n%s", m1.toString());
             System.out.println();
 
-            double[][] matrix1 = new double[][]{{1, 2, 6}, {4, 3, -1}, {2, -2, 5}};
-            Matrix m2 = new Matrix(matrix1);
+            double[][] matrix2 = new double[][]{{1, 2, 6}, {4, 3, -1}, {2, -2, 5}};
+            Matrix m2 = new Matrix(matrix2);
             System.out.printf("m2: %n%s", m2.toString());
             System.out.println();
 
-            double[][] matrix2 = new double[][]{{2, 3}, {6, 5}, {11, 12}, {5, 6}};
-            Matrix m3 = new Matrix(matrix2);
+            double[][] matrix3 = new double[][]{{2, 3}, {6, 5}, {11, 12}, {5, 6}};
+            Matrix m3 = new Matrix(matrix3);
             System.out.printf("m3: %n%s", m3.toString());
             System.out.println();
 
@@ -62,10 +62,10 @@ public class testMatrix {
             m3.subtractionMatrix(m4);
             System.out.printf("матрицы 3 после вычитания из неё матрицы 4: %n%s%n", m3.toString());
 
-            m3.multiplicationMatrixOnVector(new Vector(new double[]{1, 2, 3, 4}));
-            System.out.printf("матрицы 3 после умножениея на вектор {1, 2, 3, 4} : %n%s%n", m3.toString());
+            m3.multiplicationMatrixOnVector(new Vector(new double[]{1, 2, 3}));
+            System.out.printf("матрицы 3 после умножениея на вектор {1, 2, 3} : %n%s%n", m3.toString());
 
-            System.out.printf("Определитель матрицы m2 = %.2f%n", m2.getDetermination());
+            System.out.printf("Определитель матрицы m2 = %.2f%n%n", m2.getDetermination());
 
             System.out.printf("Произведение матриц%n{{1, 0, 2}, {0, -1, 3}, {4, 0, 5}} * {{2, 7, 1}, {3, 2, -4}, {1, -3, 5}}%n%n%s%n", Matrix.multiplication(new Matrix(new double[][]{{1, 0, 2}, {0, -1, 3}, {4, 0, 5}}), new Matrix(new double[][]{{2, 7, 1}, {3, 2, -4}, {1, -3, 5}})));
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
