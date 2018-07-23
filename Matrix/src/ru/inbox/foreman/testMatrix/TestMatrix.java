@@ -18,7 +18,7 @@ public class TestMatrix {
             System.out.printf("m1: %n%s", m1.toString());
             System.out.println();
 
-            double[][] matrix2 = new double[][]{{1, 2, 6,}, {4, 3, -1}, {2, -2, 5}};
+            double[][] matrix2 = new double[][]{{1, 2, 6}, {4, 3, -1}, {2, -2, 5}};
             Matrix m2 = new Matrix(matrix2);
             System.out.printf("m2: %n%s", m2.toString());
             System.out.println();
@@ -28,7 +28,7 @@ public class TestMatrix {
             System.out.printf("m3: %n%s", m3.toString());
             System.out.println();
 
-            Matrix m4 = new Matrix(new double[][]{{2, 3}, {6, 5}, {11, 12}});
+            Matrix m4 = new Matrix(new double[][]{{2, 3, 7}, {6, 5, 3}, {11, 12, 100}});
             System.out.printf("m4: %n%s", m4.toString());
             System.out.println();
 
@@ -63,9 +63,9 @@ public class TestMatrix {
             System.out.printf("Результирующий вектор после  умножения матрицы 3 на вектор {1, 2, 3} : %n%s%n", m3.multiplicationMatrixOnVector(new Vector(new double[]{1, 2, 3})).toString());
 
             System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumn(), m2.getRows());
-            System.out.printf("Определитель матрицы m2 = %.2f%n%n", m2.getDetermination());
+            System.out.printf("Определитель матрицы m2 = %.2f%n%n", m2.getDeterminant());
 
-            System.out.printf("Произведение матриц:%n{{1, 0, 2}, {0, -1, 3}, {4, 0, 5}} * {{2, 7, 1}, {3, 2, -4}, {1, -3, 5}}%n%n%s%n", Matrix.multiplication(new Matrix(new double[][]{{2, 7, 1}, {3, 2, -4}}), new Matrix(new double[][]{{1, 0}, {0, -1}, {4, 0}})));
+            System.out.printf("Произведение матриц:%n{{2, 7, 1}, {3, 2, -4}} * {1, 0}, {0, -1}, {4, 0}}%n%n%s%n", Matrix.multiplication(new Matrix(new double[][]{{2, 7, 1}, {3, 2, -4}}), new Matrix(new double[][]{{1, 0}, {0, -1}, {4, 0}})));
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             e.printStackTrace();
         }

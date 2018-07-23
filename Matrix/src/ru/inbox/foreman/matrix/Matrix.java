@@ -15,48 +15,48 @@ public class Matrix {
     /**
      * Матрица нулей размера h на w
      *
-     * @param h Число сторк матрицы
-     * @param w Число параметоров в строке
+     * @param h      Число сторк матрицы
+     * @param column Число параметоров в строке
      */
-    public Matrix(int h, int w) {
-        if (h <= 0 || w <= 0) {
+    public Matrix(int h, int column) {
+        if (h <= 0 || column <= 0) {
             throw new IllegalArgumentException("Размерность матрицы не можеты быть меньше либо равной 0");
         }
         this.rows = new Vector[h];
         for (int i = 0; i < h; ++i) {
-            this.rows[i] = new Vector(w);
+            this.rows[i] = new Vector(column);
         }
     }
 
     /**
      * Конструктор копирования
      *
-     * @param matrix Матрица которую копируем
+     * @param m Матрица которую копируем
      */
-    public Matrix(Matrix matrix) {
-        this.rows = new Vector[matrix.rows.length];
-        for (int i = 0; i < matrix.rows.length; ++i) {
-            this.rows[i] = new Vector(matrix.rows[i]);
+    public Matrix(Matrix m) {
+        this.rows = new Vector[m.rows.length];
+        for (int i = 0; i < m.rows.length; ++i) {
+            this.rows[i] = new Vector(m.rows[i]);
         }
     }
 
     /**
      * Конструктор из двумерного массива
      *
-     * @param matrix двумерный массив
+     * @param m двумерный массив
      */
-    public Matrix(double[][] matrix) {
-        if (matrix.length < 1 || matrix[0].length < 1) {
+    public Matrix(double[][] m) {
+        if (m.length < 1 || m[0].length < 1) {
             throw new IllegalArgumentException("Размерность матрицы не можеты быть меньше либо равной 0");
         }
-        int maxLength = matrix[0].length;
-        for (double[] tmp : matrix) {
+        int maxLength = m[0].length;
+        for (double[] tmp : m) {
             maxLength = Math.max(maxLength, tmp.length);
         }
 
-        this.rows = new Vector[matrix.length];
-        for (int i = 0; i < matrix.length; ++i) {
-            this.rows[i] = new Vector(maxLength, matrix[i]);
+        this.rows = new Vector[m.length];
+        for (int i = 0; i < m.length; ++i) {
+            this.rows[i] = new Vector(maxLength, m[i]);
         }
     }
 
@@ -127,21 +127,20 @@ public class Matrix {
      * Задание вектора-строки по индексу сторки
      *
      * @param indexRow индекс стороки
-     * @param vector   Вектор
+     * @param v        Вектор
      */
-    public void setVectorInRow(int indexRow, Vector vector) {
+    public void setVectorInRow(int indexRow, Vector v) {
         if (indexRow >= this.rows.length || indexRow < 0) {
             throw new IndexOutOfBoundsException("Индекс должен быть в пределах от 0 до " + this.rows.length);
         }
         int vectorSizeInRow = rows[indexRow].getSize();
-        if (vectorSizeInRow != vector.getSize()) {
+        if (vectorSizeInRow != v.getSize()) {
             throw new IllegalArgumentException("Размер вектора не соответствует вектору в строке ");
         }
         for (int i = 0; i < vectorSizeInRow; ++i) {
-            this.rows[indexRow].setVectorComponent(i, vector.getVectorComponent(i));
+            this.rows[indexRow].setVectorComponent(i, v.getVectorComponent(i));
         }
     }
-
 
     /**
      * Получение вектора-строки по индексу колонки
@@ -165,7 +164,7 @@ public class Matrix {
      */
     public void transposition() {
         // Если матрица квадрат, не пересоздавая вектора заменяем компоненты
-        if (this.rows.length == this.rows[0].getSize()) {
+        if (this.rows.length == this.getRows()) {
             for (int y = 0; y < this.rows.length; ++y) {
                 for (int x = y + 1; x < this.rows.length; ++x) {
                     double tmp = this.rows[y].getVectorComponent(x);
@@ -174,7 +173,7 @@ public class Matrix {
                 }
             }
         } else {    // Если не квадрат, вектора заменяются на новые
-            Vector[] tmpMatrix = new Vector[this.rows[0].getSize()];
+            Vector[] tmpMatrix = new Vector[this.getRows()];
             for (int i = 0; i < tmpMatrix.length; ++i) {
                 tmpMatrix[i] = new Vector(this.getVectorInColumn(i));
             }
@@ -196,36 +195,56 @@ public class Matrix {
     /**
      * Прибавление к матрице другой матрицы
      *
-     * @param matrix прибавляемая матрица
+     * @param m прибавляемая матрица
      */
-    public void additionMatrix(Matrix matrix) {
-        if (this.rows.length != matrix.rows.length || this.getVectorInRow(0).getSize() != matrix.getVectorInRow(0).getSize()) {
-            throw new IllegalArgumentException("Матрицы разных размерностей");
+    public void additionMatrix(Matrix m) {
+        verifyMatrix(this, m);
+        sumRowMatrix(m);
+    }
+
+    /**
+     * Сложение строк матриц
+     *
+     * @param m прибавляемая матрица
+     */
+    private void sumRowMatrix(Matrix m) {
+        for (int i = 0; i < m.rows.length; ++i) {
+            this.rows[i].addition(m.rows[i]);
         }
-        for (int i = 0; i < matrix.rows.length; ++i) {
-            this.rows[i].addition(matrix.rows[i]);
+    }
+
+    /**
+     * проверка матриц
+     *
+     * @param m1 проверяемая матрица 1
+     * @param m2 проверяемая матрица 2
+     */
+    private static void verifyMatrix(Matrix m1, Matrix m2) {
+        if (m1.rows.length != m2.rows.length || m1.getVectorInRow(0).getSize() != m2.getVectorInRow(0).getSize()) {
+            throw new IllegalArgumentException("Матрицы разных размерностей");
         }
     }
 
     /**
      * Вычитание из матрицы другой матрицы
      *
-     * @param matrix вычитаемая матрица
+     * @param m вычитаемая матрица
      */
-    public void subtractionMatrix(Matrix matrix) {
-        Matrix tmp = new Matrix(matrix);
+    public void subtractionMatrix(Matrix m) {
+        verifyMatrix(this, m);
+        Matrix tmp = new Matrix(m);
         tmp.multiplicationMatrixOnScalar(-1.0);
-        this.additionMatrix(tmp);
+        this.sumRowMatrix(tmp);
     }
 
     /**
      * Умножение матрицы на вектор по правилу «строка на столбец» через статический метод
      *
-     * @param vector строка вектор, на которую умножается матрица
+     * @param v строка вектор, на которую умножается матрица
      */
-    public Vector multiplicationMatrixOnVector(Vector vector) {
+    public Vector multiplicationMatrixOnVector(Vector v) {
 
-        if (this.rows[0].getSize() != vector.getSize()) {
+        if (this.rows[0].getSize() != v.getSize()) {
             throw new IllegalArgumentException(String.format("Вектор должен быть длинной %d", this.rows[0].getSize()));
         }
 
@@ -233,7 +252,7 @@ public class Matrix {
         for (int i = 0; i < this.rows.length; ++i) {
             double tmp = 0;
             for (int j = 0; j < this.rows[0].getSize(); ++j) {
-                tmp += this.rows[i].getVectorComponent(j) * vector.getVectorComponent(j);
+                tmp += this.rows[i].getVectorComponent(j) * v.getVectorComponent(j);
             }
             resVector.setVectorComponent(i, tmp);
         }
@@ -245,7 +264,7 @@ public class Matrix {
      *
      * @return определитель матрицы
      */
-    public double getDetermination() {
+    public double getDeterminant() {
         if (this.rows.length != this.rows[0].getSize()) {
             throw new IllegalArgumentException("Матрица должна быть размерностью NхN");
         }
@@ -284,19 +303,19 @@ public class Matrix {
     /**
      * функция ищет строку вектор в матрице с максимальным количеством нолей
      *
-     * @param matrix матрица в которой нежно искать
+     * @param m матрица в которой нежно искать
      * @return номер строки вектора с максимальным количеством нолей. Тип возвращаемого значения int. По умолчанию строка 0.
      */
-    private int searchVectorWithMaxNull(Matrix matrix) {
+    private int searchVectorWithMaxNull(Matrix m) {
         int vectorNumber = 0;
         int maxNull = 0;
         double epsilon = 10e-10;
 
-        for (int i = 0; i < matrix.rows.length; i++) {
+        for (int i = 0; i < m.rows.length; i++) {
             int countNull = 0;
 
-            for (int j = 0; j < matrix.rows[0].getSize(); j++) {
-                if (Math.abs(matrix.rows[i].getVectorComponent(j)) <= epsilon) {
+            for (int j = 0; j < m.rows[0].getSize(); j++) {
+                if (Math.abs(m.rows[i].getVectorComponent(j)) <= epsilon) {
                     countNull++;
                 }
             }
@@ -311,25 +330,25 @@ public class Matrix {
     /**
      * функция разложения переданной матрицы
      *
-     * @param matrix          переданная матрица
+     * @param m               переданная матрица
      * @param vector          номер вектора с элементом относительно которого нужно разложить
      * @param vectorComponent элемент вектора относительно которого нужно разложить
-     * @return матрицу размерностью на 1 меньше. Тип возвращаемого значения double.
+     * @return матрицу размерностью на 1 меньше. Тип возвращаемого значения Matrix.
      */
-    private Matrix decompositionMatrix(Matrix matrix, int vector, int vectorComponent) {
-        double[][] decompositionMatrix = new double[matrix.rows.length - 1][matrix.rows[0].getSize() - 1];
+    private Matrix decompositionMatrix(Matrix m, int vector, int vectorComponent) {
+        double[][] decompositionMatrix = new double[m.rows.length - 1][m.rows[0].getSize() - 1];
 
-        for (int i = 0, m = 0; i < matrix.rows.length; i++) {
+        for (int i = 0, k = 0; i < m.rows.length; i++) {
             if (i == vector) {
                 continue;
             }
-            for (int j = 0, n = 0; j < matrix.rows[0].getSize(); j++) {
+            for (int j = 0, n = 0; j < m.rows[0].getSize(); j++) {
                 if (j != vectorComponent) {
-                    decompositionMatrix[m][n] = matrix.rows[i].getVectorComponent(j);
+                    decompositionMatrix[k][n] = m.rows[i].getVectorComponent(j);
                     n++;
                 }
             }
-            m++;
+            k++;
         }
         return new Matrix(decompositionMatrix);
     }
@@ -342,8 +361,9 @@ public class Matrix {
      * @return сумма матриц
      */
     public static Matrix sumMatrix(Matrix m1, Matrix m2) {
+        verifyMatrix(m1, m2);
         Matrix tmp = new Matrix(m1);
-        tmp.additionMatrix(m2);
+        tmp.sumRowMatrix(m2);
         return tmp;
     }
 
@@ -352,12 +372,15 @@ public class Matrix {
      *
      * @param m1 матрица 1
      * @param m2 матрица 1
-     * @return разность матриц 1 и 2
+     * @return вычитание из матрицы 1 матрицы 2
      */
     public static Matrix diffMatrix(Matrix m1, Matrix m2) {
-        Matrix tmp = new Matrix(m1);
-        tmp.subtractionMatrix(m2);
-        return tmp;
+        verifyMatrix(m1, m2);
+        Matrix tmp1 = new Matrix(m1);
+        Matrix tmp2 = new Matrix(m2);
+        tmp2.multiplicationMatrixOnScalar(-1.0);
+        tmp1.sumRowMatrix(tmp2);
+        return tmp1;
     }
 
     /**
@@ -368,8 +391,8 @@ public class Matrix {
      * @return результат произведения, матрица
      */
     public static Matrix multiplication(Matrix m1, Matrix m2) {
-        if (m1.rows[0].getSize() != m2.rows.length) {
-            throw new IllegalArgumentException("высота матрицы 2 должна быть равна ширине матрицы 1");
+        if (m1.rows[0].getSize() != m2.rows.length || m2.rows[0].getSize() != m1.rows.length) {
+            throw new IllegalArgumentException("несоответствие размеров матриц");
         }
         Matrix result = new Matrix(m1.rows.length, m2.rows[0].getSize());
         for (int i = 0; i < result.rows.length; ++i) {
