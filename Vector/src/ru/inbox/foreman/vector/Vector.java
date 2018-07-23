@@ -113,6 +113,10 @@ public class Vector {
         return vector.length;
     }
 
+    public double[] toArray() {
+        return Arrays.copyOf(vector, vector.length);
+    }
+
     /**
      * Прибавление к вектору другого вектора
      *
@@ -217,7 +221,7 @@ public class Vector {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         for (int i = 0; i < vector.length; ++i) {
-            sb.append(String.format("%02.0f",vector[i]));
+            sb.append(vector[i]);
             if (i < vector.length - 1) {
                 sb.append(", ");
             }
