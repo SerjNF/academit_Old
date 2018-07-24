@@ -1,4 +1,4 @@
-package ru.inbox.foreman.readfile;
+package ru.inbox.foreman.readFile;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
