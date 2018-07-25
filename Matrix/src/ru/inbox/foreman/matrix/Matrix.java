@@ -297,14 +297,14 @@ public class Matrix {
             return m.rows[0].getVectorComponent(0) * m.rows[1].getVectorComponent(1) - m.rows[1].getVectorComponent(0) * m.rows[0].getVectorComponent(1);
         }
         // определяем вектор с наибольшим количеством нолей
-        int vectorWithMaxNull = searchVectorWithMaxNull(m);
+        int rowWithMaxNull = searchRowWithMaxNull(m);
 
         double determinant = 0.0;
         double epsilon = 10e-10;
         // пробегаем по матрице на выбранной строке и суммируем результат произведения (-1) в степени n+2 элемена в этой строке и разложенной относительно него матрицы
         for (int i = 0; i < m.rows.length; i++) {
-            double matrixComponent = m.rows[vectorWithMaxNull].getVectorComponent(i);
-            determinant += Math.abs(matrixComponent) <= epsilon ? 0 : matrixComponent * Math.pow(-1.0, i + 2) * calcDeterminant(decomposeMatrix(m, vectorWithMaxNull, i));
+            double matrixComponent = m.rows[rowWithMaxNull].getVectorComponent(i);
+            determinant += Math.abs(matrixComponent) <= epsilon ? 0 : matrixComponent * Math.pow(-1.0, i + 2) * calcDeterminant(decomposeMatrix(m, rowWithMaxNull, i));
         }
         return determinant;
     }
@@ -315,8 +315,8 @@ public class Matrix {
      * @param m матрица в которой нежно искать
      * @return номер строки вектора с максимальным количеством нолей. Тип возвращаемого значения int. По умолчанию строка 0.
      */
-    private int searchVectorWithMaxNull(Matrix m) {
-        int vectorNumber = 0;
+    private int searchRowWithMaxNull(Matrix m) {
+        int rowNumber = 0;
         int maxNull = 0;
         double epsilon = 10e-10;
 
@@ -330,10 +330,10 @@ public class Matrix {
             }
             if (countNull > maxNull) {
                 maxNull = countNull;
-                vectorNumber = i;
+                rowNumber = i;
             }
         }
-        return vectorNumber;
+        return rowNumber;
     }
 
     /**
