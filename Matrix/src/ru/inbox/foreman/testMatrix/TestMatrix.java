@@ -12,7 +12,6 @@ import ru.inbox.foreman.vector.Vector;
 public class TestMatrix {
     public static void main(String[] arg) {
 
-
         try {
             Matrix m1 = new Matrix(3, 2);
             System.out.printf("m1: %n%s", m1.toString());
@@ -32,9 +31,9 @@ public class TestMatrix {
             System.out.printf("m4: %n%s", m4.toString());
             System.out.println();
 
-            System.out.printf("Размер матрицы m1 = %d x %d%n", m1.getColumn(), m1.getRows());
-            System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumn(), m2.getRows());
-            System.out.printf("Размер матрицы m3 = %d x %d%n", m3.getColumn(), m3.getRows());
+            System.out.printf("Размер матрицы m1 = %d x %d%n", m1.getColumnSize(), m1.getRowsSize());
+            System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumnSize(), m2.getRowsSize());
+            System.out.printf("Размер матрицы m3 = %d x %d%n", m3.getColumnSize(), m3.getRowsSize());
             System.out.println();
 
             System.out.printf("Вектор из матрицы 2, колонка 2: %s", m2.getVectorInColumn(1).toString());
@@ -62,10 +61,10 @@ public class TestMatrix {
 
             System.out.printf("Результирующий вектор после  умножения матрицы 3 на вектор {1, 2, 3} : %n%s%n", m3.multiplicationMatrixOnVector(new Vector(new double[]{1, 2, 3})).toString());
 
-            System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumn(), m2.getRows());
+            System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumnSize(), m2.getRowsSize());
             System.out.printf("Определитель матрицы m2 = %.2f%n%n", m2.getDeterminant());
 
-            System.out.printf("Произведение матриц:%n{{2, 7, 1}, {3, 2, -4}} * {1, 0}, {0, -1}, {4, 0}}%n%n%s%n", Matrix.multiplication(new Matrix(new double[][]{{2, 7, 1}, {3, 2, -4}}), new Matrix(new double[][]{{1, 0}, {0, -1}, {4, 0}})));
+            System.out.printf("Произведение матриц:%n{{3, -1, 2},%n{4, 2, 0},%n{-5, 6, 1}}%n*%n{{8, 1},%n{7, 2},%n{2, -3}}%n%n%s%n", Matrix.multiplication(new Matrix(new double[][]{{3, -1, 2}, {4, 2, 0}, {-5, 6, 1}}), new Matrix(new double[][]{{8, 1}, {7, 2}, {2, -3}})));
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
