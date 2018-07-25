@@ -31,9 +31,9 @@ public class TestMatrix {
             System.out.printf("m4: %n%s", m4.toString());
             System.out.println();
 
-            System.out.printf("Размер матрицы m1 = %d x %d%n", m1.getColumnSize(), m1.getRowsSize());
-            System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumnSize(), m2.getRowsSize());
-            System.out.printf("Размер матрицы m3 = %d x %d%n", m3.getColumnSize(), m3.getRowsSize());
+            System.out.printf("Размер матрицы m1 = %d x %d%n", m1.getColumnCount(), m1.getRowsCount());
+            System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumnCount(), m2.getRowsCount());
+            System.out.printf("Размер матрицы m3 = %d x %d%n", m3.getColumnCount(), m3.getRowsCount());
             System.out.println();
 
             System.out.printf("Вектор из матрицы 2, колонка 2: %s", m2.getVectorInColumn(1).toString());
@@ -61,7 +61,7 @@ public class TestMatrix {
 
             System.out.printf("Результирующий вектор после  умножения матрицы 3 на вектор {1, 2, 3} : %n%s%n", m3.multiplicationMatrixOnVector(new Vector(new double[]{1, 2, 3})).toString());
 
-            System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumnSize(), m2.getRowsSize());
+            System.out.printf("Размер матрицы m2 = %d x %d%n", m2.getColumnCount(), m2.getRowsCount());
             System.out.printf("Определитель матрицы m2 = %.2f%n%n", m2.getDeterminant());
 
             System.out.printf("Произведение матриц:%n{{3, -1, 2},%n{4, 2, 0},%n{-5, 6, 1}}%n*%n{{8, 1},%n{7, 2},%n{2, -3}}%n%n%s%n", Matrix.multiplication(new Matrix(new double[][]{{3, -1, 2}, {4, 2, 0}, {-5, 6, 1}}), new Matrix(new double[][]{{8, 1}, {7, 2}, {2, -3}})));

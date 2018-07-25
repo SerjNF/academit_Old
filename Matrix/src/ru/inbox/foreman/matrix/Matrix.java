@@ -97,7 +97,7 @@ public class Matrix {
      *
      * @return высота матрицы
      */
-    public int getColumnSize() {
+    public int getColumnCount() {
         return this.rows.length;
     }
 
@@ -106,7 +106,7 @@ public class Matrix {
      *
      * @return ширина матрицы
      */
-    public int getRowsSize() {
+    public int getRowsCount() {
         return this.rows[0].getSize();
     }
 
@@ -149,7 +149,7 @@ public class Matrix {
      * @return Вектор
      */
     public Vector getVectorInColumn(int indexColumn) {
-        if (indexColumn >= this.getRowsSize() || indexColumn < 0) {
+        if (indexColumn >= this.getRowsCount() || indexColumn < 0) {
             throw new IndexOutOfBoundsException("Индекс должен быть в пределах от 0 до " + this.rows[0].getSize());
         }
         double[] resArray = new double[this.rows.length];
@@ -164,7 +164,7 @@ public class Matrix {
      */
     public void transposition() {
         // Если матрица квадрат, не пересоздавая вектора заменяем компоненты
-        if (this.rows.length == this.getRowsSize()) {
+        if (this.rows.length == this.getRowsCount()) {
             for (int y = 0; y < this.rows.length; ++y) {
                 for (int x = y + 1; x < this.rows.length; ++x) {
                     double tmp = this.rows[y].getVectorComponent(x);
@@ -173,7 +173,7 @@ public class Matrix {
                 }
             }
         } else {    // Если не квадрат, вектора заменяются на новые
-            Vector[] tmpMatrix = new Vector[this.getRowsSize()];
+            Vector[] tmpMatrix = new Vector[this.getRowsCount()];
             for (int i = 0; i < tmpMatrix.length; ++i) {
                 tmpMatrix[i] = this.getVectorInColumn(i);
             }
@@ -231,7 +231,7 @@ public class Matrix {
      * @param m2 проверяемая матрица 2
      */
     private static void verifyMatrix(Matrix m1, Matrix m2) {
-        if (m1.rows.length != m2.rows.length || m1.getColumnSize() != m2.getColumnSize()) {
+        if (m1.getRowsCount() != m2.getRowsCount() || m1.getColumnCount() != m2.getColumnCount()) {
             throw new IllegalArgumentException("Матрицы разных размерностей");
         }
     }
@@ -253,7 +253,7 @@ public class Matrix {
      */
     public Vector multiplicationMatrixOnVector(Vector v) {
 
-        if (this.getRowsSize() != v.getSize()) {
+        if (this.getRowsCount() != v.getSize()) {
             throw new IllegalArgumentException(String.format("Вектор должен быть длинной %d", this.rows[0].getSize()));
         }
 
@@ -398,12 +398,12 @@ public class Matrix {
      * @return результат произведения, матрица
      */
     public static Matrix multiplication(Matrix m1, Matrix m2) {
-        if (m1.getRowsSize() != m2.getColumnSize()) {
+        if (m1.getRowsCount() != m2.getColumnCount()) {
             throw new IllegalArgumentException("несоответствие размеров матриц");
         }
-        Matrix result = new Matrix(m1.getColumnSize(), m2.getRowsSize());
-        for (int i = 0; i < result.getColumnSize(); ++i) {
-            for (int j = 0; j < result.getRowsSize(); ++j) {
+        Matrix result = new Matrix(m1.getColumnCount(), m2.getRowsCount());
+        for (int i = 0; i < result.getColumnCount(); ++i) {
+            for (int j = 0; j < result.getRowsCount(); ++j) {
                 result.rows[i].setVectorComponent(j, Vector.multiplicationVectors(m1.getVectorInRow(i), m2.getVectorInColumn(j)));
             }
         }
