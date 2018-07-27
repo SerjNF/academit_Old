@@ -6,18 +6,18 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class MyArrayList<T> implements List<T> {
-    //  private double[] im = new double[5];
-    private T[] item;
+
+    private Object[] item;
     private int length;
 
-    MyArrayList(){
-        this.item = (T[]) new Object[]{};
+    MyArrayList() {
+        this.item = new Object[]{};
         length = 0;
     }
 
-    MyArrayList(int capacity){
+    MyArrayList(int capacity) {
         int DEF_CAPACITY = 10;
-        this.item = (T[]) new Object[DEF_CAPACITY];
+        this.item = new Object[DEF_CAPACITY];
         length = DEF_CAPACITY;
     }
 
@@ -26,6 +26,7 @@ public class MyArrayList<T> implements List<T> {
         return length;
     }
 
+
     @Override
     public boolean isEmpty() {
         return length == 0;
@@ -33,6 +34,11 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean contains(Object o) {
+        for (int i = 0; i < this.length; ++i) {
+            if (item[i].equals(o)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -103,7 +109,6 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
-
     }
 
     @Override
