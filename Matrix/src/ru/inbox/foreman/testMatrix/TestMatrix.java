@@ -17,7 +17,7 @@ public class TestMatrix {
             System.out.printf("m1: %n%s", m1.toString());
             System.out.println();
 
-            double[][] matrix2 = new double[][]{{1, 2, 6}, {4, 3, -1}, {2, -2, 5}};
+            double[][] matrix2 = new double[][]{{2, 4, 2}, {-3, 7, -1}, {4, 3, 5}};
             Matrix m2 = new Matrix(matrix2);
             System.out.printf("m2: %n%s", m2.toString());
             System.out.println();

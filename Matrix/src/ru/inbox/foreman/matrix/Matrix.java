@@ -302,7 +302,7 @@ public class Matrix {
         double determinant = 0.0;
         double epsilon = 10e-10;
         // пробегаем по матрице на выбранной строке и суммируем результат произведения (-1) в степени n+2 элемена в этой строке и разложенной относительно него матрицы
-        for (int i = 0; i < m.rows.length; i++) {
+        for (int i = 0; i < m.getColumnsCount(); i++) {
             double matrixComponent = m.rows[rowWithMaxNull].getVectorComponent(i);
             determinant += Math.abs(matrixComponent) <= epsilon ? 0 : matrixComponent * Math.pow(-1.0, i + 2) * calcDeterminant(decomposeMatrix(m, rowWithMaxNull, i));
         }
@@ -402,9 +402,14 @@ public class Matrix {
             throw new IllegalArgumentException("несоответствие размеров матриц");
         }
         Matrix result = new Matrix(m1.getRowsCount(), m2.getColumnsCount());
+
         for (int i = 0; i < result.getRowsCount(); ++i) {
             for (int j = 0; j < result.getColumnsCount(); ++j) {
-                result.rows[i].setVectorComponent(j, Vector.multiplicationVectors(m1.getVectorInRow(i), m2.getVectorInColumn(j)));
+                double tmp = 0;
+                for (int k = 0; k < m2.getRowsCount(); ++k) {
+                    tmp += m1.rows[i].getVectorComponent(k) * m2.rows[k].getVectorComponent(j);
+                }
+                result.rows[i].setVectorComponent(j, tmp);
             }
         }
         return result;
