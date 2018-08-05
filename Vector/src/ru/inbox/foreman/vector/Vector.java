@@ -69,7 +69,7 @@ public class Vector {
      */
 
     public static Vector sumVectors(Vector v1, Vector v2) {
-        // что бы ворнинги убрать для tmp использовал конструктор со значениями из массива
+        // что бы ворнинги убрать, для tmp использовал конструктор со значениями из массива
         Vector tmp = new Vector(v1.vector);
         tmp.addition(v2);
         return tmp;

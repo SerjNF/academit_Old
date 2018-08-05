@@ -304,7 +304,7 @@ public class Matrix {
         // пробегаем по матрице на выбранной строке и суммируем результат произведения (-1) в степени n+2 элемена в этой строке и разложенной относительно него матрицы
         for (int i = 0; i < m.getColumnsCount(); i++) {
             double matrixComponent = m.rows[rowWithMaxNull].getVectorComponent(i);
-            determinant += Math.abs(matrixComponent) <= epsilon ? 0 : matrixComponent * Math.pow(-1.0, i + 2) * calcDeterminant(decomposeMatrix(m, rowWithMaxNull, i));
+            determinant += Math.abs(matrixComponent) <= epsilon ? 0 : matrixComponent * Math.pow(-1.0, i + rowWithMaxNull) * calcDeterminant(decomposeMatrix(m, rowWithMaxNull, i));
         }
         return determinant;
     }
