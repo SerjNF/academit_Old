@@ -9,7 +9,7 @@ import java.util.ListIterator;
 
 public class Test1 {
     public static void main(String[] arg) {
-        MyArrayList<Integer> myArrayList = new MyArrayList<Integer>();
+        MyArrayList<Integer> myArrayList = new MyArrayList<>();
         System.out.println("isEmpty: " + myArrayList.isEmpty());
         myArrayList.add(1);
         myArrayList.add(2);
@@ -83,7 +83,7 @@ public class Test1 {
         System.out.println();
 //new ArrayList<Integer>(Arrays.asList(8,9))
         System.out.print("удаление из первой коллекции элементов второй коллекции: ");
-        System.out.println(myArrayList.removeAll(new ArrayList<Integer>(Arrays.asList(8, 9))));
+        System.out.println(myArrayList.removeAll(new ArrayList<>(Arrays.asList(8, 9))));
         System.out.println("MyArrayList toString(toArray): " + Arrays.toString(myArrayList.toArray()));
         System.out.println("Length = " + myArrayList.size());
     }
