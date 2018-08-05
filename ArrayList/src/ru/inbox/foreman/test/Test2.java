@@ -16,7 +16,6 @@ public class Test2 {
         ArrayList<String> strings = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new FileInputStream("input.txt"))) {
-            Pattern p = Pattern.compile("[a-z]+");
             while (scanner.hasNext()) {
                 strings.add(scanner.next().split("[\\s ,.()]")[0]);
             }
@@ -32,6 +31,8 @@ public class Test2 {
         list2.add("and");
         list2.add("if");
         list2.add("by");
+        list2.add("that");
+        list2.add("any");
 
         list1.addAll(strings);
         System.out.println(Arrays.toString(list1.toArray()));
@@ -47,13 +48,10 @@ public class Test2 {
         System.out.println(Arrays.toString(list1.toArray()));
         System.out.println("длина: " + list1.size());
 
-        ListIterator<String> listIterator = list1.listIterator();
+        ListIterator<String> listIterator = list1.listIterator(29);
         System.out.println("печать коллекции иератором");
-        while (listIterator.hasNext()){
-            System.out.println(listIterator.next());
+        while (listIterator.hasPrevious()) {
+            System.out.println(listIterator.previous());
         }
-
-
-
     }
 }

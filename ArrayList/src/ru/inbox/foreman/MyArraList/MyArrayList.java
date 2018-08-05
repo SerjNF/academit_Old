@@ -81,14 +81,14 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public boolean add(T t) {
         if (checkCapacity()) {
-            increaseCapacity(item.length * 2);
+            ensureCapacity(item.length * 2);
         }
         this.item[this.length] = t;
         this.length++;
         return true;
     }
 
-    private void increaseCapacity(int capacity) {
+    private void ensureCapacity(int capacity) {
         item = Arrays.copyOf(item, capacity);
     }
 
@@ -127,7 +127,7 @@ public class MyArrayList<T> implements List<T> {
 //        } else {
 //            int cSize = c.size();
 //            if (cSize + this.length < this.item.length) {
-//                increaseCapacity((cSize + this.length) * 2);
+//                ensureCapacity((cSize + this.length) * 2);
 //                Iterator iterator = c.iterator();
 //                for (int i = length; iterator.hasNext(); i++) {
 //                    item[i] = (T) iterator.next();
@@ -147,7 +147,7 @@ public class MyArrayList<T> implements List<T> {
         } else {
             int cSize = c.size();
             if (cSize + this.length >= this.item.length) {
-                increaseCapacity((cSize + this.length) * 2);
+                ensureCapacity((cSize + this.length) * 2);
             }
             if (index == this.length) {
                 insertAll(index, c);
@@ -227,7 +227,7 @@ public class MyArrayList<T> implements List<T> {
     public void add(int index, T element) {
         checkIndexForAdd(index);
         if (checkCapacity()) {
-            increaseCapacity(item.length * 2);
+            ensureCapacity(item.length * 2);
         }
         if (index != this.length) {
             System.arraycopy(this.item, index, this.item, index + 1, length + 1 - index);
@@ -302,7 +302,7 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public boolean hasPrevious() {
-                return currentIndex >= 0;
+                return currentIndex > 0;
             }
 
             @Override
@@ -319,7 +319,7 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public int nextIndex() {
-                return hasNext() ? currentIndex + 1 : length;
+                return hasNext() ? currentIndex : length;
             }
 
             @Override
@@ -330,7 +330,7 @@ public class MyArrayList<T> implements List<T> {
             @Override
             public void remove() {
                 if (hasNextStep) {
-                    System.arraycopy(item, prevIndex + 1, item, prevIndex, length - 1 - prevIndex);
+                    System.arraycopy(item, currentIndex + 1, item, currentIndex, length - 1 - currentIndex);
                     length--;
                     currentIndex--;
                     hasNextStep = false;
@@ -339,18 +339,20 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public void set(T t) {
-  //              System.arraycopy(item, index, item, currentIndex + 1, length + 1 - currentIndex);
-                item[prevIndex] = t;
+                if (hasNextStep) {
 
+                    item[prevIndex] = t;
+                }
             }
 
             @Override
             public void add(T t) {
                 if (checkCapacity()) {
-                    increaseCapacity(item.length * 2);
+                    ensureCapacity(item.length * 2);
                 }
-                System.arraycopy(item, index, item, prevIndex + 1 , length + 1 - prevIndex);
-                item[prevIndex] = t;
+                System.arraycopy(item, index, item, prevIndex + 1, length + 1 - prevIndex);
+                item[currentIndex] = t;
+                currentIndex++;
                 length++;
             }
         };
