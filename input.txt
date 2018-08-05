@@ -1,3 +1,2 @@
-13233254
-135466870
-89785645
+Inserts the specified element into the list (optional operation).
+The element is inserted immediately before the element that would be returned by next(), if any, and after the element that would be returned by previous(), if any.
