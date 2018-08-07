@@ -14,6 +14,7 @@ public class Test1 {
         myArrayList.add(1);
         myArrayList.add(2);
         myArrayList.add(5);
+        myArrayList.add(null);
         myArrayList.add(12);
         myArrayList.add(0);
         myArrayList.add(10);

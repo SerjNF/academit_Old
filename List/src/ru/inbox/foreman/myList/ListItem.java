@@ -7,7 +7,6 @@ package ru.inbox.foreman.myList;
  * @author SergeyNF
  */
 class ListItem<T> {
-
     private T data;
     private ListItem<T> next;
 

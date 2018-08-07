@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ListIterator;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class Test2 {
     public static void main(String[] arg) {
@@ -29,6 +28,7 @@ public class Test2 {
         list2.add("The");
         list2.add("the");
         list2.add("and");
+        list2.add(null);
         list2.add("if");
         list2.add("by");
         list2.add("that");
@@ -49,7 +49,7 @@ public class Test2 {
         System.out.println("длина: " + list1.size());
 
         ListIterator<String> listIterator = list1.listIterator(29);
-        System.out.println("печать коллекции иератором");
+        System.out.println("печать коллекции лист-итератором");
         while (listIterator.hasPrevious()) {
             System.out.println(listIterator.previous());
         }

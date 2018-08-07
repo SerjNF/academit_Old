@@ -36,7 +36,7 @@ public class Test {
 
         System.out.println("Первый элемент: " + singleLinkedList.get());
 
-        int indexElement = 3;
+        int indexElement = 0;
 
         System.out.printf("Элемент №%d: %s%n", indexElement, singleLinkedList.getAtIndex(indexElement));
 
@@ -74,6 +74,10 @@ public class Test {
         }
         System.out.println(singleLinkedList.toString());
         System.out.println("Size = " + singleLinkedList.getSize());
+
+        singleLinkedList.remove();
+        singleLinkedList.copy().reverse();
+
     }
 }
 

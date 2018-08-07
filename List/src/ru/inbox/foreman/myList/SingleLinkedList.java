@@ -12,11 +12,6 @@ public class SingleLinkedList<T> {
     private ListItem<T> head;
     private int size = 0;
 
-    private int lastSearchIndex = 0;
-    private ListItem<T> lastSearchItem = null;
-    private ListItem<T> prevItem = null;
-
-
     public SingleLinkedList() {
     }
 
@@ -69,13 +64,7 @@ public class SingleLinkedList<T> {
      * @return данные типа <T>
      */
     public T getAtIndex(int index) {
-        checkIndex(index);
-        if (index == 0) {
-            return get();
-        }
-        searchElementAtIndex(index);
-
-        return this.lastSearchItem.getData();
+        return this.getElementAtIndex(index).getData();
     }
 
     /**
@@ -87,17 +76,10 @@ public class SingleLinkedList<T> {
      */
     public T setAtIndex(int index, T data) {
         checkIndex(index);
-        T oldData;
-        if (index == 0) {
-            oldData = head.getData();
-            this.head.setData(data);
-            return oldData;
-        }
-        searchElementAtIndex(index);
-        oldData = this.lastSearchItem.getData();
-        this.lastSearchItem.setData(data);
+        ListItem<T> elementAtIndex = getElementAtIndex(index);
+        T oldData = elementAtIndex.getData();
+        elementAtIndex.setData(data);
         return oldData;
-
     }
 
     /**
@@ -111,12 +93,10 @@ public class SingleLinkedList<T> {
         if (index == 0) {
             return remove();
         }
-        searchElementAtIndex(index);
-        this.prevItem.setNext(lastSearchItem.getNext());
+        ListItem<T> elementAtPrevIndex = getElementAtIndex(index - 1);
+        T oldData = elementAtPrevIndex.getNext().getData();
+        elementAtPrevIndex.setNext(elementAtPrevIndex.getNext().getNext());
         this.size--;
-        T oldData = lastSearchItem.getData();
-        this.lastSearchItem = null;
-        this.lastSearchIndex = 0;
         return oldData;
     }
 
@@ -126,11 +106,14 @@ public class SingleLinkedList<T> {
      * @return удаленный элемент
      */
     public T remove() {
-        checkCollection();
-        T oldData = head.getData();
-        this.head = head.getNext();
-        size--;
-        return oldData;
+        if (head != null) {
+            checkCollection();
+            T oldData = head.getData();
+            this.head = head.getNext();
+            size--;
+            return oldData;
+        }
+        return null;
     }
 
     /**
@@ -143,12 +126,11 @@ public class SingleLinkedList<T> {
         checkIndex(index);
         if (index == 0) {
             add(data);
+        } else {
+            ListItem<T> elementAtPrevIndex = getElementAtIndex(index - 1);
+            elementAtPrevIndex.setNext(new ListItem<>(data, elementAtPrevIndex.getNext()));
+            size++;
         }
-        searchElementAtIndex(index);
-        this.prevItem.setNext(new ListItem<>(data, this.lastSearchItem));
-        lastSearchIndex = 0;
-        lastSearchItem = head;
-        size++;
     }
 
     /**
@@ -158,18 +140,18 @@ public class SingleLinkedList<T> {
      * @return true - данные найдены и удалены, в противном случае false
      */
     public boolean remove(T data) {
-        checkCollection();
-        if (this.head.getData().equals(data)) {
-            this.head = head.getNext();
-            size--;
-            return true;
-        }
-
-        for (ListItem<T> p = this.head.getNext(), prev = head; p != null; prev = p, p = p.getNext()) {
-            if (p.getData().equals(data)) {
-                prev.setNext(p.getNext());
+        if (head != null) {
+            if (this.head.getData().equals(data)) {
+                this.head = head.getNext();
                 size--;
                 return true;
+            }
+            for (ListItem<T> p = this.head.getNext(), prev = head; p != null; prev = p, p = p.getNext()) {
+                if (p.getData().equals(data)) {
+                    prev.setNext(p.getNext());
+                    size--;
+                    return true;
+                }
             }
         }
         return false;
@@ -179,8 +161,7 @@ public class SingleLinkedList<T> {
      * Разворот коллекции
      */
     public void reverse() {
-        checkCollection();
-        if (size >= 2) {
+        if (size >= 2 && head != null) {
             ListItem<T> newLastItem = new ListItem<>(head.getData());
             for (ListItem<T> p = this.head.getNext(), prev = newLastItem, next = head; next != null; prev = p, p = next) {
                 if ((next = p.getNext()) == null) {
@@ -197,11 +178,12 @@ public class SingleLinkedList<T> {
      * @return новая коллекция
      */
     public SingleLinkedList<T> copy() {
-        checkCollection();
         SingleLinkedList<T> returnedCollection = new SingleLinkedList<>();
-        returnedCollection.add(this.head.getData());
-        for (ListItem<T> t = this.head.getNext(), r = returnedCollection.head; t != null; t = t.getNext(), r = r.getNext()) {
-            r.setNext(new ListItem<>(t.getData()));
+        if (head != null) {
+            returnedCollection.add(this.head.getData());
+            for (ListItem<T> t = this.head.getNext(), r = returnedCollection.head; t != null; t = t.getNext(), r = r.getNext()) {
+                r.setNext(new ListItem<>(t.getData()));
+            }
         }
         return returnedCollection;
     }
@@ -212,19 +194,14 @@ public class SingleLinkedList<T> {
      *
      * @param index требуемый индекс
      */
-    private void searchElementAtIndex(int index) {
-        ListItem<T> p = head.getNext();
-        int startIndex = 1;
-        if (index >= this.lastSearchIndex) {
-            startIndex = this.lastSearchIndex;
-            p = this.lastSearchItem != null ? this.lastSearchItem : head;
-        }
+    private ListItem<T> getElementAtIndex(int index) {
+        ListItem<T> p = head;
+        int startIndex = 0;
+
         for (; startIndex != index; startIndex++) {
-            this.prevItem = p;
             p = p.getNext();
         }
-        this.lastSearchItem = p;
-        this.lastSearchIndex = index;
+        return p;
     }
 
     /**
