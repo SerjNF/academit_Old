@@ -40,7 +40,7 @@ public class Test {
 
         System.out.printf("Элемент №%d: %s%n", indexElement, singleLinkedList.getAtIndex(indexElement));
 
-        System.out.printf("Элемент №%d: %s заменен на ЗАМЕНА%n", indexElement, singleLinkedList.setAtIndex(indexElement, "ЗАМЕНА"));
+        System.out.printf("Элемент №%d: %s заменен на: ЗАМЕНА%n", indexElement, singleLinkedList.setAtIndex(indexElement, "ЗАМЕНА"));
         System.out.printf("Элемент №%d: %s%n", indexElement, singleLinkedList.getAtIndex(indexElement));
         System.out.println(singleLinkedList.toString());
 
@@ -49,25 +49,26 @@ public class Test {
         System.out.println("Size = " + singleLinkedList.getSize());
         System.out.println(singleLinkedList.toString());
 
-        String addWord = "ВСТАВКА";
-        singleLinkedList.addAtIndex(indexElement, addWord);
-        System.out.printf("Перед элементом №%d вставлен %s%n", indexElement, addWord);
+        String word = "ВСТАВКА";
+        singleLinkedList.addAtIndex(indexElement, word);
+        System.out.printf("Перед элементом №%d вставлен %s%n", indexElement, word);
 
         indexElement = 4;
         System.out.printf("Элемент №%d: %s%n", indexElement, singleLinkedList.getAtIndex(indexElement));
         System.out.println("Size = " + singleLinkedList.getSize());
         System.out.println(singleLinkedList.toString());
 
-        addWord = "the";
-        System.out.printf("Удаление элемента %s: %s%n", addWord, singleLinkedList.remove(addWord));
+        word = "the";
+        System.out.printf("Удаление элемента %s: %s%n", word, singleLinkedList.remove(word));
         System.out.println(singleLinkedList.toString());
         System.out.println("Size = " + singleLinkedList.getSize());
 
-        addWord = "if";
-        System.out.printf("Удаление элемента %s: %s%n", addWord, singleLinkedList.remove(addWord));
+        word = "if";
+        System.out.printf("Удаление элемента %s: %s%n", word, singleLinkedList.remove(word));
         System.out.println(singleLinkedList.toString());
         System.out.println("Size = " + singleLinkedList.getSize());
 
+        System.out.println("Удаление элементов");
         while (singleLinkedList.getSize() != 0) {
             singleLinkedList.remove();
         }
