@@ -10,7 +10,7 @@ import java.util.ListIterator;
 public class Test1 {
     public static void main(String[] arg) {
         MyArrayList<Integer> myArrayList = new MyArrayList<>();
-        System.out.println("isEmpty: " + myArrayList.isEmpty());
+        System.out.printf("isEmpty: %s%n", myArrayList.isEmpty());
         myArrayList.add(1);
         myArrayList.add(2);
         myArrayList.add(5);
@@ -29,7 +29,7 @@ public class Test1 {
         }
         System.out.println();
 
-        System.out.println("Удаление значения 0: " + myArrayList.remove(new Integer(0)));
+        System.out.printf("Удаление значения 0: %s%n", myArrayList.remove(new Integer(0)));
         System.out.println("toString(toArray): " + Arrays.toString(myArrayList.toArray()));
         System.out.println("Length = " + myArrayList.size());
 
@@ -74,15 +74,15 @@ public class Test1 {
         listIterator.next();
         listIterator.set(505);
         listIterator.add(1000);
-      // listIterator.remove();
+       listIterator.remove();
         while (listIterator.hasNext()) {
 
             System.out.print(listIterator.next() + " ");
-  //          listIterator.remove();
-        }
+         //   myArrayList.add(3);
 
+        }
         System.out.println();
-//new ArrayList<Integer>(Arrays.asList(8,9))
+
         System.out.print("удаление из первой коллекции элементов второй коллекции: ");
         System.out.println(myArrayList.removeAll(new ArrayList<>(Arrays.asList(8, 9))));
         System.out.println("MyArrayList toString(toArray): " + Arrays.toString(myArrayList.toArray()));

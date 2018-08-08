@@ -2,12 +2,11 @@ package ru.inbox.foreman.MyArraList;
 
 import java.util.*;
 
-
 public class MyArrayList<T> implements List<T> {
     private T[] items;
     private int length;
     private static int DEFAULT_CAPACITY = 10;
-    private boolean singOfChange = false;
+    private int modCount = 0;
 
     public MyArrayList() {
         this(DEFAULT_CAPACITY);
@@ -15,19 +14,13 @@ public class MyArrayList<T> implements List<T> {
 
     @SuppressWarnings("unchecked")
     public MyArrayList(int capacity) {
-        this.items = (T[]) new Object[capacity];
+        items = (T[]) new Object[capacity];
         length = 0;
     }
-
 
     @Override
     public int size() {
         return length;
-    }
-
-    private void setSingOfChange(boolean sing) {
-        this.singOfChange = sing;
-
     }
 
     @Override
@@ -42,13 +35,13 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        setSingOfChange(false);
         return new Iterator<T>() {
+            private int expectedModCount = modCount;
             private int currentIndex = 0;
 
             @Override
             public boolean hasNext() {
-                if (singOfChange) {
+                if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException("Сollection modified");
                 }
                 return currentIndex < length;
@@ -57,8 +50,8 @@ public class MyArrayList<T> implements List<T> {
             @Override
             @SuppressWarnings("unchecked")
             public T next() {
-                T returnElement = items[this.currentIndex];
-                this.currentIndex++;
+                T returnElement = items[currentIndex];
+                currentIndex++;
                 return returnElement;
             }
         };
@@ -66,15 +59,13 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
-        return Arrays.copyOf(this.items, this.length);
+        return Arrays.copyOf(items, length);
     }
-
 
     @Override
     @SuppressWarnings("unchecked")
     public <T1> T1[] toArray(T1[] a) {
         if (a.length < length) {
-
             return (T1[]) Arrays.copyOf(items, length, a.getClass());
         }
         System.arraycopy(items, 0, a, 0, length);
@@ -85,32 +76,43 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        setSingOfChange(true);
-        if (checkCapacity()) {
-            ensureCapacity(items.length * 2);
-        }
-        this.items[this.length] = t;
-        this.length++;
+        ensureCapacity(length + 1);
+        items[length] = t;
+        length++;
+        modCount++;
         return true;
     }
 
-    public void ensureCapacity(int capacity) {
-        setSingOfChange(true);
-        int newCapacity = Math.max(capacity, this.items.length);
-        items = Arrays.copyOf(items, newCapacity);
+    public void ensureCapacity(int minCapacity) {
+        int size = items.length;
+        if (size == 0) {
+            size = minCapacity;
+        }
+        while (size - minCapacity < 0) {
+            size = size << 1;
+        }
+        items = Arrays.copyOf(items, size);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void trimToSize() {
+        modCount++;
+        if (length < items.length) {
+            items = (length == 0) ? (T[]) new Object[]{} : Arrays.copyOf(items, length);
+        }
     }
 
     @Override
     public boolean remove(Object o) {
         Objects.requireNonNull(o);
-        setSingOfChange(true);
-        for (int i = 0; i < this.length; ++i) {
-            T currentItem = this.items[i];
+        for (int i = 0; i < length; ++i) {
+            T currentItem = items[i];
             if (currentItem != null && currentItem.equals(o)) {
-                if (i < this.length - 1) {
-                    System.arraycopy(this.items, i + 1, this.items, i, length - 1 - i);
+                if (i < length - 1) {
+                    System.arraycopy(items, i + 1, items, i, length - 1 - i);
                 }
                 length--;
+                modCount++;
                 return true;
             }
         }
@@ -119,9 +121,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        if (c.size() > length) {
-            return false;
-        }
+        Objects.requireNonNull(c);
         for (Object cElement : c) {
             if (!contains(cElement)) {
                 return false;
@@ -132,27 +132,22 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        setSingOfChange(true);
-        return addAll(this.length, c);
+        return addAll(length, c);
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
         Objects.requireNonNull(c);
-        setSingOfChange(true);
-
         int cSize = c.size();
-        if (cSize + this.length >= this.items.length) {
-            ensureCapacity((cSize + this.length) * 2);
-        }
-        if (index == this.length) {
+        ensureCapacity(cSize + length);
+        if (index == length) {
             insertAll(index, c);
         } else {
-            System.arraycopy(this.items, index, this.items, index + cSize, length - index);
+            System.arraycopy(items, index, items, index + cSize, length - index);
             insertAll(index, c);
         }
         length += cSize;
-
+        modCount++;
         return true;
     }
 
@@ -160,8 +155,6 @@ public class MyArrayList<T> implements List<T> {
     @SuppressWarnings("unchecked")
     public boolean removeAll(Collection<?> c) {
         Objects.requireNonNull(c);
-        setSingOfChange(true);
-
         boolean result = false;
         Object[] resultItem = new Object[length];
 
@@ -176,21 +169,20 @@ public class MyArrayList<T> implements List<T> {
         }
         items = (T[]) resultItem;
         length = j;
+        modCount++;
         return result;
     }
-
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean retainAll(Collection<?> c) {
         Objects.requireNonNull(c);
-        setSingOfChange(true);
         boolean result = false;
         Object[] resultItem = new Object[length];
 
         int j = 0;
         for (int i = 0; i < length; ++i) {
-            if (c.contains(items[i])) {
+            if (c.contains(this.items[i])) {
                 resultItem[j] = items[i];
                 j++;
                 result = true;
@@ -198,62 +190,59 @@ public class MyArrayList<T> implements List<T> {
         }
         items = (T[]) resultItem;
         length = j;
+        modCount++;
         return result;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void clear() {
-        setSingOfChange(true);
-        this.items = (T[]) new Object[0];
+        items = (T[]) new Object[0];
         length = 0;
     }
 
     @Override
     public T get(int index) {
         checkIndex(index);
-        return this.items[index];
+        return items[index];
     }
 
     @Override
     public T set(int index, T element) {
         checkIndex(index);
-        setSingOfChange(true);
         T returnValue = items[index];
-        this.items[index] = element;
+        items[index] = element;
         return returnValue;
     }
 
     @Override
     public void add(int index, T element) {
         checkIndexForAdd(index);
-        setSingOfChange(true);
-        if (checkCapacity()) {
-            ensureCapacity(items.length * 2);
-        }
-        if (index != this.length) {
-            System.arraycopy(this.items, index, this.items, index + 1, length + 1 - index);
+        ensureCapacity(length + 1);
+        if (index != length) {
+            System.arraycopy(items, index, items, index + 1, length + 1 - index);
         }
         items[index] = element;
         length++;
+        modCount++;
     }
 
     @Override
     public T remove(int index) {
         checkIndex(index);
-        setSingOfChange(true);
         T returnValue = items[index];
-        if (index < this.length - 1) {
-            System.arraycopy(this.items, index + 1, this.items, index, length - 1 - index);
+        if (index < length - 1) {
+            System.arraycopy(items, index + 1, items, index, length - 1 - index);
         }
         length--;
+        modCount++;
         return returnValue;
     }
 
     @Override
     public int indexOf(Object o) {
         Objects.requireNonNull(o);
-        for (int i = 0; i <= this.length; ++i) {
+        for (int i = 0; i <= length; ++i) {
             T currentItem = items[i];
             if (currentItem != null && currentItem.equals(o)) {
                 return i;
@@ -265,8 +254,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public int lastIndexOf(Object o) {
         Objects.requireNonNull(o);
-
-        for (int i = this.length - 1; i >= 0; --i) {
+        for (int i = length - 1; i >= 0; --i) {
             T currentItem = items[i];
             if (currentItem != null && currentItem.equals(o)) {
                 return i;
@@ -285,10 +273,8 @@ public class MyArrayList<T> implements List<T> {
         if (index >= length || index < 0) {
             throw new IndexOutOfBoundsException("Out of range");
         }
-
-        setSingOfChange(false);
-
         return new ListIterator<T>() {
+            private int expectedModCount = modCount;
             private int currentIndex = index;
             private boolean hasNextStep = true;
             private int prevIndex = index;
@@ -296,19 +282,16 @@ public class MyArrayList<T> implements List<T> {
             @Override
             public boolean hasNext() {
                 return currentIndex < length;
-
             }
 
             @Override
             public T next() {
-                if (singOfChange) {
+                if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException("Сollection modified");
                 }
-
                 if (currentIndex >= length) {
                     throw new NoSuchElementException("No Such Element");
                 }
-
                 T returnElement = items[this.currentIndex];
                 prevIndex = currentIndex;
                 currentIndex++;
@@ -318,19 +301,17 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public boolean hasPrevious() {
-                return currentIndex > 0;
+                return currentIndex >= 0;
             }
 
             @Override
             public T previous() {
-                if (singOfChange) {
+                if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException("Сollection modified");
                 }
-
                 if (currentIndex < 0) {
                     throw new NoSuchElementException("No Such Element");
                 }
-
                 T returnElement = items[currentIndex];
                 prevIndex = currentIndex;
                 currentIndex--;
@@ -351,7 +332,6 @@ public class MyArrayList<T> implements List<T> {
             @Override
             public void remove() {
                 if (hasNextStep) {
-                    setSingOfChange(true);
                     System.arraycopy(items, currentIndex + 1, items, currentIndex, length - 1 - currentIndex);
                     length--;
                     currentIndex--;
@@ -362,17 +342,13 @@ public class MyArrayList<T> implements List<T> {
             @Override
             public void set(T t) {
                 if (hasNextStep) {
-                    setSingOfChange(true);
                     items[prevIndex] = t;
                 }
             }
 
             @Override
             public void add(T t) {
-                if (checkCapacity()) {
-                    ensureCapacity(items.length * 2);
-                }
-
+                ensureCapacity(length + 1);
                 System.arraycopy(items, index, items, prevIndex + 1, length + 1 - prevIndex);
                 items[currentIndex] = t;
                 currentIndex++;
@@ -386,9 +362,8 @@ public class MyArrayList<T> implements List<T> {
         return null;
     }
 
-
     private void checkIndexForAdd(int index) {
-        if (index > this.length) {
+        if (index > length) {
             throw new ArrayIndexOutOfBoundsException(printThrowOutOfBoundException());
         }
     }
@@ -398,7 +373,7 @@ public class MyArrayList<T> implements List<T> {
     }
 
     private void checkIndex(int index) {
-        if (index >= this.length) {
+        if (index >= length) {
             throw new ArrayIndexOutOfBoundsException(printThrowOutOfBoundException());
         }
     }
@@ -410,9 +385,4 @@ public class MyArrayList<T> implements List<T> {
             items[i] = (T) iterator.next();
         }
     }
-
-    private boolean checkCapacity() {
-        return items.length == length;
-    }
-
 }

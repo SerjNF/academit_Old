@@ -44,14 +44,18 @@ public class Test2 {
         System.out.println("длина: " + list1.size());
 
         list1.addAll(0, list2);
-        System.out.println("После удаления слов из коллекции 2");
+        System.out.println("После добавления слов из коллекции 2");
         System.out.println(Arrays.toString(list1.toArray()));
         System.out.println("длина: " + list1.size());
 
-        ListIterator<String> listIterator = list1.listIterator(29);
+        ListIterator<String> listIterator = list1.listIterator(24);
         System.out.println("печать коллекции лист-итератором");
         while (listIterator.hasPrevious()) {
             System.out.println(listIterator.previous());
         }
+
+        list1.ensureCapacity(50);
+        list1.trimToSize();
+
     }
 }
