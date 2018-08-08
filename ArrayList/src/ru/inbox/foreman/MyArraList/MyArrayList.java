@@ -91,7 +91,9 @@ public class MyArrayList<T> implements List<T> {
         while (size - minCapacity < 0) {
             size = size << 1;
         }
-        items = Arrays.copyOf(items, size);
+        if (size != items.length) {
+            items = Arrays.copyOf(items, size);
+        }
     }
 
     @SuppressWarnings("unchecked")
