@@ -41,15 +41,18 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public boolean hasNext() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException("Сollection modified");
-                }
                 return currentIndex < length;
             }
 
             @Override
             @SuppressWarnings("unchecked")
             public T next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException("Сollection modified");
+                }
+                if (currentIndex >= length) {
+                    throw new NoSuchElementException(noSuchElement());
+                }
                 T returnElement = items[currentIndex];
                 currentIndex++;
                 return returnElement;
@@ -69,8 +72,9 @@ public class MyArrayList<T> implements List<T> {
             return (T1[]) Arrays.copyOf(items, length, a.getClass());
         }
         System.arraycopy(items, 0, a, 0, length);
-        if (a.length > length)
+        if (a.length > length) {
             a[length] = null;
+        }
         return a;
     }
 
@@ -84,21 +88,13 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public void ensureCapacity(int minCapacity) {
-        int size = items.length;
-        if (size == 0) {
-            size = minCapacity;
-        }
-        while (size - minCapacity < 0) {
-            size = size << 1;
-        }
-        if (size != items.length) {
-            items = Arrays.copyOf(items, size);
+        if (items.length - minCapacity < 0) {
+            items = Arrays.copyOf(items, minCapacity * 2);
         }
     }
 
     @SuppressWarnings("unchecked")
     public void trimToSize() {
-        modCount++;
         if (length < items.length) {
             items = (length == 0) ? (T[]) new Object[]{} : Arrays.copyOf(items, length);
         }
@@ -158,18 +154,18 @@ public class MyArrayList<T> implements List<T> {
     public boolean removeAll(Collection<?> c) {
         Objects.requireNonNull(c);
         boolean result = false;
-        Object[] resultItem = new Object[length];
+        Object[] resultItems = new Object[length];
 
         int j = 0;
         for (int i = 0; i < length; ++i) {
             if (!c.contains(items[i])) {
-                resultItem[j] = items[i];
+                resultItems[j] = items[i];
                 j++;
             } else {
                 result = true;
             }
         }
-        items = (T[]) resultItem;
+        items = (T[]) resultItems;
         length = j;
         modCount++;
         return result;
@@ -201,6 +197,7 @@ public class MyArrayList<T> implements List<T> {
     public void clear() {
         items = (T[]) new Object[0];
         length = 0;
+        modCount++;
     }
 
     @Override
@@ -288,11 +285,9 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public T next() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException("Сollection modified");
-                }
+                checkModification();
                 if (currentIndex >= length) {
-                    throw new NoSuchElementException("No Such Element");
+                    throw new NoSuchElementException(noSuchElement());
                 }
                 T returnElement = items[this.currentIndex];
                 prevIndex = currentIndex;
@@ -308,11 +303,9 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public T previous() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException("Сollection modified");
-                }
+                checkModification();
                 if (currentIndex < 0) {
-                    throw new NoSuchElementException("No Such Element");
+                    throw new NoSuchElementException(noSuchElement());
                 }
                 T returnElement = items[currentIndex];
                 prevIndex = currentIndex;
@@ -336,7 +329,6 @@ public class MyArrayList<T> implements List<T> {
                 if (hasNextStep) {
                     System.arraycopy(items, currentIndex + 1, items, currentIndex, length - 1 - currentIndex);
                     length--;
-                    currentIndex--;
                     hasNextStep = false;
                 }
             }
@@ -351,12 +343,21 @@ public class MyArrayList<T> implements List<T> {
             @Override
             public void add(T t) {
                 ensureCapacity(length + 1);
-                System.arraycopy(items, index, items, prevIndex + 1, length + 1 - prevIndex);
-                items[currentIndex] = t;
-                currentIndex++;
+                System.arraycopy(items, prevIndex, items, prevIndex + 1, length + 1 - prevIndex);
+                items[prevIndex] = t;
                 length++;
             }
+
+            private void checkModification() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException("Сollection modified");
+                }
+            }
         };
+    }
+
+    private String noSuchElement() {
+        return "No Such Element";
     }
 
     @Override

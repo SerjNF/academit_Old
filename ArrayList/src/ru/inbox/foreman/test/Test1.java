@@ -69,17 +69,13 @@ public class Test1 {
 
         System.out.println("222 индекс последнего вхождения: " + myArrayList.lastIndexOf(222));
 
-        ListIterator<Integer> listIterator = myArrayList.listIterator(2);
+        ListIterator<Integer> listIterator = myArrayList.listIterator(0);
         System.out.println("Проход лист-итератором индекса 2, вставляя значение 505 и добавляя 1000:");
-        listIterator.next();
         listIterator.set(505);
         listIterator.add(1000);
-       listIterator.remove();
+        listIterator.remove();
         while (listIterator.hasNext()) {
-
             System.out.print(listIterator.next() + " ");
-         //   myArrayList.add(3);
-
         }
         System.out.println();
 
