@@ -2,6 +2,7 @@ package ru.inbox.foreman.test;
 
 import org.junit.*;
 import org.junit.Test;
+import ru.inbox.foreman.exception.MyListIsEmptyException;
 import ru.inbox.foreman.myList.SingleLinkedList;
 
 import java.io.FileInputStream;
@@ -32,7 +33,6 @@ public class SingleLinkedListTest {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        //   testList1.add(null);
     }
 
     @After
@@ -60,7 +60,7 @@ public class SingleLinkedListTest {
         try {
             assertNotNull(testList2.get());
             Assert.fail("Did't throws");
-        } catch (RuntimeException e) {
+        } catch (MyListIsEmptyException e) {
             assertNotNull(e);
             assertEquals("Collection is empty", e.getMessage());
         }
@@ -93,7 +93,7 @@ public class SingleLinkedListTest {
         try {
             testList2.getAtIndex(0);
             Assert.fail("Did't throws");
-        } catch (RuntimeException e) {
+        } catch (MyListIsEmptyException e) {
             assertNotNull(e);
             assertEquals("Collection is empty", e.getMessage());
         }
@@ -114,7 +114,7 @@ public class SingleLinkedListTest {
         try {
             testList2.setAtIndex(0, null);
             Assert.fail("Did't throws");
-        } catch (RuntimeException e) {
+        } catch (MyListIsEmptyException e) {
             assertNotNull(e);
             assertEquals("Collection is empty", e.getMessage());
         }
@@ -139,7 +139,7 @@ public class SingleLinkedListTest {
         try {
             testList2.removeAtIndex(0);
             Assert.fail("Did't throws");
-        } catch (RuntimeException e) {
+        } catch (MyListIsEmptyException e) {
             assertNotNull(e);
             assertEquals("Collection is empty", e.getMessage());
         }
@@ -152,7 +152,7 @@ public class SingleLinkedListTest {
         try {
             testList2.remove(null);
             Assert.fail("Did't throws");
-        } catch (RuntimeException e) {
+        } catch (MyListIsEmptyException e) {
             assertNotNull(e);
             assertEquals("Collection is empty", e.getMessage());
         }
@@ -200,6 +200,13 @@ public class SingleLinkedListTest {
     @org.junit.Test
     public void testCopy() {
         assertEquals(testList1, testList1.copy());
+        try {
+            testList2.copy();
+            Assert.fail("Did't throws");
+        } catch (RuntimeException e) {
+            assertNotNull(e);
+            assertEquals("Collection is empty", e.getMessage());
+        }
     }
 }
 
