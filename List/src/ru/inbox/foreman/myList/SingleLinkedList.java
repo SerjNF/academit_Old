@@ -2,6 +2,8 @@ package ru.inbox.foreman.myList;
 
 import ru.inbox.foreman.exception.MyListIsEmptyException;
 
+import java.util.Objects;
+
 /**
  * Класс коллекции
  *
@@ -38,6 +40,28 @@ public class SingleLinkedList<T> {
         return sb.toString();
     }
 
+    @Override
+    @SuppressWarnings({"unchecked", "EqualsWhichDoesntCheckParameterClass"})
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        SingleLinkedList<T> ob = (SingleLinkedList<T>) obj;
+
+        if (size != ob.size) {
+            return false;
+        }
+        for (ListItem<T> p = this.head, o = ob.head; p != null; p = p.getNext(), o = o.getNext()) {
+            if (!Objects.equals(p.getData(), o.getData())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Возвращает размер списка
      *
@@ -64,6 +88,7 @@ public class SingleLinkedList<T> {
      * @return данные типа <T>
      */
     public T getAtIndex(int index) {
+        checkIndex(index);
         return this.getElementAtIndex(index).getData();
     }
 
@@ -106,14 +131,12 @@ public class SingleLinkedList<T> {
      * @return удаленный элемент
      */
     public T remove() {
-        if (head != null) {
-            checkCollection();
-            T oldData = head.getData();
-            this.head = head.getNext();
-            size--;
-            return oldData;
-        }
-        return null;
+        checkCollection();
+        T oldData = head.getData();
+        this.head = head.getNext();
+        size--;
+        return oldData;
+
     }
 
     /**
@@ -123,12 +146,15 @@ public class SingleLinkedList<T> {
      * @param data  новые данные
      */
     public void addAtIndex(int index, T data) {
-        checkIndex(index);
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index out of range");
+        }
+
         if (index == 0) {
             add(data);
         } else {
             ListItem<T> elementAtPrevIndex = getElementAtIndex(index - 1);
-            elementAtPrevIndex.setNext(new ListItem<>(data, elementAtPrevIndex.getNext()));
+            elementAtPrevIndex.setNext(new ListItem<>(data, (index == size) ? null : elementAtPrevIndex.getNext()));
             size++;
         }
     }
@@ -140,20 +166,20 @@ public class SingleLinkedList<T> {
      * @return true - данные найдены и удалены, в противном случае false
      */
     public boolean remove(T data) {
-        if (head != null) {
-            if (this.head.getData().equals(data)) {
-                this.head = head.getNext();
+        checkCollection();
+        if (Objects.equals(this.head.getData(), data)) {
+            this.head = head.getNext();
+            size--;
+            return true;
+        }
+        for (ListItem<T> p = this.head.getNext(), prev = head; p != null; prev = p, p = p.getNext()) {
+            if (Objects.equals(p.getData(), data)) {
+                prev.setNext(p.getNext());
                 size--;
                 return true;
             }
-            for (ListItem<T> p = this.head.getNext(), prev = head; p != null; prev = p, p = p.getNext()) {
-                if (p.getData().equals(data)) {
-                    prev.setNext(p.getNext());
-                    size--;
-                    return true;
-                }
-            }
         }
+
         return false;
     }
 
@@ -161,7 +187,7 @@ public class SingleLinkedList<T> {
      * Разворот коллекции
      */
     public void reverse() {
-        if (size >= 2 && head != null) {
+        if (size >= 2) {
             ListItem<T> newLastItem = new ListItem<>(head.getData());
             for (ListItem<T> p = this.head.getNext(), prev = newLastItem, next = head; next != null; prev = p, p = next) {
                 if ((next = p.getNext()) == null) {
@@ -178,13 +204,14 @@ public class SingleLinkedList<T> {
      * @return новая коллекция
      */
     public SingleLinkedList<T> copy() {
+        checkCollection();
         SingleLinkedList<T> returnedCollection = new SingleLinkedList<>();
-        if (head != null) {
-            returnedCollection.add(this.head.getData());
-            for (ListItem<T> t = this.head.getNext(), r = returnedCollection.head; t != null; t = t.getNext(), r = r.getNext()) {
-                r.setNext(new ListItem<>(t.getData()));
-            }
+
+        returnedCollection.add(this.head.getData());
+        for (ListItem<T> t = this.head.getNext(), r = returnedCollection.head; t != null; t = t.getNext(), r = r.getNext()) {
+            r.setNext(new ListItem<>(t.getData()));
         }
+        returnedCollection.size = size;
         return returnedCollection;
     }
 
@@ -195,7 +222,8 @@ public class SingleLinkedList<T> {
      * @param index требуемый индекс
      */
     private ListItem<T> getElementAtIndex(int index) {
-        ListItem<T> p = head;
+      //  checkCollection();
+        ListItem<T> p = this.head;
         int startIndex = 0;
 
         for (; startIndex != index; startIndex++) {
@@ -210,6 +238,7 @@ public class SingleLinkedList<T> {
      * @param index индекс
      */
     private void checkIndex(int index) {
+        checkCollection();
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index out of range");
         }
@@ -219,7 +248,7 @@ public class SingleLinkedList<T> {
      * Проверка коллекции на наличие элементов
      */
     private void checkCollection() {
-        if (this.head == null) {
+        if (head == null) {
             throw new MyListIsEmptyException("Collection is empty");
         }
     }

@@ -12,6 +12,7 @@ import java.util.Scanner;
  * @author SergeyNF
  */
 public class Test {
+
     public static void main(String[] arg) {
         SingleLinkedList<String> singleLinkedList = new SingleLinkedList<>();
 
@@ -29,6 +30,7 @@ public class Test {
         SingleLinkedList<String> newList = singleLinkedList.copy();
         System.out.println("copy");
         System.out.println(newList.toString());
+        System.out.println("Size = " + newList.getSize());
 
         singleLinkedList.reverse();
         System.out.println("revers");
@@ -36,7 +38,7 @@ public class Test {
 
         System.out.println("Первый элемент: " + singleLinkedList.get());
 
-        int indexElement = 0;
+        int indexElement = 2;
 
         System.out.printf("Элемент №%d: %s%n", indexElement, singleLinkedList.getAtIndex(indexElement));
 
@@ -45,15 +47,15 @@ public class Test {
         System.out.println(singleLinkedList.toString());
 
         System.out.printf("Элемент №%d: %s удален%n", indexElement, singleLinkedList.removeAtIndex(indexElement));
-        System.out.printf("Элемент №%d: %s%n", indexElement, singleLinkedList.getAtIndex(indexElement));
+        System.out.printf("Элемент №%d: %s%n", indexElement -1, singleLinkedList.getAtIndex(indexElement-1));
         System.out.println("Size = " + singleLinkedList.getSize());
         System.out.println(singleLinkedList.toString());
 
         String word = "ВСТАВКА";
-        singleLinkedList.addAtIndex(indexElement, word);
+        singleLinkedList.addAtIndex(indexElement -1, word);
         System.out.printf("Перед элементом №%d вставлен %s%n", indexElement, word);
 
-        indexElement = 4;
+        indexElement = 0;
         System.out.printf("Элемент №%d: %s%n", indexElement, singleLinkedList.getAtIndex(indexElement));
         System.out.println("Size = " + singleLinkedList.getSize());
         System.out.println(singleLinkedList.toString());
@@ -63,10 +65,16 @@ public class Test {
         System.out.println(singleLinkedList.toString());
         System.out.println("Size = " + singleLinkedList.getSize());
 
+
+        singleLinkedList.add(null);
+        singleLinkedList.add(null);
+
+
         word = "if";
         System.out.printf("Удаление элемента %s: %s%n", word, singleLinkedList.remove(word));
         System.out.println(singleLinkedList.toString());
         System.out.println("Size = " + singleLinkedList.getSize());
+
 
         System.out.println("Удаление элементов");
         while (singleLinkedList.getSize() != 0) {
@@ -75,8 +83,9 @@ public class Test {
         System.out.println(singleLinkedList.toString());
         System.out.println("Size = " + singleLinkedList.getSize());
 
-        singleLinkedList.remove();
-        singleLinkedList.copy().reverse();
+        System.out.println("Реверс пустого");
+        singleLinkedList.reverse();
+    //    System.out.println("Удаление в пустом" + singleLinkedList.remove());
 
     }
 }
