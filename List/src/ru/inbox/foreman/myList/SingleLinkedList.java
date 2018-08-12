@@ -154,7 +154,7 @@ public class SingleLinkedList<T> {
             add(data);
         } else {
             ListItem<T> elementAtPrevIndex = getElementAtIndex(index - 1);
-            elementAtPrevIndex.setNext(new ListItem<>(data, (index == size) ? null : elementAtPrevIndex.getNext()));
+            elementAtPrevIndex.setNext(new ListItem<>(data, elementAtPrevIndex.getNext()));
             size++;
         }
     }
@@ -166,7 +166,9 @@ public class SingleLinkedList<T> {
      * @return true - данные найдены и удалены, в противном случае false
      */
     public boolean remove(T data) {
-        checkCollection();
+        if (head == null) {
+            return false;
+        }
         if (Objects.equals(this.head.getData(), data)) {
             this.head = head.getNext();
             size--;
@@ -179,7 +181,6 @@ public class SingleLinkedList<T> {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -204,9 +205,10 @@ public class SingleLinkedList<T> {
      * @return новая коллекция
      */
     public SingleLinkedList<T> copy() {
-        checkCollection();
         SingleLinkedList<T> returnedCollection = new SingleLinkedList<>();
-
+        if (this.head == null) {
+            return returnedCollection;
+        }
         returnedCollection.add(this.head.getData());
         for (ListItem<T> t = this.head.getNext(), r = returnedCollection.head; t != null; t = t.getNext(), r = r.getNext()) {
             r.setNext(new ListItem<>(t.getData()));
@@ -222,7 +224,7 @@ public class SingleLinkedList<T> {
      * @param index требуемый индекс
      */
     private ListItem<T> getElementAtIndex(int index) {
-      //  checkCollection();
+        //  checkCollection();
         ListItem<T> p = this.head;
         int startIndex = 0;
 

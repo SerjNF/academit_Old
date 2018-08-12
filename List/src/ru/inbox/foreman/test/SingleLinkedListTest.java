@@ -36,7 +36,7 @@ public class SingleLinkedListTest {
     }
 
     @After
-    public final void cleanField(){
+    public final void cleanField() {
         testList1 = null;
         testList2 = null;
     }
@@ -149,13 +149,7 @@ public class SingleLinkedListTest {
     public void testRemoveData() {
         assertTrue(testList1.remove("list"));
         assertFalse(testList1.remove("list"));
-        try {
-            testList2.remove(null);
-            Assert.fail("Did't throws");
-        } catch (MyListIsEmptyException e) {
-            assertNotNull(e);
-            assertEquals("Collection is empty", e.getMessage());
-        }
+        assertFalse(testList2.remove(null));
     }
 
     @Test
@@ -200,10 +194,13 @@ public class SingleLinkedListTest {
     @org.junit.Test
     public void testCopy() {
         assertEquals(testList1, testList1.copy());
+        SingleLinkedList<String> testCopy = testList2.copy();
+        assertNotNull(testCopy);
+        assertEquals(0, testCopy.getSize());
         try {
-            testList2.copy();
+            assertNotNull(testCopy.get());
             Assert.fail("Did't throws");
-        } catch (RuntimeException e) {
+        } catch (MyListIsEmptyException e) {
             assertNotNull(e);
             assertEquals("Collection is empty", e.getMessage());
         }

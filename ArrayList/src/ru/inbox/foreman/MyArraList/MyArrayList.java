@@ -88,8 +88,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public void ensureCapacity(int minCapacity) {
-        if (items.length - minCapacity < 0) {
-            items = Arrays.copyOf(items, minCapacity * 2);
+        if (items.length < minCapacity) {
+            items = Arrays.copyOf(items, minCapacity);
         }
     }
 
@@ -102,15 +102,13 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-        Objects.requireNonNull(o);
         for (int i = 0; i < length; ++i) {
-            T currentItem = items[i];
-            if (currentItem != null && currentItem.equals(o)) {
+            if (Objects.equals(items[i], o)) {
                 if (i < length - 1) {
                     System.arraycopy(items, i + 1, items, i, length - 1 - i);
                 }
                 length--;
-                modCount++;
+                modCount--;
                 return true;
             }
         }
@@ -167,7 +165,7 @@ public class MyArrayList<T> implements List<T> {
         }
         items = (T[]) resultItems;
         length = j;
-        modCount++;
+        modCount--;
         return result;
     }
 
@@ -176,6 +174,7 @@ public class MyArrayList<T> implements List<T> {
     public boolean retainAll(Collection<?> c) {
         Objects.requireNonNull(c);
         boolean result = false;
+        int expectedLength = length;
         Object[] resultItem = new Object[length];
 
         int j = 0;
@@ -188,7 +187,9 @@ public class MyArrayList<T> implements List<T> {
         }
         items = (T[]) resultItem;
         length = j;
-        modCount++;
+        if (expectedLength != length) {
+            modCount++;
+        }
         return result;
     }
 
@@ -234,16 +235,14 @@ public class MyArrayList<T> implements List<T> {
             System.arraycopy(items, index + 1, items, index, length - 1 - index);
         }
         length--;
-        modCount++;
+        modCount--;
         return returnValue;
     }
 
     @Override
     public int indexOf(Object o) {
-        Objects.requireNonNull(o);
-        for (int i = 0; i <= length; ++i) {
-            T currentItem = items[i];
-            if (currentItem != null && currentItem.equals(o)) {
+        for (int i = 0; i < length; ++i) {
+            if (Objects.equals(items[i], o)) {
                 return i;
             }
         }
@@ -252,10 +251,8 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        Objects.requireNonNull(o);
         for (int i = length - 1; i >= 0; --i) {
-            T currentItem = items[i];
-            if (currentItem != null && currentItem.equals(o)) {
+            if (Objects.equals(items[i], o)) {
                 return i;
             }
         }
@@ -343,7 +340,7 @@ public class MyArrayList<T> implements List<T> {
             @Override
             public void add(T t) {
                 ensureCapacity(length + 1);
-                System.arraycopy(items, prevIndex, items, prevIndex + 1, length + 1 - prevIndex);
+                System.arraycopy(items, prevIndex, items, prevIndex + 1, length - prevIndex);
                 items[prevIndex] = t;
                 length++;
             }

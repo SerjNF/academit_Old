@@ -33,6 +33,10 @@ public class Test1 {
         System.out.println("toString(toArray): " + Arrays.toString(myArrayList.toArray()));
         System.out.println("Length = " + myArrayList.size());
 
+//        System.out.printf("Удаление значения null: %s%n", myArrayList.remove(null));
+//        System.out.println("toString(toArray): " + Arrays.toString(myArrayList.toArray()));
+//        System.out.println("Length = " + myArrayList.size());
+
         System.out.println("добавление 33 по индексу 3");
         myArrayList.add(3, 33);
         System.out.println("MyArrayList toString(toArray): " + Arrays.toString(myArrayList.toArray()));
@@ -48,9 +52,13 @@ public class Test1 {
         System.out.println("Length = " + myArrayList.size());
 
         MyArrayList<Integer> list = new MyArrayList<>(3);
-        list.add(12);
+        list.add(null);
         list.add(2);
-        list.add(5);
+        list.add(51);
+
+        System.out.println("retailAll: " + myArrayList.retainAll(list));
+        System.out.println(Arrays.toString(myArrayList.toArray()));
+        System.out.println("Length = " + myArrayList.size());
 
         System.out.println("Вторая коллекция: " + Arrays.toString(list.toArray()));
 
@@ -69,10 +77,11 @@ public class Test1 {
 
         System.out.println("222 индекс последнего вхождения: " + myArrayList.lastIndexOf(222));
 
-        ListIterator<Integer> listIterator = myArrayList.listIterator(0);
+        ListIterator<Integer> listIterator = myArrayList.listIterator(2);
         System.out.println("Проход лист-итератором индекса 2, вставляя значение 505 и добавляя 1000:");
         listIterator.set(505);
         listIterator.add(1000);
+        listIterator.add(null);
         listIterator.remove();
         while (listIterator.hasNext()) {
             System.out.print(listIterator.next() + " ");
