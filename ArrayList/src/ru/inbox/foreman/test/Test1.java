@@ -1,5 +1,7 @@
 package ru.inbox.foreman.test;
 
+//import ru.inbox.foreman.MyArraList.MyArrayList;
+
 import ru.inbox.foreman.MyArraList.MyArrayList;
 
 import java.util.ArrayList;
@@ -52,9 +54,13 @@ public class Test1 {
         System.out.println("Length = " + myArrayList.size());
 
         MyArrayList<Integer> list = new MyArrayList<>(3);
-        list.add(null);
+        list.add(1);
         list.add(2);
-        list.add(51);
+        list.add(5);
+        list.add(33);
+        list.add(null);
+        list.add(66);
+      //  list.add(10);
 
         System.out.println("retailAll: " + myArrayList.retainAll(list));
         System.out.println(Arrays.toString(myArrayList.toArray()));
@@ -87,9 +93,9 @@ public class Test1 {
             System.out.print(listIterator.next() + " ");
         }
         System.out.println();
-
+//new ArrayList<>(Arrays.asList(8, 9))
         System.out.print("удаление из первой коллекции элементов второй коллекции: ");
-        System.out.println(myArrayList.removeAll(new ArrayList<>(Arrays.asList(8, 9))));
+        System.out.println(myArrayList.removeAll(list));
         System.out.println("MyArrayList toString(toArray): " + Arrays.toString(myArrayList.toArray()));
         System.out.println("Length = " + myArrayList.size());
     }

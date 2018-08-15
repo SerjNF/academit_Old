@@ -3,9 +3,9 @@ package ru.inbox.foreman.MyArraList;
 import java.util.*;
 
 public class MyArrayList<T> implements List<T> {
+    private static int DEFAULT_CAPACITY = 10;
     private T[] items;
     private int length;
-    private static int DEFAULT_CAPACITY = 10;
     private int modCount = 0;
 
     public MyArrayList() {
@@ -48,7 +48,7 @@ public class MyArrayList<T> implements List<T> {
             @SuppressWarnings("unchecked")
             public T next() {
                 if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException("Сollection modified");
+                    throw new ConcurrentModificationException("Collection modified");
                 }
                 if (currentIndex >= length) {
                     throw new NoSuchElementException(noSuchElement());
@@ -80,7 +80,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        ensureCapacity(length + 1);
+        ensureCapacity(length * 2);
         items[length] = t;
         length++;
         modCount++;
@@ -108,7 +108,7 @@ public class MyArrayList<T> implements List<T> {
                     System.arraycopy(items, i + 1, items, i, length - 1 - i);
                 }
                 length--;
-                modCount--;
+                modCount++;
                 return true;
             }
         }
@@ -151,7 +151,6 @@ public class MyArrayList<T> implements List<T> {
     @SuppressWarnings("unchecked")
     public boolean removeAll(Collection<?> c) {
         Objects.requireNonNull(c);
-        boolean result = false;
         Object[] resultItems = new Object[length];
 
         int j = 0;
@@ -159,38 +158,37 @@ public class MyArrayList<T> implements List<T> {
             if (!c.contains(items[i])) {
                 resultItems[j] = items[i];
                 j++;
-            } else {
-                result = true;
             }
         }
-        items = (T[]) resultItems;
-        length = j;
-        modCount--;
-        return result;
+        if (j != length) {
+            modCount++;
+            length = j;
+            items = (T[]) resultItems;
+            return true;
+        }
+        return false;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean retainAll(Collection<?> c) {
         Objects.requireNonNull(c);
-        boolean result = false;
-        int expectedLength = length;
-        Object[] resultItem = new Object[length];
+        Object[] resultItems = new Object[length];
 
         int j = 0;
         for (int i = 0; i < length; ++i) {
             if (c.contains(this.items[i])) {
-                resultItem[j] = items[i];
+                resultItems[j] = items[i];
                 j++;
-                result = true;
             }
         }
-        items = (T[]) resultItem;
-        length = j;
-        if (expectedLength != length) {
+        if (j != length) {
             modCount++;
+            length = j;
+            items = (T[]) resultItems;
+            return true;
         }
-        return result;
+        return false;
     }
 
     @Override
@@ -218,7 +216,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public void add(int index, T element) {
         checkIndexForAdd(index);
-        ensureCapacity(length + 1);
+        ensureCapacity(length * 2);
         if (index != length) {
             System.arraycopy(items, index, items, index + 1, length + 1 - index);
         }
@@ -339,7 +337,7 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public void add(T t) {
-                ensureCapacity(length + 1);
+                ensureCapacity(length * 2);
                 System.arraycopy(items, prevIndex, items, prevIndex + 1, length - prevIndex);
                 items[prevIndex] = t;
                 length++;
@@ -347,7 +345,7 @@ public class MyArrayList<T> implements List<T> {
 
             private void checkModification() {
                 if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException("Сollection modified");
+                    throw new ConcurrentModificationException("Collection modified");
                 }
             }
         };
@@ -378,11 +376,10 @@ public class MyArrayList<T> implements List<T> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void insertAll(int index, Collection<? extends T> c) {
-        Iterator iterator = c.iterator();
+        Iterator<? extends T> iterator = c.iterator();
         for (int i = index; iterator.hasNext(); i++) {
-            items[i] = (T) iterator.next();
+            items[i] = iterator.next();
         }
     }
 }
