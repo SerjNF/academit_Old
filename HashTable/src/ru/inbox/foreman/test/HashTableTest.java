@@ -37,13 +37,8 @@ public class HashTableTest {
 
     @Test
     public void add() {
-        try {
-            testTableHaveData.add(null);
-            Assert.fail("нет исключения");
-        } catch (Exception e) {
+        assertTrue(testTableHaveData.add(null));
 
-            assertNotEquals("", e.getMessage());
-        }
     }
 
     @Test
@@ -62,39 +57,36 @@ public class HashTableTest {
     public void contains() {
         assertTrue(testTableHaveData.contains("word1"));
         assertFalse(testTableHaveData.contains("word2"));
-        try {
-            testTableHaveData.contains(null);
-            Assert.fail("нет исключения");
-        } catch (Exception e) {
-            assertNotEquals("", e.getMessage());
-        }
+        assertFalse(testTableHaveData.contains(null));
+        testTableHaveData.add(null);
+        assertTrue(testTableHaveData.contains(null));
     }
 
     @Test
     public void iterator() {
         assertTrue(testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", "word2"))));
-        Iterator iter = testTableHaveData.iterator();
-        assertTrue(iter.hasNext());
-        assertEquals("n", iter.next());
-        assertTrue(iter.hasNext());
-        assertEquals("word1", iter.next());
-        assertTrue(iter.hasNext());
-        assertEquals("word2", iter.next());
-        assertTrue(iter.hasNext());
-        assertEquals("word2", iter.next());
-        assertTrue(iter.hasNext());
-        assertEquals("word3", iter.next());
-        assertFalse(iter.hasNext());
+        Iterator<String> iterator = testTableHaveData.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals("n", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("word1", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("word2", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("word2", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("word3", iterator.next());
+        assertFalse(iterator.hasNext());
         testTableHaveData.add("add");
         try {
-            assertNull(iter.next());
+            assertNull(iterator.next());
         } catch (Exception e) {
             assertNotNull(e);
             assertNotEquals("", e.getMessage());
         }
 
         try {
-            assertNull(iter.next());
+            assertNull(iterator.next());
         } catch (Exception e) {
             assertNotNull(e);
             assertNotEquals("", e.getMessage());
@@ -103,8 +95,8 @@ public class HashTableTest {
 
     @Test
     public void toArray() {
-        String[] arrayStrings = new String[]{"n", "word1", "word2", "word3", "word3"};
-        assertTrue(testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", "word3"))));
+        String[] arrayStrings = new String[]{null, "n", "word1", "word2", "word3", "word3"};
+        assertTrue(testTableHaveData.addAll(new ArrayList<>(Arrays.asList(null, "word2", "word3", "n", "word3"))));
         assertArrayEquals(arrayStrings, testTableHaveData.toArray());
         assertArrayEquals(new String[0], testTableEmpty.toArray());
     }
@@ -112,29 +104,20 @@ public class HashTableTest {
 
     @Test
     public void remove() {
-        assertFalse(testTableHaveData.remove("word2"));
+        testTableHaveData.addAll(new ArrayList<>(Collections.singletonList(null)));
+
+        assertTrue(testTableHaveData.remove(null));
         assertTrue(testTableHaveData.remove("word1"));
         assertFalse(testTableHaveData.remove("word2"));
         assertEquals(0, testTableHaveData.size());
         assertFalse(testTableEmpty.remove("word2"));
-        try {
-            testTableHaveData.remove(null);
-            Assert.fail("нет исключения");
-        } catch (Exception e) {
-            assertNotEquals("", e.getMessage());
-        }
     }
 
     @Test
     public void addAll() {
         assertTrue(testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n"))));
         assertEquals(4, testTableHaveData.size());
-        try {
-            testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", null)));
-            Assert.fail("нет исключения");
-        } catch (Exception e) {
-            assertNotEquals("", e.getMessage());
-        }
+        assertTrue(testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", null))));
     }
 
     @Test
@@ -149,26 +132,15 @@ public class HashTableTest {
         assertTrue(testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "word1"))));
         assertTrue(testTableHaveData.retainAll(new ArrayList<>(Collections.singletonList("word1"))));
         assertEquals(testTableHaveData.size(), 2);
-
-        try {
-            testTableHaveData.retainAll((new ArrayList<>(Arrays.asList("word2", "word3", "n", null))));
-            Assert.fail("нет исключения");
-        } catch (Exception e) {
-            assertNotEquals("", e.getMessage());
-        }
+        assertFalse(testTableHaveData.retainAll((new ArrayList<>(Collections.singletonList("word1")))));
     }
 
     @Test
     public void removeAll() {
-        testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n")));
+        testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", null)));
         assertTrue(testTableHaveData.removeAll(new ArrayList<>(Arrays.asList("word2", "word3", "n"))));
         assertFalse(testTableHaveData.removeAll(new ArrayList<>(Arrays.asList("word2", "word3", "n"))));
-        try {
-            testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", null)));
-            Assert.fail("нет исключения");
-        } catch (Exception e) {
-            assertNotEquals("", e.getMessage());
-        }
+        assertTrue(testTableHaveData.removeAll(new ArrayList<>(Arrays.asList("word1", "word3", "n", null))));
     }
 
     @Test
