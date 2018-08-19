@@ -78,7 +78,7 @@ public class HashTable<T> implements Collection<T> {
     public Object[] toArray() {
         int indexItem = 0;
         Object[] returnArray = new Object[size];
-        for(T item : this){
+        for (T item : this) {
             returnArray[indexItem] = item;
             indexItem++;
         }
@@ -102,7 +102,7 @@ public class HashTable<T> implements Collection<T> {
     @Override
     public boolean remove(Object o) {
         int index = getIndex(o);
-        if (elements[index] == null || !(elements[index].remove(o))) {
+        if (elements[index] == null || !elements[index].remove(o)) {
             return false;
         }
         size--;
@@ -113,18 +113,20 @@ public class HashTable<T> implements Collection<T> {
     @Override
     public boolean addAll(Collection c) {
         Objects.requireNonNull(c);
+        int expectedSize = size;
         for (Object cItem : c) {
-            if (!add(cItem)) {
-                return false;
-            }
+            add(cItem);
         }
-        return true;
+        return size != expectedSize;
     }
 
     @Override
     public void clear() {
-        //noinspection unchecked
-        elements = (ArrayList<T>[]) new ArrayList[DEFAULT_CAPACITY];
+        for (ArrayList<T> element : elements) {
+            if (element != null) {
+                element.clear();
+            }
+        }
         size = 0;
         modCount++;
     }
@@ -134,11 +136,10 @@ public class HashTable<T> implements Collection<T> {
         Objects.requireNonNull(c);
         int resultSize = 0;
         for (ArrayList<T> element : elements) {
-            if (element == null){
-                continue;
+            if (element != null) {
+                element.retainAll(c);
+                resultSize += element.size();
             }
-            element.retainAll(c);
-            resultSize += element.size();
         }
         if (size != resultSize) {
             modCount++;
@@ -151,13 +152,21 @@ public class HashTable<T> implements Collection<T> {
     @Override
     public boolean removeAll(Collection c) {
         Objects.requireNonNull(c);
-        boolean result = false;
-        for (Object obj : c) {
-            if (remove(obj)) {
-                result = true;
+        int resultSize = 0;
+
+        for (ArrayList<T> element : elements) {
+            if (element != null) {
+                //noinspection SuspiciousMethodCalls
+                element.removeAll(c);
+                resultSize += element.size();
             }
         }
-        return result;
+        if (size != resultSize) {
+            modCount++;
+            size = resultSize;
+            return true;
+        }
+        return false;
     }
 
     @Override

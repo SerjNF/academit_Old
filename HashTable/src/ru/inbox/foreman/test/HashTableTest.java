@@ -118,6 +118,7 @@ public class HashTableTest {
         assertTrue(testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n"))));
         assertEquals(4, testTableHaveData.size());
         assertTrue(testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", null))));
+        assertFalse(testTableHaveData.addAll(testTableEmpty));
     }
 
     @Test
@@ -137,10 +138,14 @@ public class HashTableTest {
 
     @Test
     public void removeAll() {
-        testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", null)));
+        testTableHaveData.addAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", "n" ,"n" , null, "word2")));
+        assertEquals(8, testTableHaveData.size());
+        assertFalse(testTableHaveData.removeAll(testTableEmpty));
         assertTrue(testTableHaveData.removeAll(new ArrayList<>(Arrays.asList("word2", "word3", "n"))));
+        assertArrayEquals(testTableHaveData.toArray(), new String[]{null, "word1"});
+        assertEquals(2, testTableHaveData.size());
         assertFalse(testTableHaveData.removeAll(new ArrayList<>(Arrays.asList("word2", "word3", "n"))));
-        assertTrue(testTableHaveData.removeAll(new ArrayList<>(Arrays.asList("word1", "word3", "n", null))));
+        assertTrue(testTableHaveData.removeAll(new ArrayList<>(Arrays.asList("word2", "word3", "n", null))));
     }
 
     @Test
