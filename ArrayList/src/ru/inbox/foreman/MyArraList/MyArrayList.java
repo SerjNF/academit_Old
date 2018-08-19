@@ -80,7 +80,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        ensureCapacity(length * 2);
+        ensureCapacity(length + 1);
         items[length] = t;
         length++;
         modCount++;
@@ -88,8 +88,10 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public void ensureCapacity(int minCapacity) {
-        if (items.length < minCapacity) {
-            items = Arrays.copyOf(items, minCapacity);
+        int itemsLength = items.length;
+        if (minCapacity > itemsLength) {
+            int newLength = minCapacity <= itemsLength * 2 ? itemsLength * 2 : minCapacity;
+            items = Arrays.copyOf(items, newLength);
         }
     }
 
@@ -216,7 +218,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public void add(int index, T element) {
         checkIndexForAdd(index);
-        ensureCapacity(length * 2);
+        ensureCapacity(length + 1);
         if (index != length) {
             System.arraycopy(items, index, items, index + 1, length + 1 - index);
         }
@@ -337,7 +339,7 @@ public class MyArrayList<T> implements List<T> {
 
             @Override
             public void add(T t) {
-                ensureCapacity(length * 2);
+                ensureCapacity(length + 1);
                 System.arraycopy(items, prevIndex, items, prevIndex + 1, length - prevIndex);
                 items[prevIndex] = t;
                 length++;

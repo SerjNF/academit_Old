@@ -60,6 +60,11 @@ public class Test1 {
         list.add(33);
         list.add(null);
         list.add(66);
+        list.add(2);
+        list.add(5);
+        list.add(33);
+        list.add(null);
+        list.add(66);
       //  list.add(10);
 
         System.out.println("retailAll: " + myArrayList.retainAll(list));
