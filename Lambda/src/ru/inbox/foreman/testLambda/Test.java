@@ -54,7 +54,6 @@ public class Test {
 //прочитать число – сколько элементов нужно вычислить,
 //затем – распечатать эти элементы
         System.out.println("Введите длину последовательность квадратов чисел: ");
-
         int n = new Scanner(System.in).nextInt();
         DoubleStream square = DoubleStream.iterate(0, x -> x + 1).limit(n).map(x -> Math.pow(x, 2));
         System.out.println(Arrays.toString(square.toArray()));
