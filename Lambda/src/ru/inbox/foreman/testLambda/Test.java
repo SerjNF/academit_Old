@@ -60,8 +60,8 @@ public class Test {
         System.out.println(Arrays.toString(square.toArray()));
 
 //ряд фибоначи
-        LongStream fibonacсi = Stream.iterate(new long[]{0, 1}, f -> new long[]{f[1], f[0] + f[1]}).limit(n).mapToLong(x -> x[0]);
-        System.out.println(Arrays.toString(fibonacсi.toArray()));
+        LongStream fibonacci = Stream.iterate(new long[]{0, 1}, f -> new long[]{f[1], f[0] + f[1]}).limit(n).mapToLong(x -> x[0]);
+        System.out.println(Arrays.toString(fibonacci.toArray()));
     }
 
 }
