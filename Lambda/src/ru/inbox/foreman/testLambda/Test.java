@@ -28,10 +28,12 @@ public class Test {
         System.out.println(list.stream()
                 .map(Person::getName)
                 .distinct()
-                .collect(Collectors.joining(",", "Имена:", "")));
+                .collect(Collectors.joining(", ", "Имена:", ".")));
 
 //получить список людей младше 18, посчитать для них средний возраст
-        List<Person> lowAgePersonList = list.stream().filter(p -> p.getAge() <= 18).collect(Collectors.toList());
+        List<Person> lowAgePersonList = list.stream()
+                .filter(p -> p.getAge() <= 18)
+                .collect(Collectors.toList());
         System.out.println(lowAgePersonList.stream()
                 .map(Person::getName)
                 .collect(Collectors.joining(",", "Их возраст меньше 18: ", "")));
@@ -41,13 +43,15 @@ public class Test {
 
 //при помощи группировки получить Map, в котором ключи – имена, а значения – средний возраст
         Map<String, Double> list1 = list.stream()
-                .collect(Collectors.groupingBy(Person::getName,
-                        Collectors.averagingInt(Person::getAge)));
-        list1.forEach((age, name) ->
-                System.out.printf("age %s: %s\n", age, name));
+                .collect(Collectors.groupingBy(Person::getName, Collectors.averagingInt(Person::getAge)));
+        list1.forEach((age, name) -> System.out.printf("age %s: %s%n", age, name));
 
 //получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
-        List<String> middleAgePersonList = list.stream().filter(p -> p.getAge() > 20 && p.getAge() < 45).sorted((p1, p2) -> p2.getAge() - p1.getAge()).map(Person::getName).collect(Collectors.toList());
+        List<String> middleAgePersonList = list.stream()
+                .filter(p -> p.getAge() >= 20 && p.getAge() <= 45)
+                .sorted((p1, p2) -> p2.getAge() - p1.getAge())
+                .map(Person::getName)
+                .collect(Collectors.toList());
         System.out.println(middleAgePersonList);
 
 //Создать бесконечный поток корней чисел. С консоли
@@ -55,12 +59,17 @@ public class Test {
 //затем – распечатать эти элементы
         System.out.println("Введите длину последовательность квадратов чисел: ");
         int n = new Scanner(System.in).nextInt();
-        DoubleStream square = DoubleStream.iterate(0, x -> x + 1).limit(n).map(x -> Math.pow(x, 2));
-        System.out.println(Arrays.toString(square.toArray()));
+        DoubleStream square = Stream.iterate(0, x -> x + 1)
+                .mapToDouble(Math::sqrt)
+                .limit(n);
+        square.forEach(x -> System.out.printf("%.2f, ", x));
+        System.out.println();
+        //   System.out.println(Arrays.toString(square.toArray()));
 
 //ряд фибоначи
-        LongStream fibonacci = Stream.iterate(new long[]{0, 1}, f -> new long[]{f[1], f[0] + f[1]}).limit(n).mapToLong(x -> x[0]);
+        LongStream fibonacci = Stream.iterate(new long[]{0, 1}, f -> new long[]{f[1], f[0] + f[1]})
+                .mapToLong(x -> x[0])
+                .limit(n);
         System.out.println(Arrays.toString(fibonacci.toArray()));
     }
-
 }
