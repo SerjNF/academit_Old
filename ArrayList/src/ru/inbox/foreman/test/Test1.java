@@ -53,7 +53,9 @@ public class Test1 {
         System.out.println("MyArrayList toString(toArray): " + Arrays.toString(myArrayList.toArray()));
         System.out.println("Length = " + myArrayList.size());
 
-        MyArrayList<Integer> list = new MyArrayList<>(3);
+
+        ArrayList<Integer> list = new ArrayList<>(3);
+
         list.add(1);
         list.add(2);
         list.add(5);
