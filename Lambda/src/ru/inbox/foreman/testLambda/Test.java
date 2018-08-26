@@ -49,7 +49,7 @@ public class Test {
 //получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
         List<String> middleAgePersonList = list.stream()
                 .filter(p -> p.getAge() >= 20 && p.getAge() <= 45)
-                .sorted((p1, p2) -> p2.getAge() - p1.getAge())
+                .sorted()
                 .map(Person::getName)
                 .collect(Collectors.toList());
         System.out.println(middleAgePersonList);

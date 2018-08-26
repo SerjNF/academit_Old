@@ -1,14 +1,16 @@
 package ru.inbox.foreman.treeNode;
 
+import java.util.Objects;
+
 /**
  * Класс узла дерева
  *
  * @param <T> тип данных;
  * @author SergeyNF
  */
-public class TreeNode<T extends Comparable<T>> {
+public class TreeNode<T extends Comparable<? super T>> {
     private T data;
-    private TreeNode<T > left;
+    private TreeNode<T> left;
     private TreeNode<T> right;
 
     public TreeNode() {
@@ -47,5 +49,18 @@ public class TreeNode<T extends Comparable<T>> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        //noinspection unchecked
+        TreeNode<T> t = (TreeNode<T>) obj;
+        return data.equals(t.data) && left.equals(t.left) && right.equals(t.right);
     }
 }

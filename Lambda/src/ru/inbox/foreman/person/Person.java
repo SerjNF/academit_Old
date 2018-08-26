@@ -1,6 +1,6 @@
 package ru.inbox.foreman.person;
 
-public class Person {
+public class Person implements Comparable<Person> {
 
     private String name;
     private int age;
@@ -24,5 +24,22 @@ public class Person {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Person p = (Person) obj;
+        return name.equals(p.name) && age == p.age;
     }
 }
