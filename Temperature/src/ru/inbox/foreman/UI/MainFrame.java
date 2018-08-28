@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
 
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
-
 public class MainFrame {
     private JFrame frame;
     private JTextField inputTemp;
@@ -51,7 +49,7 @@ public class MainFrame {
         frame.getContentPane().add(mediumPanel);
         frame.getContentPane().add(resultPanel);
 
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setSize(500, 200);
@@ -100,18 +98,19 @@ public class MainFrame {
         new AddScaleFrame(converter);
     }
 
-
     private void calcResultTemp(JLabel resultTemp) {
         String iTemp = inputTemp.getText();
         String convertedTemp = iTemp.trim().isEmpty() ? "0" : iTemp;
         double result = converter.convertTemp((String) selectInputScale.getSelectedItem(),
                 (String) selectResultTempScale.getSelectedItem(),
                 convertedTemp);
-        resultTemp.setText(String.valueOf(result));
+        String resultString = String.valueOf(result);
+        int endSubstring = resultString.indexOf('.');
+        resultTemp.setText(resultString.substring(0, endSubstring + 4 > resultString.length() ? resultString.length() : endSubstring + 4));
     }
 
     private JPanel createInputPanel() {
-        Font font = new Font ("Serif", Font.ITALIC, 18);    // font = new Font(null, Font.ITALIC, 13);
+        Font font = new Font("Serif", Font.ITALIC, 18);    // font = new Font(null, Font.ITALIC, 13);
         selectInputScale = new JComboBox<>(converter.getScaleName());
         selectInputScale.setFont(font);
         inputTemp = new JTextField(15);
@@ -127,7 +126,7 @@ public class MainFrame {
     }
 
     private JPanel createResultPanel() {
-        Font font = new Font ("Serif", Font.ITALIC, 18);    // font = new Font(null, Font.ITALIC, 13);
+        Font font = new Font("Serif", Font.ITALIC, 18);    // font = new Font(null, Font.ITALIC, 13);
 
         selectResultTempScale = new JComboBox<>(converter.getScaleName());
         selectResultTempScale.setFont(font);
