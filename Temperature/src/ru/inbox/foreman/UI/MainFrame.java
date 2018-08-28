@@ -36,7 +36,11 @@ public class MainFrame {
         JPanel inputPanel = createInputPanel();
         // лэйбел
         JPanel mediumPanel = new JPanel();
-        mediumPanel.add(new JLabel("Конвертировать в:"));
+        JLabel label = new JLabel("Конвертировать в:");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setVerticalAlignment(SwingConstants.CENTER);
+        label.setFont(new Font("Serif", Font.PLAIN, 18));
+        mediumPanel.add(label);
         // панель результата
         JPanel resultPanel = createResultPanel();
 
@@ -109,7 +113,10 @@ public class MainFrame {
 
     private JPanel createInputPanel() {
         selectInputScale = new JComboBox<>(converter.getScaleName());
+        selectInputScale.setFont(new Font("Serif", Font.PLAIN, 18));
         inputTemp = new JTextField(15);
+        inputTemp.setFont(new Font("Serif", Font.PLAIN, 18));
+        inputTemp.setHorizontalAlignment(SwingConstants.RIGHT);
         //фильтр
         ((AbstractDocument) inputTemp.getDocument()).setDocumentFilter(new DigitFilter());
 
@@ -121,7 +128,10 @@ public class MainFrame {
 
     private JPanel createResultPanel() {
         selectResultTempScale = new JComboBox<>(converter.getScaleName());
+        selectResultTempScale.setFont(new Font("Serif", Font.PLAIN, 18));
         JLabel resultTemp = new JLabel();
+        resultTemp.setHorizontalAlignment(SwingConstants.RIGHT);
+        resultTemp.setFont(new Font("Serif", Font.PLAIN, 18));
         JPanel rPanel = new JPanel(new GridLayout(1, 2));
 
         rPanel.add(selectResultTempScale);
