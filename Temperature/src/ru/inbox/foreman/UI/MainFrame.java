@@ -87,7 +87,7 @@ public class MainFrame {
         String result = (String) JOptionPane.showInputDialog(
                 frame,
                 "Выберите какую шкалу удалить :",
-                "Выбор напитка",
+                "Удаление шкалы",
                 JOptionPane.QUESTION_MESSAGE, null, listScale, converter.getScaleName()[0]);
         selectResultTempScale.removeItem(result);
         selectInputScale.removeItem(result);
