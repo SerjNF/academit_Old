@@ -27,7 +27,7 @@ public class MainFrame {
     }
 
     public static void main(String[] arg) {
-        new MainFrame();
+        SwingUtilities.invokeLater(MainFrame::new);
     }
 
     private void createUI() {
@@ -101,7 +101,6 @@ public class MainFrame {
     }
 
 
-
     private void calcResultTemp(JLabel resultTemp) {
         String iTemp = inputTemp.getText();
         String convertedTemp = iTemp.trim().isEmpty() ? "0" : iTemp;
@@ -137,6 +136,7 @@ public class MainFrame {
         rPanel.add(selectResultTempScale);
         rPanel.add(resultTemp);
         selectResultTempScale.addActionListener(e -> calcResultTemp(resultTemp));
+        inputTemp.addActionListener(e -> calcResultTemp(resultTemp));
         return rPanel;
     }
 
