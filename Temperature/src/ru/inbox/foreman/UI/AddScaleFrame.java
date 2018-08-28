@@ -7,12 +7,12 @@ import ru.inbox.foreman.support.ParserToDouble;
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
-import java.util.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import java.util.stream.Collectors;
-
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 class AddScaleFrame {
     private JFrame addScale;
@@ -35,7 +35,43 @@ class AddScaleFrame {
 
         addScale.setSize(300, 300);
         addScale.setResizable(false);
-        addScale.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        addScale.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                addScale.dispose();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+        //     addScale.setDefaultCloseOperation(addScale.EXIT_ON_CLOSE);
         addScale.setLocationRelativeTo(null);
         addScale.setVisible(true);
         addScale.pack();
@@ -59,21 +95,19 @@ class AddScaleFrame {
             JOptionPane.showMessageDialog(addScale, "Поля должны быть заполнены");
             return;
         }
-
-        HashMap<JTextField, Double> coefficients = new HashMap<>();
-        kListTextField.forEach(e -> coefficients.put(e, ParserToDouble.parseToDouble(e.getText())));
-
-        double[] kInput = new double[] {coefficients.get(kListTextField.get(0)),coefficients.get(kListTextField.get(1)),coefficients.get(kListTextField.get(2))};
-        double[] kResult = new double[] {coefficients.get(kListTextField.get(3)),coefficients.get(kListTextField.get(4)),coefficients.get(kListTextField.get(5))};
-
-        converter.addScale(nameScale.getText(), kInput, kResult);
+        double[] coefficients = new double[6];
+        for (int i = 0; i < coefficients.length; i++) {
+            coefficients[i] = ParserToDouble.parseToDouble(kListTextField.get(i).getText());
+        }
+        converter.addScale(nameScale.getText(), coefficients);
         addScale.dispose();
     }
 
     private boolean validation() {
-        List<Boolean> kBoolean = kListTextField.stream().map(e -> e.getText().trim().isEmpty()).collect(Collectors.toList());
-        Optional<Boolean> res = kBoolean.stream().reduce((e1, e2) -> !e1 && !e2);
-        return !res.isPresent() || !res.get();
+        Optional<Boolean> kBoolean = kListTextField.stream()
+                .map(e -> e.getText().trim().isEmpty())
+                .reduce((e1, e2) -> !e1 && !e2);
+        return !kBoolean.isPresent() || !kBoolean.get();
     }
 
     private JPanel inputPanel() {

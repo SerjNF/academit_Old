@@ -9,8 +9,8 @@ import java.util.HashMap;
 
 public class ConvertTemperature {
     private MainFrame mFrame;
-    private HashMap<String, double[]> fTempToCelsius;
-    private HashMap<String, double[]> fTempToResultScale;
+    private HashMap<String, double[]> coefficientsToCelsius;
+    private HashMap<String, double[]> coefficientsToResult;
 
     public ConvertTemperature(MainFrame frame) {
         this.mFrame = frame;
@@ -18,33 +18,33 @@ public class ConvertTemperature {
     }
 
     public String[] getScaleName() {
-        return fTempToCelsius.keySet().toArray(new String[0]);
+        return coefficientsToCelsius.keySet().toArray(new String[0]);
     }
 
     public double convertTemp(String selectedInputScale, String selectedResultScale, String inputTemp) {
-        double[] kTempToCelsius = fTempToCelsius.get(selectedInputScale);
+        double[] kTempToCelsius = coefficientsToCelsius.get(selectedInputScale);
         double tempInCelsius = (ParserToDouble.parseToDouble(inputTemp) * kTempToCelsius[0] + kTempToCelsius[1]) * kTempToCelsius[2];
-        double[] kTempToResult = fTempToResultScale.get(selectedResultScale);
-        return (tempInCelsius * kTempToResult[0] + kTempToResult[1]) * kTempToResult[2];
+        double[] kTempToResult = coefficientsToResult.get(selectedResultScale);
+        return (tempInCelsius * kTempToResult[3] + kTempToResult[4]) * kTempToResult[5];
     }
 
-    public void addScale(String scaleName, double[] kInput, double[] kResult) {
-        fTempToCelsius.put(scaleName, kInput);
-        fTempToResultScale.put(scaleName, kResult);
-        mFrame.updateUI(scaleName);
+    public void addScale(String scaleName, double[] kInput) {
+        coefficientsToCelsius.put(scaleName, kInput);
+        coefficientsToResult.put(scaleName, kInput);
+        mFrame.updateScales(scaleName);
         serialization();
     }
 
     public void removeScale(String removedScale) {
-        fTempToCelsius.remove(removedScale);
-        fTempToResultScale.remove(removedScale);
+        coefficientsToCelsius.remove(removedScale);
+        coefficientsToResult.remove(removedScale);
         serialization();
     }
 
     private void serialization() {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("converter.ser"))) {
-            objectOutputStream.writeObject(fTempToCelsius);
-            objectOutputStream.writeObject(fTempToResultScale);
+            objectOutputStream.writeObject(coefficientsToCelsius);
+            objectOutputStream.writeObject(coefficientsToResult);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mFrame.getFrame(), "Ошибка записи");
         }
@@ -52,13 +52,13 @@ public class ConvertTemperature {
 
     private void deserialization() {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("converter.ser"))) {
-            fTempToCelsius = (HashMap<String, double[]>) objectInputStream.readObject();
-            fTempToResultScale = (HashMap<String, double[]>) objectInputStream.readObject();
+            coefficientsToCelsius = (HashMap<String, double[]>) objectInputStream.readObject();
+            coefficientsToResult = (HashMap<String, double[]>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            fTempToCelsius = new HashMap<>();
-            fTempToCelsius.put("Цельсия", new double[]{1, 0, 1});
-            fTempToResultScale = new HashMap<>();
-            fTempToResultScale.put("Цельсия", new double[]{1, 0, 1});
+            coefficientsToCelsius = new HashMap<>();
+            coefficientsToCelsius.put("Цельсия", new double[]{1, 0, 1, 0, 0, 0});
+            coefficientsToResult = new HashMap<>();
+            coefficientsToResult.put("Цельсия", new double[]{0, 0 ,0, 1, 0, 1});
         }
     }
 }
