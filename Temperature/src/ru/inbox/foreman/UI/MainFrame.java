@@ -3,13 +3,9 @@ package ru.inbox.foreman.UI;
 import ru.inbox.foreman.model.ConvertTemperature;
 import ru.inbox.foreman.support.DigitFilter;
 
-
 import javax.swing.*;
-import javax.swing.text.PlainDocument;
+import javax.swing.text.AbstractDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.text.NumberFormat;
-import java.util.function.Function;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
@@ -18,10 +14,9 @@ public class MainFrame {
     private JPanel inputPanel;
     private JPanel resultPanel;
     private JMenuBar menuBar;
-    JFormattedTextField inputTemp;
-    JComboBox<String> selectInputScale;
-    JComboBox<String> selectResultTempScale;
-    JTextField resultTemp;
+    private JTextField inputTemp;
+    private JComboBox<String> selectInputScale;
+    private JComboBox<String> selectResultTempScale;
     private ConvertTemperature converter;
 
     private MainFrame() {
@@ -32,7 +27,10 @@ public class MainFrame {
         }
         converter = new ConvertTemperature(this);
         createUI();
+    }
 
+    public static void main(String[] arg) {
+        new MainFrame();
     }
 
     private void createUI() {
@@ -46,31 +44,33 @@ public class MainFrame {
         resultPanel = createResultPanel();
 
         frame = new JFrame("Конвертер темрературы");
+        frame.setLayout(new GridLayout(3, 1));
         frame.setJMenuBar(menuBar);
-        frame.getContentPane().add(inputPanel, BorderLayout.NORTH);
-        frame.getContentPane().add(resultPanel, BorderLayout.SOUTH);
-        frame.getContentPane().add(mediumPanel, BorderLayout.CENTER);
+        frame.getContentPane().add(inputPanel);
+        frame.getContentPane().add(mediumPanel);
+        frame.getContentPane().add(resultPanel);
 
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        frame.pack();
-
+        frame.setSize(500, 200);
+        frame.setResizable(false);
+        //   frame.pack();
     }
 
     private JMenuBar createMenu() {
         menuBar = new JMenuBar();
 
         JMenu menuScale = new JMenu("Шкала");
-        JMenuItem add = new JMenuItem("Добавить");
-        add.addActionListener(e -> addScale());
-        JMenuItem remove = new JMenuItem("Удалить");
-        add.addActionListener(e -> removeScale());
+        JMenuItem addButton = new JMenuItem("Добавить");
+        addButton.addActionListener(e -> addScale());
+        JMenuItem removeButton = new JMenuItem("Удалить");
+        removeButton.addActionListener(e -> removeScale());
         JMenuItem close = new JMenuItem("Выход");
         close.addActionListener(e -> closeWindow());
 
-        menuScale.add(add);
-        menuScale.add(remove);
+        menuScale.add(addButton);
+        menuScale.add(removeButton);
         menuScale.addSeparator();
         menuScale.add(close);
         menuBar.add(menuScale);
@@ -83,19 +83,27 @@ public class MainFrame {
     }
 
     private void removeScale() {
+        String[] listScale = converter.getScaleName();
+        String result = (String) JOptionPane.showInputDialog(
+                frame,
+                "Выберите какую шкалу удалить :",
+                "Выбор напитка",
+                JOptionPane.QUESTION_MESSAGE, null, listScale, converter.getScaleName()[0]);
+        selectResultTempScale.removeItem(result);
+        selectInputScale.removeItem(result);
+        converter.removeScale(result);
+
     }
 
     private void addScale() {
         new AddScaleFrame(converter);
-
-
     }
 
     private JPanel createResultPanel() {
-        selectResultTempScale = new JComboBox<>(converter.getResultScaleName());
+        selectResultTempScale = new JComboBox<>(converter.getScaleName());
         JLabel resultTemp = new JLabel();
         //resultTemp.setEditable(false);
-        resultPanel = new JPanel();
+        resultPanel = new JPanel(new GridLayout(1, 2));
         resultPanel.add(selectResultTempScale);
         resultPanel.add(resultTemp);
         selectResultTempScale.addActionListener(e -> calcResultTemp(resultTemp));
@@ -103,38 +111,30 @@ public class MainFrame {
     }
 
     private void calcResultTemp(JLabel resultTemp) {
+        String convertedTemp = inputTemp.getText().trim().isEmpty() ? "0" : inputTemp.getText();
         double result = converter.convertTemp((String) selectInputScale.getSelectedItem(), (String) selectResultTempScale.getSelectedItem(),
-                inputTemp.getValue());
+                convertedTemp);
         resultTemp.setText(String.valueOf(result));
     }
 
-
     private JPanel createInputPanel() {
-        selectInputScale = new JComboBox<>(converter.getInputScaleName());
-        inputTemp = new JFormattedTextField(NumberFormat.getNumberInstance());
-        //  inputTemp.setValue(10);
-        inputTemp.setColumns(15);
-        PlainDocument plDoc = (PlainDocument) inputTemp.getDocument();
-        plDoc.setDocumentFilter(new DigitFilter());
-        inputPanel = new JPanel();
+        selectInputScale = new JComboBox<>(converter.getScaleName());
+        inputTemp = new JTextField(15);
+        //фильтр
+        ((AbstractDocument) inputTemp.getDocument()).setDocumentFilter(new DigitFilter());
+
+        inputPanel = new JPanel(new GridLayout(1, 2));
         inputPanel.add(selectInputScale);
         inputPanel.add(inputTemp);
         return inputPanel;
     }
 
-    public double getInputData() {
-        String inputData = inputTemp.getText();
-
-
-        return Double.parseDouble(inputTemp.getText());
+    public void updateUI(String scaleName) {
+        selectInputScale.addItem(scaleName);
+        selectResultTempScale.addItem(scaleName);
     }
 
-    public void updateUI() {
-        selectInputScale.addItem(converter.getLastScale());
-        selectResultTempScale.addItem(converter.getLastScale());
-    }
-
-    public static void main(String[] arg) {
-        new MainFrame();
+    public JFrame getFrame(){
+        return frame;
     }
 }

@@ -1,15 +1,15 @@
 package ru.inbox.foreman.UI;
 
 import ru.inbox.foreman.model.ConvertTemperature;
+import ru.inbox.foreman.support.DigitFilter;
+import ru.inbox.foreman.support.ParserToDouble;
 
 import javax.swing.*;
-import javax.swing.text.MaskFormatter;
+import javax.swing.text.AbstractDocument;
 import java.awt.*;
-import java.text.ParseException;
 import java.util.*;
 import java.util.List;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
+
 import java.util.stream.Collectors;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
@@ -17,32 +17,18 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 class AddScaleFrame {
     private JFrame addScale;
     private JTextField nameScale;
-    private JFormattedTextField k1ToC;
-    private JFormattedTextField k2ToC;
-    private JFormattedTextField k3ToC;
-    private JFormattedTextField k1ToR;
-    private JFormattedTextField k2ToR;
-    private JFormattedTextField k3ToR;
-    private MaskFormatter formatter;
     private ConvertTemperature converter;
+    private List<JTextField> kListTextField = new ArrayList<>();
 
     AddScaleFrame(ConvertTemperature converter) {
         this.converter = converter;
-        try {
-            formatter = new MaskFormatter("###.####");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         createUI();
-
-
     }
 
     private void createUI() {
         addScale = new JFrame("Добавление шкалы");
         JPanel inputPanel = inputPanel();
         JPanel buttonPanel = buttonPanel();
-        JPanel mediumPanel = mediumPanel();
 
         addScale.getContentPane().add(inputPanel, BorderLayout.CENTER);
         addScale.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -55,45 +41,39 @@ class AddScaleFrame {
         addScale.pack();
     }
 
-    private JPanel mediumPanel() {
-        JLabel label = new JLabel("Пример записи перевода (Цельсия в Кельвины): t -> t- 273");
-        JPanel labelPanel = new JPanel();
-        labelPanel.add(label);
-        return labelPanel;
-    }
-
     private JPanel buttonPanel() {
-        JPanel buttonPanel = new JPanel();
         JButton okButton = new JButton("Ok");
         JButton cancelButton = new JButton("Cancel");
+
         cancelButton.addActionListener(e -> this.addScale.dispose());
         okButton.addActionListener(e -> addScaleToConverter());
+
+        JPanel buttonPanel = new JPanel();
         buttonPanel.add(okButton);
         buttonPanel.add(cancelButton);
         return buttonPanel;
     }
 
     private void addScaleToConverter() {
-        List<JFormattedTextField> kList = new ArrayList<>(Arrays.asList(k1ToC, k2ToC, k3ToC, k1ToR, k2ToR, k3ToR));
-
-        List<Boolean> kBoolean = kList.stream().map(e -> e.getText().trim().isEmpty()).collect(Collectors.toList());
-        Optional<Boolean> res = kBoolean.stream().reduce((e1, e2) -> e1 && e2);
-
-        if (res.isPresent() && res.get()) {
+        if (validation()) {
             JOptionPane.showMessageDialog(addScale, "Поля должны быть заполнены");
             return;
         }
 
-        HashMap<JFormattedTextField, Long> coefficients = new HashMap<>();
-        kList.forEach(e -> {
-            coefficients.put(e, (Long) e.getValue());
-        });
+        HashMap<JTextField, Double> coefficients = new HashMap<>();
+        kListTextField.forEach(e -> coefficients.put(e, ParserToDouble.parseToDouble(e.getText())));
 
-        Function<Long, Long> f = e -> ((e * coefficients.get(k1ToC) + coefficients.get(k2ToC)) * coefficients.get(k3ToC));
-        Function<Long, Long> r = e -> ((e * coefficients.get(k1ToR) + coefficients.get(k1ToR)) * coefficients.get(k1ToR));
+        double[] kInput = new double[] {coefficients.get(kListTextField.get(0)),coefficients.get(kListTextField.get(1)),coefficients.get(kListTextField.get(2))};
+        double[] kResult = new double[] {coefficients.get(kListTextField.get(3)),coefficients.get(kListTextField.get(4)),coefficients.get(kListTextField.get(5))};
 
-        converter.addInputScale(nameScale.getText(), f, r);
+        converter.addScale(nameScale.getText(), kInput, kResult);
         addScale.dispose();
+    }
+
+    private boolean validation() {
+        List<Boolean> kBoolean = kListTextField.stream().map(e -> e.getText().trim().isEmpty()).collect(Collectors.toList());
+        Optional<Boolean> res = kBoolean.stream().reduce((e1, e2) -> !e1 && !e2);
+        return !res.isPresent() || !res.get();
     }
 
     private JPanel inputPanel() {
@@ -102,33 +82,41 @@ class AddScaleFrame {
         inputNameScale.add(new Label("Название шкалы"));
         inputNameScale.add(nameScale);
 
-        JPanel TempToCelsius = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel tempToCelsius = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JPanel kC = new JPanel(new GridLayout(1, 3));
-        k1ToC = new JFormattedTextField(formatter);
-        k2ToC = new JFormattedTextField(formatter);
-        k3ToC = new JFormattedTextField(formatter);
-        TempToCelsius.add(new Label("Коэффициенты А и В  функции (t*k1 + k2)*k3 перевода температуры в Гр. цельсия"));
-        kC.add(k1ToC);
-        kC.add(k2ToC);
-        kC.add(k3ToC);
-        TempToCelsius.add(kC);
+        kListTextField.add(new JTextField(5));
+        kListTextField.add(new JTextField(5));
+        kListTextField.add(new JTextField(5));
 
-        JPanel TempToResult = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        tempToCelsius.add(new Label("Коэффициенты А и В  функции (t*k1 + k2)*k3 перевода температуры в Гр. цельсия"));
+        kC.add(kListTextField.get(0));
+        kC.add(kListTextField.get(1));
+        kC.add(kListTextField.get(2));
+        tempToCelsius.add(kC);
+
+        JPanel tempToResult = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JPanel kR = new JPanel(new GridLayout(1, 3));
-        k1ToR = new JFormattedTextField(formatter);
-        k2ToR = new JFormattedTextField(formatter);
-        k3ToR = new JFormattedTextField(formatter);
-        TempToResult.add(new Label("Коэффициенты А и В  функции (t*k1 + k2)*k3 перевода температуры из Гр. цельсия"));
-        kR.add(k1ToR);
-        kR.add(k2ToR);
-        kR.add(k3ToR);
-        TempToResult.add(kR);
+        kListTextField.add(new JTextField(5));
+        kListTextField.add(new JTextField(5));
+        kListTextField.add(new JTextField(5));
+
+        tempToResult.add(new Label("Коэффициенты А и В  функции (t*k1 + k2)*k3 перевода температуры из Гр. цельсия"));
+        kR.add(kListTextField.get(3));
+        kR.add(kListTextField.get(4));
+        kR.add(kListTextField.get(5));
+        tempToResult.add(kR);
+
+        setFilter();
 
         JPanel inputPanel = new JPanel(new GridLayout(3, 1));
         inputPanel.add(inputNameScale);
-        inputPanel.add(TempToCelsius);
-        inputPanel.add(TempToResult);
+        inputPanel.add(tempToCelsius);
+        inputPanel.add(tempToResult);
         return inputPanel;
+    }
+
+    private void setFilter() {
+        kListTextField.forEach(e -> ((AbstractDocument) e.getDocument()).setDocumentFilter(new DigitFilter()));
     }
 
 
