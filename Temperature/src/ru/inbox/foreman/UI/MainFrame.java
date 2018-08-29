@@ -29,6 +29,7 @@ public class MainFrame {
     }
 
     private void createUI() {
+        // меню
         JMenuBar menuBar = createMenu();
         // панель ввода
         JPanel inputPanel = createInputPanel();
